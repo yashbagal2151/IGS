@@ -8,6 +8,6 @@ export default defineConfig({
     react()
   ],
   server: {
-    port: 1206, // Change this to your desired port
+    port: 5000, // Change this to your desired port
   },
 })

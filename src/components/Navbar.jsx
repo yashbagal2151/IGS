@@ -30,10 +30,27 @@ export default function Navbar() {
   ];
 
   const productLinks = [
-    { name: "All Products", path: "/products" },
-    { name: "God Statues", path: "/categories/god-statue" },
-    { name: "Motivational Statues", path: "/categories/motivational-statue" },
+    { name: "All Products", path: "/filter" },
+    { name: "Chhatrapati Shivaji Maharaj Statues", scrollTo: "shivaji" },
+    { name: "Mavale Statues", scrollTo: "mavale" },
+    { name: "God Statues", scrollTo: "god-statues" },
+    { name: "Motivational Statues", scrollTo: "motivational" },
+    { name: "Home Decor", scrollTo: "home-decor" },
   ];
+
+  const handleCategoryClick = (link) => {
+    if (link.scrollTo) {
+      // Scroll to section on home page
+      const element = document.getElementById(`section-${link.scrollTo}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        // If not on home page, navigate to home and then scroll
+        window.location.href = `/#section-${link.scrollTo}`;
+      }
+    }
+    toggleProductsDropdown();
+  };
 
   return (
     <>
@@ -79,18 +96,28 @@ export default function Navbar() {
                           aria-orientation="vertical"
                           aria-labelledby="products-menu-button"
                         >
-                          {productLinks.map((pLink) => (
-                            <Link
-                              key={pLink.name}
-                              to={pLink.path}
-                              onClick={() => {
-                                toggleProductsDropdown();
-                              }}
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                              {pLink.name}
-                            </Link>
-                          ))}
+                          {productLinks.map((pLink) =>
+                            pLink.path ? (
+                              <Link
+                                key={pLink.name}
+                                to={pLink.path}
+                                onClick={() => {
+                                  toggleProductsDropdown();
+                                }}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                {pLink.name}
+                              </Link>
+                            ) : (
+                              <button
+                                key={pLink.name}
+                                onClick={() => handleCategoryClick(pLink)}
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                {pLink.name}
+                              </button>
+                            )
+                          )}
                         </div>
                       </div>
                     )}
@@ -226,19 +253,32 @@ export default function Navbar() {
               </button>
               {isProductsDropdownOpen && (
                 <div className="pl-6 pt-1 pb-1 space-y-1 bg-gray-50 rounded-b-lg">
-                  {productLinks.map((pLink) => (
-                    <Link
-                      key={pLink.name}
-                      to={pLink.path}
-                      onClick={() => {
-                        toggleMenu();
-                        toggleProductsDropdown();
-                      }}
-                      className="block text-base text-gray-600 hover:text-purple-700 py-1"
-                    >
-                      {pLink.name}
-                    </Link>
-                  ))}
+                  {productLinks.map((pLink) =>
+                    pLink.path ? (
+                      <Link
+                        key={pLink.name}
+                        to={pLink.path}
+                        onClick={() => {
+                          toggleMenu();
+                          toggleProductsDropdown();
+                        }}
+                        className="block text-base text-gray-600 hover:text-purple-700 py-1"
+                      >
+                        {pLink.name}
+                      </Link>
+                    ) : (
+                      <button
+                        key={pLink.name}
+                        onClick={() => {
+                          handleCategoryClick(pLink);
+                          toggleMenu();
+                        }}
+                        className="block w-full text-left text-base text-gray-600 hover:text-purple-700 py-1"
+                      >
+                        {pLink.name}
+                      </button>
+                    )
+                  )}
                 </div>
               )}
             </div>

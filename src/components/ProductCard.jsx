@@ -34,22 +34,17 @@ const ProductCard = ({ product }) => {
       className="
       bg-white 
       overflow-hidden 
-      transition 
-      duration-300 
+      transition-all duration-300 
       flex flex-col
+      rounded-2xl
+      group
     "
     >
       {/* --- Image and Tag Section --- */}
       {/* The image container has rounded top corners */}
-      <div className="relative h-96 w-full bg-gray-50 rounded-t-xl overflow-hidden flex items-center justify-center rounded-xl 
-      shadow-lg 
-      hover:shadow-xl">
+      <div className="relative h-70 w-full bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-2xl group-hover:ring-2 group-hover:ring-purple-200">
         {/* Placeholder for the image. Ensure your 'imageURL' points to a valid asset. */}
-        <img
-          src={imageURL}
-          alt={name}
-          className="w-full h-full object-cover" // Changed to object-cover for better fit, but object-contain if you need entire image visible
-        />
+        <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}
         <div className="absolute top-3 left-3 flex space-x-2">
@@ -94,11 +89,11 @@ const ProductCard = ({ product }) => {
 
       {/* --- Product Details Section --- */}
       <div className="p-4 flex-grow flex flex-col justify-between">
-        <h3 className="text-base font-semibold text-gray-800 mb-1">{name}</h3>{" "}
+        <h3 className="text-base font-semibold text-gray-800 mb-1">{name}</h3>
         {/* Adjusted font size slightly */}
         {/* Price Row */}
         <div className="flex items-baseline space-x-2 mb-2">
-          <span className="text-lg font-bold text-gray-900">₹{price}</span>{" "}
+          <span className="text-lg font-bold text-purple-700">₹{price}</span>
           {/* Adjusted font size */}
           <span className="text-xs line-through text-gray-500">
             MRP: ₹{mrp}
@@ -111,9 +106,7 @@ const ProductCard = ({ product }) => {
           <div>
             {/* Rating Row */}
             <div className="flex items-center text-sm text-gray-600">
-              <span>
-                {rating}
-              </span>
+              <span>{rating}</span>
               <Star
                 size={14}
                 fill="currentColor"
@@ -125,11 +118,13 @@ const ProductCard = ({ product }) => {
           <div>
             <button
               className="
-          flex items-center justify-center w-full py-2 px-1 text-white 
+          flex items-center justify-center py-2 px-3 text-white 
           bg-purple-700 hover:bg-purple-800 font-semibold text-sm 
-          transition duration-150 ease-in-out 
+          transition-all duration-300 ease-out 
           focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
-          rounded-md
+          rounded-sm
+          opacity-0 translate-y-1 pointer-events-none
+          group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
         "
               onClick={handleAddToCart}
             >

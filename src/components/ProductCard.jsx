@@ -93,7 +93,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* --- Product Details Section --- */}
-      <div className="p-4 flex-grow">
+      <div className="p-4 flex-grow flex flex-col justify-between">
         <h3 className="text-base font-semibold text-gray-800 mb-1">{name}</h3>{" "}
         {/* Adjusted font size slightly */}
         {/* Price Row */}
@@ -107,11 +107,11 @@ const ProductCard = ({ product }) => {
             {discount}
           </span>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center gap-2">
           <div>
             {/* Rating Row */}
             <div className="flex items-center text-sm text-gray-600">
-              <span className="font-semibold text-yellow-500 mr-1">
+              <span>
                 {rating}
               </span>
               <Star

@@ -1,14 +1,19 @@
 @import "tailwindcss";
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
 html,
 body,
 #root {
   height: 100%;
 }
 .container {
-  @apply max-w-7xl mx-auto;
+  /* @apply max-w-7xl mx-auto; */
 }
 * {
   box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  /* font-weight: <weight>;
+  font-style: normal; */
 }
 :root {
   --border-xs: 2px;
@@ -44,4 +49,41 @@ body,
   --color-gray-900: #111111;
   --color-white: #FFFFFF;
   --color-black: #000000;
+}
+/* --- BACKGROUND COLOR CLASSES (Brand) --- */
+.bg-brand-25 { background-color: var(--color-brand-25); }
+.bg-brand-50 { background-color: var(--color-brand-50); }
+.bg-brand-100 { background-color: var(--color-brand-100); }
+.bg-brand-200 { background-color: var(--color-brand-200); }
+.bg-brand-300 { background-color: var(--color-brand-300); }
+.bg-brand-400 { background-color: var(--color-brand-400); }
+.bg-brand-500 { background-color: var(--color-brand-500); }
+.bg-brand-600 { background-color: var(--color-brand-600); }
+.bg-brand-700 { background-color: var(--color-brand-700); }
+.bg-brand-800 { background-color: var(--color-brand-800); }
+.bg-brand-900 { background-color: var(--color-brand-900); }
+
+/* --- BACKGROUND COLOR CLASSES (Gray & Base) --- */
+.bg-gray-25 { background-color: var(--color-gray-25); }
+.bg-gray-50 { background-color: var(--color-gray-50); }
+.bg-gray-100 { background-color: var(--color-gray-100); }
+.bg-gray-200 { background-color: var(--color-gray-200); }
+.bg-gray-300 { background-color: var(--color-gray-300); }
+.bg-gray-400 { background-color: var(--color-gray-400); }
+.bg-gray-500 { background-color: var(--color-gray-500); }
+.bg-gray-600 { background-color: var(--color-gray-600); }
+.bg-gray-700 { background-color: var(--color-gray-700); }
+.bg-gray-800 { background-color: var(--color-gray-800); }
+.bg-gray-900 { background-color: var(--color-gray-900); }
+.bg-white { background-color: var(--color-white); }
+.bg-black { background-color: var(--color-black); }
+
+/* --- BORDER RADIUS CLASS for circle --- */
+.rounded-circle { 
+    border-radius: var(--circle); /* Will render as 2000px */
+}
+
+/* For compatibility, you might also want the standard Tailwind 'full' equivalent */
+.rounded-full { 
+    border-radius: var(--circle); 
 }

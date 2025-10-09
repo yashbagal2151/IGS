@@ -75,12 +75,7 @@ const SlideshowStripe = () => {
       <div className="absolute top-6 left-6 text-white">
         <h4 className="text-lg font-semibold drop-shadow">{slide.title}</h4>
         <p className="text-sm opacity-90 drop-shadow">{slide.description}</p>
-        {/* <button
-          onClick={() => handleCheckout(slide)}
-          className="mt-2 bg-green-500 px-4 py-2 rounded hover:bg-green-600"
-        >
-          Buy ₹{(slide.price)}
-        </button> */}
+
       </div>
 
       {/* Slider Buttons */}

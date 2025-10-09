@@ -38,7 +38,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="bg-white shadow-sm sticky top-0 z-30 border-b border-gray-100">
-        <div className="container  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 md:px-15 lg:px-20">
           <div className="flex justify-between items-center h-20">
             {/* Logo/Brand */}
             <div className="flex-shrink-0">
@@ -60,7 +60,7 @@ export default function Navbar() {
                   <div key={link.name} className="relative">
                     <button
                       onClick={toggleProductsDropdown}
-                      className="text-gray-700 hover:text-purple-700 px-3 py-2 text-sm font-medium flex items-center transition"
+                      className="text-gray-700 hover:text-purple-700 lg:px-3 lg:py-3 text-sm font-medium flex items-center transition"
                     >
                       Products{" "}
                       <ChevronDown
@@ -100,7 +100,7 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     to={link.path}
-                    className="text-gray-700 hover:text-purple-700 px-3 py-2 text-sm font-medium transition"
+                    className="text-gray-700 hover:text-purple-700 lg:px-3 lg:py-3 text-sm font-medium transition"
                   >
                     {link.name}
                   </Link>
@@ -117,6 +117,20 @@ export default function Navbar() {
                 <Search size={20} />
               </button>
 
+              {/* Cart Icon with Item Count (Desktop) */}
+              <button
+                onClick={toggleCart}
+                className="p-2 transition relative hidden sm:block"
+                aria-label={`Open shopping cart with ${totalItems} items`}
+              >
+                <ShoppingCart size={20} />
+                {totalItems > 0 && (
+                  <span className="absolute top-1.5 right-0 inline-flex items-center justify-center px-1.5 py-1.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-brand-600 rounded-circle min-w-4 h-4">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
+              </button>
+
               <Link
                 to="/login"
                 className="text-gray-700 hover:text-purple-700 text-sm font-medium transition hidden sm:block"
@@ -130,20 +144,6 @@ export default function Navbar() {
               >
                 Sign Up
               </Link>
-
-              {/* Cart Icon with Item Count (Desktop) */}
-              <button
-                onClick={toggleCart}
-                className="p-2 bg-purple-100 rounded-full text-purple-700 hover:bg-purple-200 transition relative hidden sm:block"
-                aria-label={`Open shopping cart with ${totalItems} items`}
-              >
-                <ShoppingCart size={20} />
-                {totalItems > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full min-w-4 h-4">
-                    {totalItems > 99 ? "99+" : totalItems}
-                  </span>
-                )}
-              </button>
 
               {/* --- Mobile Menu Button --- */}
               <div className="flex lg:hidden">
@@ -214,7 +214,7 @@ export default function Navbar() {
             <div className="border-b border-gray-100 pb-2 mb-2">
               <button
                 onClick={toggleProductsDropdown}
-                className="w-full text-left text-lg font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition flex justify-between items-center"
+                className="w-full text-left text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition flex justify-between items-center"
               >
                 Products{" "}
                 <ChevronDown
@@ -251,7 +251,7 @@ export default function Navbar() {
                   key={link.name}
                   to={link.path}
                   onClick={toggleMenu}
-                  className="block text-lg font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition"
+                  className="block text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition"
                 >
                   {link.name}
                 </Link>
@@ -284,7 +284,7 @@ export default function Navbar() {
             <Link
               to="/signup"
               onClick={toggleMenu}
-              className="w-full text-center inline-block px-4 py-3 text-lg font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
+              className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
             >
               Sign Up
             </Link>

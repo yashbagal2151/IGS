@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import { ShoppingCart, Star } from "lucide-react"; // Assuming lucide-react for icons
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onOpenProduct }) => {
   const dispatch = useDispatch();
   const {
     id,
@@ -30,9 +30,8 @@ const ProductCard = ({ product }) => {
     );
   };
 
-  return (
-    <Link
-      to={`/product/${id}`}
+  const content = (
+    <div
       className="
       bg-white 
       overflow-hidden 
@@ -143,7 +142,21 @@ const ProductCard = ({ product }) => {
 
       {/* --- Add to Cart Button --- */}
       {/* Button now has rounded bottom corners, matching the card */}
-    </Link>
+    </div>
+  );
+  if (onOpenProduct) {
+    return (
+      <button
+        type="button"
+        className="text-left w-full"
+        onClick={() => onOpenProduct(product)}
+      >
+        {content}
+      </button>
+    );
+  }
+  return (
+    <Link to={`/product/${id}`}>{content}</Link>
   );
 };
 

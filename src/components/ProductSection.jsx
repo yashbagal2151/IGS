@@ -19,6 +19,7 @@ export default function ProductSection({
   showViewMore = true,
   maxItems = 4,
   categoryId,
+  onOpenProduct,
 }) {
   const displayedProducts = products.slice(0, maxItems);
 
@@ -70,7 +71,11 @@ export default function ProductSection({
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {displayedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onOpenProduct={onOpenProduct}
+          />
         ))}
       </div>
     </section>

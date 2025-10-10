@@ -7,10 +7,13 @@ import Clippathgroup from "../assets/clip-path-group.svg";
 import Modal from "../components/Modal";
 import FilterSidebar from "../components/FilterSidebar";
 import { useNavigate } from "react-router-dom";
+import ProductInfoModal from "../components/ProductInfoModal";
 
 function Home() {
   const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalFilters, setModalFilters] = useState({
     category: null,
     material: null,
@@ -45,6 +48,15 @@ function Home() {
     });
     closeFilterModal();
     navigate(`/filter?${params.toString()}`);
+  };
+
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setIsProductOpen(true);
+  };
+  const closeProductModal = () => {
+    setIsProductOpen(false);
+    setSelectedProduct(null);
   };
   return (
     <div className="bg-white">
@@ -143,6 +155,7 @@ min-height: 100dvh;"
             showViewMore={true}
             maxItems={4}
             categoryId={section.id}
+            onOpenProduct={openProductModal}
           />
         </div>
       ))}
@@ -171,6 +184,13 @@ min-height: 100dvh;"
           </div>
         </div>
       </Modal>
+
+      {/* Product Info Modal */}
+      <ProductInfoModal
+        isOpen={isProductOpen}
+        onClose={closeProductModal}
+        product={selectedProduct}
+      />
     </div>
   );
 }

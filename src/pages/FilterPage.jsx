@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import FilterSidebar from "../components/FilterSidebar";
 import ProductCard from "../components/ProductCard";
+import ProductInfoModal from "../components/ProductInfoModal";
 import { Search, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import categoriesData from "../data/categories.json";
 import products from "../data/products.json";
@@ -23,6 +24,8 @@ export default function FilterPage() {
   const [sortBy, setSortBy] = useState("popular");
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Initialize filters from URL params
   useEffect(() => {
@@ -193,6 +196,15 @@ export default function FilterPage() {
     setCurrentPage(1);
   };
 
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setIsProductOpen(true);
+  };
+  const closeProductModal = () => {
+    setIsProductOpen(false);
+    setSelectedProduct(null);
+  };
+
   const {
     products: paginatedProducts,
     total,
@@ -281,7 +293,11 @@ export default function FilterPage() {
           {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {paginatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onOpenProduct={openProductModal}
+              />
             ))}
           </div>
 
@@ -330,6 +346,13 @@ export default function FilterPage() {
           )}
         </div>
       </div>
+
+      {/* Product Info Modal */}
+      <ProductInfoModal
+        isOpen={isProductOpen}
+        onClose={closeProductModal}
+        product={selectedProduct}
+      />
     </div>
   );
 }

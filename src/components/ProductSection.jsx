@@ -40,8 +40,20 @@ export default function ProductSection({
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
-            {subtitle && <p className="text-gray-600 text-lg">{subtitle}</p>}
+            <Link
+              to={`/filter?category=${getCategoryFilterId(title)}`}
+              className="text-3xl font-bold text-gray-900 mb-2 hover:text-purple-700"
+            >
+              {title}
+            </Link>
+            {subtitle && (
+              <Link
+                to={`/filter?category=${getCategoryFilterId(title)}`}
+                className="text-gray-600 text-lg hover:text-purple-700"
+              >
+                {subtitle}
+              </Link>
+            )}
           </div>
           {showViewMore && products.length > maxItems && (
             <Link

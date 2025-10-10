@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import { ShoppingCart, Star } from "lucide-react"; // Assuming lucide-react for icons
@@ -30,7 +31,8 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div
+    <Link
+      to={`/product/${id}`}
       className="
       bg-white 
       overflow-hidden 
@@ -38,6 +40,7 @@ const ProductCard = ({ product }) => {
       flex flex-col
       rounded-2xl
       group
+      focus:outline-none focus:ring-2 focus:ring-purple-500
     "
     >
       {/* --- Image and Tag Section --- */}
@@ -126,7 +129,11 @@ const ProductCard = ({ product }) => {
           opacity-0 translate-y-1 pointer-events-none
           group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
         "
-              onClick={handleAddToCart}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleAddToCart();
+              }}
             >
               Add to Cart <ShoppingCart size={18} className="ml-2" />
             </button>
@@ -136,7 +143,7 @@ const ProductCard = ({ product }) => {
 
       {/* --- Add to Cart Button --- */}
       {/* Button now has rounded bottom corners, matching the card */}
-    </div>
+    </Link>
   );
 };
 

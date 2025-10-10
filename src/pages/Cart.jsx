@@ -51,7 +51,7 @@ export default function Cart({ isDrawer = false, onClose }) {
   };
 
   // --- Conditional Styling ---
-  const containerClasses = isDrawer ? "p-4" : "container mx-auto px-4 py-8";
+  const containerClasses = isDrawer ? "p-0" : "container mx-auto px-4 py-8";
 
   return (
     <>
@@ -87,7 +87,9 @@ export default function Cart({ isDrawer = false, onClose }) {
           // MAIN CONTENT LAYOUT
           <div
             className={`flex ${
-              isDrawer ? "flex-col" : "flex-col md:flex-row gap-8"
+              isDrawer
+                ? "flex-col pt-4 px-4 h-dvh"
+                : "flex-col md:flex-row gap-8 h-100 "
             }`}
           >
             {/* --- Cart Items List (Main Section) --- */}

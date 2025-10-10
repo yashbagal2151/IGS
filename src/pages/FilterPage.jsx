@@ -91,10 +91,12 @@ export default function FilterPage() {
       );
     }
 
-    // Material filter (placeholder - would need material data in products)
-    // if (filters.material) {
-    //   filtered = filtered.filter(product => product.material === filters.material);
-    // }
+    // Material filter
+    if (filters.material) {
+      filtered = filtered.filter(
+        (product) => (product.material || "").toLowerCase() === filters.material
+      );
+    }
 
     // Size filter (placeholder - would need size data in products)
     // if (filters.size) {

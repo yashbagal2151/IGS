@@ -169,20 +169,6 @@ export default function FilterSidebar({
         />
         <RadioOption
           name="material"
-          value="bronze"
-          label="Bronze"
-          checked={filters.material === "bronze"}
-          onChange={(value) => handleFilterChange("material", value)}
-        />
-        <RadioOption
-          name="material"
-          value="wood"
-          label="Wood"
-          checked={filters.material === "wood"}
-          onChange={(value) => handleFilterChange("material", value)}
-        />
-        <RadioOption
-          name="material"
           value="resin"
           label="Resin"
           checked={filters.material === "resin"}

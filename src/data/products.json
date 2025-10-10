@@ -10,7 +10,8 @@
     "reviews": 105,
     "isFeatured": true,
     "isCustomizable": true,
-    "imageURL": "https://picsum.photos/300/300?random=1"
+    "imageURL": "https://picsum.photos/300/300?random=1",
+    "material": "marble"
   },
   {
     "id": "MTVT002",
@@ -23,7 +24,8 @@
     "reviews": 55,
     "isFeatured": false,
     "isCustomizable": true,
-    "imageURL": "https://picsum.photos/300/300?random=1"
+    "imageURL": "https://picsum.photos/300/300?random=1",
+    "material": "resin"
   },
   {
     "id": "GNP003",
@@ -36,7 +38,8 @@
     "reviews": 150,
     "isFeatured": true,
     "isCustomizable": false,
-    "imageURL": "https://picsum.photos/300/300?random=1"
+    "imageURL": "https://picsum.photos/300/300?random=1",
+    "material": "marble"
   },
   {
     "id": "MTVT003",
@@ -49,6 +52,7 @@
     "reviews": 55,
     "isFeatured": false,
     "isCustomizable": true,
-    "imageURL": "https://picsum.photos/300/300?random=1"
+    "imageURL": "https://picsum.photos/300/300?random=1",
+    "material": "resin"
   }
 ]

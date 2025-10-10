@@ -16,7 +16,8 @@
           "reviews": 89,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=5"
+          "imageURL": "https://picsum.photos/300/300?random=5",
+          "material": "marble"
         },
         {
           "id": "SHV002",
@@ -29,7 +30,8 @@
           "reviews": 67,
           "isFeatured": true,
           "isCustomizable": false,
-          "imageURL": "https://picsum.photos/300/300?random=6"
+          "imageURL": "https://picsum.photos/300/300?random=6",
+          "material": "resin"
         },
         {
           "id": "SHV003",
@@ -42,7 +44,8 @@
           "reviews": 43,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=7"
+          "imageURL": "https://picsum.photos/300/300?random=7",
+          "material": "resin"
         },
         {
           "id": "SHV004",
@@ -55,7 +58,8 @@
           "reviews": 112,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=8"
+          "imageURL": "https://picsum.photos/300/300?random=8",
+          "material": "marble"
         }
       ]
     },
@@ -75,7 +79,8 @@
           "reviews": 78,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=9"
+          "imageURL": "https://picsum.photos/300/300?random=9",
+          "material": "marble"
         },
         {
           "id": "MVL002",
@@ -88,7 +93,8 @@
           "reviews": 56,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=10"
+          "imageURL": "https://picsum.photos/300/300?random=10",
+          "material": "resin"
         },
         {
           "id": "MVL003",
@@ -101,7 +107,8 @@
           "reviews": 82,
           "isFeatured": true,
           "isCustomizable": false,
-          "imageURL": "https://picsum.photos/300/300?random=11"
+          "imageURL": "https://picsum.photos/300/300?random=11",
+          "material": "marble"
         },
         {
           "id": "MVL004",
@@ -114,7 +121,8 @@
           "reviews": 45,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=12"
+          "imageURL": "https://picsum.photos/300/300?random=12",
+          "material": "resin"
         }
       ]
     },
@@ -134,7 +142,8 @@
           "reviews": 125,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=13"
+          "imageURL": "https://picsum.photos/300/300?random=13",
+          "material": "resin"
         },
         {
           "id": "GOD002",
@@ -147,7 +156,8 @@
           "reviews": 98,
           "isFeatured": true,
           "isCustomizable": false,
-          "imageURL": "https://picsum.photos/300/300?random=14"
+          "imageURL": "https://picsum.photos/300/300?random=14",
+          "material": "marble"
         },
         {
           "id": "GOD003",
@@ -160,7 +170,8 @@
           "reviews": 87,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=15"
+          "imageURL": "https://picsum.photos/300/300?random=15",
+          "material": "resin"
         },
         {
           "id": "GOD004",
@@ -173,7 +184,8 @@
           "reviews": 156,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=16"
+          "imageURL": "https://picsum.photos/300/300?random=16",
+          "material": "marble"
         }
       ]
     },
@@ -193,7 +205,8 @@
           "reviews": 72,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=17"
+          "imageURL": "https://picsum.photos/300/300?random=17",
+          "material": "bronze"
         },
         {
           "id": "MOT002",
@@ -206,7 +219,8 @@
           "reviews": 89,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=18"
+          "imageURL": "https://picsum.photos/300/300?random=18",
+          "material": "resin"
         },
         {
           "id": "MOT003",
@@ -219,7 +233,8 @@
           "reviews": 54,
           "isFeatured": false,
           "isCustomizable": false,
-          "imageURL": "https://picsum.photos/300/300?random=19"
+          "imageURL": "https://picsum.photos/300/300?random=19",
+          "material": "resin"
         },
         {
           "id": "MOT004",
@@ -232,7 +247,8 @@
           "reviews": 76,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=20"
+          "imageURL": "https://picsum.photos/300/300?random=20",
+          "material": "marble"
         }
       ]
     },
@@ -252,7 +268,8 @@
           "reviews": 63,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=21"
+          "imageURL": "https://picsum.photos/300/300?random=21",
+          "material": "resin"
         },
         {
           "id": "DEC002",
@@ -265,7 +282,8 @@
           "reviews": 91,
           "isFeatured": true,
           "isCustomizable": false,
-          "imageURL": "https://picsum.photos/300/300?random=22"
+          "imageURL": "https://picsum.photos/300/300?random=22",
+          "material": "marble"
         },
         {
           "id": "DEC003",
@@ -278,7 +296,8 @@
           "reviews": 47,
           "isFeatured": false,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=23"
+          "imageURL": "https://picsum.photos/300/300?random=23",
+          "material": "resin"
         },
         {
           "id": "DEC004",
@@ -291,7 +310,8 @@
           "reviews": 78,
           "isFeatured": true,
           "isCustomizable": true,
-          "imageURL": "https://picsum.photos/300/300?random=24"
+          "imageURL": "https://picsum.photos/300/300?random=24",
+          "material": "marble"
         }
       ]
     }

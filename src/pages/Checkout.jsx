@@ -189,15 +189,14 @@ export default function Checkout() {
 
   const isValidUpiId = (id) => /^[a-zA-Z0-9_.-]{3,}@[a-zA-Z]{3,}$/.test(id);
 
-  // Delivery ETA window: 5–7 business days from now
+  // Delivery ETA: 7 days from now
   const now = new Date();
   const addDays = (d, n) => {
     const x = new Date(d);
     x.setDate(x.getDate() + n);
     return x;
   };
-  const etaMin = addDays(now, 5);
-  const etaMax = addDays(now, 7);
+  const etaExact = addDays(now, 7);
   const formatEta = (d) => d.toLocaleDateString(undefined, { day: "2-digit", month: "long" });
 
   const isPaymentValid = React.useMemo(() => {
@@ -551,7 +550,7 @@ export default function Checkout() {
                         Gift wrap this item (₹20 for wrapping)
                       </label>
                       <div className="text-xs text-gray-500 mt-1">
-                        Estimated Delivery – <span className="font-semibold">Between {formatEta(etaMin)} - {formatEta(etaMax)}, 8am - 10pm</span>
+                        Estimated Delivery – <span className="font-semibold">By {formatEta(etaExact)}, 8am - 10pm</span>
                       </div>
                       <button
                         type="button"

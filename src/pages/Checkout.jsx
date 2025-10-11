@@ -9,7 +9,6 @@ import addresses from "../data/addresses.json";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
-import CardForm from "../components/CardForm";
 
 export default function Checkout() {
   const navigate = useNavigate();

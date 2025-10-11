@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import indianStates from "../data/indianStates.json";
 
 export default function AddressForm({ onSubmit, onCancel, initial, submitLabel = "Use this address" }) {
   const [name, setName] = useState(initial?.name || "");
@@ -10,11 +11,25 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [makeDefault, setMakeDefault] = useState(initial?.isDefault || false);
+  const [errors, setErrors] = useState({});
+
+  const onlyDigits = (value) => value.replace(/\D/g, "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim()) return;
-    if (!/^[0-9]{6}$/.test(pincode)) return;
+    const validationErrors = {};
+    if (!name.trim()) validationErrors.name = "Name is required";
+
+    const mobileDigits = onlyDigits(mobile);
+    if (mobileDigits.length !== 10) validationErrors.mobile = "Enter a valid 10-digit mobile number";
+
+    if (!/^[0-9]{6}$/.test(pincode)) validationErrors.pincode = "Pincode must be 6 digits";
+    if (!state) validationErrors.state = "Please select your state";
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
     const addressLine = [
       flat,
@@ -32,7 +47,7 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
       name: name.trim(),
       tag: "Home",
       addressLine,
-      mobile: mobile.trim(),
+      mobile: `+91 ${mobileDigits}`,
       email: "",
       isDefault: makeDefault,
     };
@@ -45,22 +60,26 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
         <label className="block text-sm font-medium mb-1">Name *</label>
         <input
           type="text"
-          className="w-full border rounded px-3 py-2"
+          className={`w-full border rounded px-3 py-2 ${errors.name ? "border-red-500" : ""}`}
           placeholder="John Doe"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
+        {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium mb-1">Mobile Number</label>
+        <label className="block text-sm font-medium mb-1">Mobile Number *</label>
         <input
           type="tel"
-          className="w-full border rounded px-3 py-2"
-          placeholder="000 000 0000"
+          className={`w-full border rounded px-3 py-2 ${errors.mobile ? "border-red-500" : ""}`}
+          placeholder="Enter 10 digits"
           value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
+          onChange={(e) => setMobile(onlyDigits(e.target.value).slice(0, 10))}
+          inputMode="numeric"
+          maxLength={10}
         />
+        {errors.mobile && <p className="mt-1 text-xs text-red-600">{errors.mobile}</p>}
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Flat, House no., Building, Company, Apartment</label>
@@ -94,12 +113,13 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
         <label className="block text-sm font-medium mb-1">Pincode *</label>
         <input
           type="text"
-          className="w-full border rounded px-3 py-2"
+          className={`w-full border rounded px-3 py-2 ${errors.pincode ? "border-red-500" : ""}`}
           placeholder="6 digits [0-9]"
           value={pincode}
-          onChange={(e) => setPincode(e.target.value)}
+          onChange={(e) => setPincode(onlyDigits(e.target.value).slice(0, 6))}
           required
         />
+        {errors.pincode && <p className="mt-1 text-xs text-red-600">{errors.pincode}</p>}
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -112,18 +132,19 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">State</label>
+          <label className="block text-sm font-medium mb-1">State *</label>
           <select
-            className="w-full border rounded px-3 py-2"
+            className={`w-full border rounded px-3 py-2 ${errors.state ? "border-red-500" : ""}`}
             value={state}
             onChange={(e) => setState(e.target.value)}
+            required
           >
             <option value="">Select your state</option>
-            <option>Maharashtra</option>
-            <option>Karnataka</option>
-            <option>Gujarat</option>
-            <option>Delhi</option>
+            {indianStates.map((st) => (
+              <option key={st} value={st}>{st}</option>
+            ))}
           </select>
+          {errors.state && <p className="mt-1 text-xs text-red-600">{errors.state}</p>}
         </div>
       </div>
       <label className="flex items-center gap-2 text-sm">

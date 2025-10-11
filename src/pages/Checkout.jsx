@@ -9,6 +9,7 @@ import addresses from "../data/addresses.json";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
+import CardForm from "../components/CardForm";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -44,20 +45,55 @@ export default function Checkout() {
 
   // Payment selection
   const [paymentType, setPaymentType] = useState("card"); // 'upi' | 'card' | 'netbanking' | 'cod'
-  const [selectedCardMask, setSelectedCardMask] = useState("**0000");
+
+  // Cards
+  const [cards, setCards] = useState([
+    { id: "card_boi_0000", brand: "visa", mask: "0000", label: "Bank of India debit card ending with 0000" },
+    { id: "card_hdfc_0000", brand: "mastercard", mask: "0000", label: "HDFC Bank credit card ending with 0000" },
+  ]);
+  const [selectedCardId, setSelectedCardId] = useState("card_boi_0000");
+  const selectedCard = useMemo(() => cards.find((c) => c.id === selectedCardId), [cards, selectedCardId]);
+
+  // Netbanking
+  const [selectedBank, setSelectedBank] = useState("");
+
+  // UPI
+  const [upiApp, setUpiApp] = useState("phonepe"); // 'phonepe' | 'gpay' | 'other'
   const [upiId, setUpiId] = useState("");
+  const [upiVerified, setUpiVerified] = useState(false);
+
+  // Modals
+  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
   const currentStep = open.address ? 1 : open.payment ? 2 : 3;
   const ctaLabel = (() => {
     if (currentStep === 1) return "Deliver to this address";
     if (currentStep === 2) return "Use this payment method";
-    if (paymentType === "card")
-      return `Pay with debit card ${selectedCardMask}`;
+    if (paymentType === "card" && selectedCard)
+      return `Pay with debit card **${selectedCard.mask}`;
     if (paymentType === "upi") return "Pay with UPI";
     if (paymentType === "netbanking") return "Pay via Netbanking";
     if (paymentType === "cod") return "Place order (COD)";
     return "Place order";
   })();
+
+  const isValidUpiId = (id) => /^[a-zA-Z0-9_.-]{3,}@[a-zA-Z]{3,}$/.test(id);
+
+  const isPaymentValid = React.useMemo(() => {
+    if (currentStep !== 2) return true;
+    switch (paymentType) {
+      case "upi":
+        return Boolean(upiApp) && isValidUpiId(upiId) && upiVerified;
+      case "card":
+        return Boolean(selectedCardId);
+      case "netbanking":
+        return Boolean(selectedBank);
+      case "cod":
+        return true;
+      default:
+        return false;
+    }
+  }, [currentStep, paymentType, upiApp, upiId, upiVerified, selectedCardId, selectedBank]);
 
   const handlePay = async () => {
     const order = {
@@ -68,9 +104,11 @@ export default function Checkout() {
         type: paymentType,
         label:
           paymentType === "card"
-            ? `debit card ${selectedCardMask}`
+            ? `debit card **${selectedCard?.mask || "0000"}`
             : paymentType === "upi"
             ? `UPI ${upiId || "(ID verified)"}`
+            : paymentType === "netbanking" && selectedBank
+            ? `Netbanking ${selectedBank}`
             : paymentType,
       },
       totals: { mrpTotal, discount, delivery, payable, subtotal },
@@ -84,6 +122,7 @@ export default function Checkout() {
     if (currentStep === 1) {
       setOpen({ address: false, payment: true, review: false });
     } else if (currentStep === 2) {
+      if (!isPaymentValid) return;
       setOpen({ address: false, payment: false, review: true });
     } else {
       handlePay();
@@ -192,42 +231,73 @@ export default function Checkout() {
             {/* UPI */}
             <div className="mb-4">
               <div className="text-sm font-semibold mb-2">UPI</div>
-              <div className="flex items-center gap-4 mb-3 text-sm">
+              <div className="flex flex-wrap items-center gap-4 mb-3 text-sm">
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"
                     name="paytype"
-                    checked={paymentType === "upi"}
-                    onChange={() => setPaymentType("upi")}
+                    checked={paymentType === "upi" && upiApp === "phonepe"}
+                    onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); }}
                   />
                   PhonePe
                 </label>
+                <div className="flex items-center gap-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="paytype"
+                      checked={paymentType === "upi" && upiApp === "gpay"}
+                      onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); }}
+                    />
+                    GPay
+                  </label>
+                  {paymentType === "upi" && upiApp === "gpay" && (
+                    <>
+                      <input
+                        className={`border px-2 py-1 rounded text-sm ${upiId && !isValidUpiId(upiId) ? 'border-red-500' : ''}`}
+                        placeholder="Enter UPI ID"
+                        value={upiId}
+                        onChange={(e) => { setUpiId(e.target.value); setUpiVerified(false); }}
+                      />
+                      <button
+                        type="button"
+                        className={`text-purple-700 text-sm ${isValidUpiId(upiId) ? '' : 'opacity-50 cursor-not-allowed'}`}
+                        disabled={!isValidUpiId(upiId)}
+                        onClick={() => setUpiVerified(true)}
+                      >
+                        {upiVerified ? 'Verified' : 'Verify ID'}
+                      </button>
+                    </>
+                  )}
+                </div>
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"
                     name="paytype"
-                    checked={paymentType === "upi"}
-                    onChange={() => setPaymentType("upi")}
-                  />
-                  GPay
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="paytype"
-                    checked={paymentType === "upi"}
-                    onChange={() => setPaymentType("upi")}
+                    checked={paymentType === "upi" && upiApp === "other"}
+                    onChange={() => { setPaymentType("upi"); setUpiApp("other"); setUpiVerified(false); }}
                   />
                   Other UPI App
                 </label>
-                <input
-                  className="border px-2 py-1 rounded text-sm"
-                  placeholder="Enter UPI ID"
-                  value={upiId}
-                  onChange={(e) => setUpiId(e.target.value)}
-                />
-                <button className="text-purple-700 text-sm">Verify ID</button>
               </div>
+              {paymentType === "upi" && upiApp !== "gpay" && (
+                <div className="flex items-center gap-3 text-sm">
+                  <input
+                    className={`border px-2 py-1 rounded text-sm ${upiId && !isValidUpiId(upiId) ? 'border-red-500' : ''}`}
+                    placeholder="Enter UPI ID"
+                    value={upiId}
+                    onChange={(e) => { setUpiId(e.target.value); setUpiVerified(false); }}
+                  />
+                  <button
+                    type="button"
+                    className={`text-purple-700 text-sm ${isValidUpiId(upiId) ? '' : 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!isValidUpiId(upiId)}
+                    onClick={() => setUpiVerified(true)}
+                  >
+                    {upiVerified ? 'Verified' : 'Verify ID'}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Cards */}
@@ -235,45 +305,43 @@ export default function Checkout() {
               <div className="text-sm font-semibold mb-2">
                 Credit or Debit Card
               </div>
-              <label className="flex items-center gap-2 mb-2 text-sm">
-                <input
-                  type="radio"
-                  name="paytype"
-                  checked={paymentType === "card"}
-                  onChange={() => {
-                    setPaymentType("card");
-                    setSelectedCardMask("**0000");
-                  }}
-                />
-                Bank of India debit card ending with 0000
-              </label>
-              <label className="flex items-center gap-2 mb-2 text-sm">
-                <input
-                  type="radio"
-                  name="paytype"
-                  checked={paymentType === "card"}
-                  onChange={() => {
-                    setPaymentType("card");
-                    setSelectedCardMask("**0000");
-                  }}
-                />
-                HDFC Bank credit card ending with 0000
-              </label>
-              <button className="text-purple-700 text-sm">Add new card</button>
+              {cards.map((c) => (
+                <label key={c.id} className="flex items-center gap-2 mb-2 text-sm">
+                  <input
+                    type="radio"
+                    name="paytype_card"
+                    checked={paymentType === "card" && selectedCardId === c.id}
+                    onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); }}
+                  />
+                  {c.label}
+                </label>
+              ))}
+              <button
+                type="button"
+                className="text-purple-700 text-sm"
+                onClick={() => { setPaymentType("card"); setIsCardModalOpen(true); }}
+              >
+                Add new card
+              </button>
             </div>
 
             {/* Netbanking */}
             <div className="mb-4">
               <div className="text-sm font-semibold mb-2">Netbanking</div>
-              <select
-                className="border rounded px-2 py-1 text-sm"
-                onChange={() => setPaymentType("netbanking")}
-              >
-                <option>Select your bank</option>
-                <option>SBI</option>
-                <option>HDFC</option>
-                <option>ICICI</option>
-              </select>
+              <div className="flex items-center gap-2">
+                <select
+                  className="border rounded px-2 py-1 text-sm"
+                  value={selectedBank}
+                  onChange={(e) => { setSelectedBank(e.target.value); setPaymentType("netbanking"); }}
+                >
+                  <option value="">Select your bank</option>
+                  <option value="SBI">SBI</option>
+                  <option value="HDFC">HDFC</option>
+                  <option value="ICICI">ICICI</option>
+                  <option value="AXIS">AXIS</option>
+                  <option value="KOTAK">KOTAK</option>
+                </select>
+              </div>
             </div>
 
             {/* COD */}
@@ -385,7 +453,7 @@ export default function Checkout() {
             <button
               onClick={handlePrimaryAction}
               className="w-full mt-4 px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-              disabled={items.length === 0}
+              disabled={items.length === 0 || (currentStep === 2 && !isPaymentValid)}
             >
               {ctaLabel}
             </button>
@@ -428,6 +496,60 @@ export default function Checkout() {
             setIsAddressModalOpen(false);
           }}
         />
+      </Modal>
+      {/* Add Card Modal */}
+      <Modal
+        isOpen={isCardModalOpen}
+        onClose={() => setIsCardModalOpen(false)}
+        title="Add new card"
+      >
+        {/* Inline minimal card form to avoid a new file */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.currentTarget;
+            const name = form.cardName.value.trim();
+            const number = form.cardNumber.value.replace(/\D/g, "");
+            const expiry = form.cardExpiry.value.trim();
+            const cvv = form.cardCvv.value.replace(/\D/g, "");
+            if (!name || number.length < 12 || !/^\d{2}\/\d{2}$/.test(expiry) || cvv.length < 3) return;
+            const mask = number.slice(-4);
+            const card = {
+              id: `card_new_${mask}`,
+              brand: "card",
+              mask,
+              label: `New card ending with ${mask}`,
+            };
+            setCards((prev) => [...prev, card]);
+            setSelectedCardId(card.id);
+            setPaymentType("card");
+            setIsCardModalOpen(false);
+          }}
+          className="space-y-3"
+        >
+          <div>
+            <label className="block text-sm mb-1">Name on card</label>
+            <input name="cardName" className="w-full border rounded px-3 py-2" required />
+          </div>
+          <div>
+            <label className="block text-sm mb-1">Card number</label>
+            <input name="cardNumber" className="w-full border rounded px-3 py-2" inputMode="numeric" required />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Expiry (MM/YY)</label>
+              <input name="cardExpiry" className="w-full border rounded px-3 py-2" placeholder="MM/YY" required />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">CVV</label>
+              <input name="cardCvv" className="w-full border rounded px-3 py-2" inputMode="numeric" required />
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={() => setIsCardModalOpen(false)} className="px-4 py-2 border rounded">Cancel</button>
+            <button type="submit" className="px-4 py-2 bg-purple-700 text-white rounded">Save card</button>
+          </div>
+        </form>
       </Modal>
     </>
   );

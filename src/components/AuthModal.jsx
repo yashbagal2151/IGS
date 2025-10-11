@@ -31,7 +31,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
     setName(''); setMobile(''); setEmail(''); setPassword(''); setConfirmPassword(''); setErrors({});
   };
 
-  const strongPassword = (p) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=]{8,}$/.test(p);
+  // Accept any characters; require at least one letter and one number, length >= 8
+  const strongPassword = (p) => /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(p);
 
   const validateSignup = () => {
     const e = {};
@@ -121,7 +122,7 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
             </div>
             <div>
               <label className="block text-sm mb-1">Mobile Number <span className="text-red-500">*</span></label>
-              <input className={`w-full border rounded px-3 py-2 ${errors.mobile? 'border-red-500':'border-gray-200'}`} value={mobile} onChange={(e)=>setMobile(e.target.value.replace(/\D/g,''))} placeholder="987 654 3210" inputMode="numeric" maxLength={10} />
+              <input className={`w-full border rounded px-3 py-2 ${errors.mobile? 'border-red-500':'border-gray-200'}`} value={mobile} onChange={(e)=>setMobile(e.target.value.replace(/\D/g,'').slice(0,10))} placeholder="987 654 3210" inputMode="numeric" maxLength={10} />
               {errors.mobile && <p className="text-xs text-red-600">{errors.mobile}</p>}
             </div>
             <div>

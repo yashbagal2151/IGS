@@ -361,7 +361,7 @@ export default function Navbar() {
 
       {/* --- Cart Drawer Component (Always positioned outside the Navbar) --- */}
       <CartDrawer isOpen={isCartOpen} onClose={toggleCart} />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialTab="login" />
     </>
   );
 }

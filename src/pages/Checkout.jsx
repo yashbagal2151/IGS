@@ -29,6 +29,7 @@ export default function Checkout() {
     [selectedAddressId, addrList]
   );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [editAddress, setEditAddress] = useState(null);
 
   // Payment selection
   const [paymentType, setPaymentType] = useState("card"); // 'upi' | 'card' | 'netbanking' | 'cod'
@@ -132,6 +133,16 @@ export default function Checkout() {
                   <div className="text-gray-600">{addr.addressLine}</div>
                   <div className="text-gray-600">Mobile: {addr.mobile}</div>
                   <div className="text-gray-600">Email: {addr.email}</div>
+                  <button
+                    type="button"
+                    className="text-xs text-purple-700 mt-1"
+                    onClick={() => {
+                      setEditAddress(addr);
+                      setIsAddressModalOpen(true);
+                    }}
+                  >
+                    Edit address
+                  </button>
                 </div>
               </label>
             ))}
@@ -341,15 +352,29 @@ export default function Checkout() {
     {/* Add Address Modal */}
     <Modal isOpen={isAddressModalOpen} onClose={() => setIsAddressModalOpen(false)} title="Add new Address">
       <AddressForm
-        onCancel={() => setIsAddressModalOpen(false)}
+        initial={editAddress || undefined}
+        submitLabel={editAddress ? "Save address" : "Use this address"}
+        onCancel={() => {
+          setEditAddress(null);
+          setIsAddressModalOpen(false);
+        }}
         onSubmit={(newAddr) => {
           setAddrList((prev) => {
-            const list = newAddr.isDefault
-              ? [{ ...newAddr, isDefault: true }, ...prev.map((a) => ({ ...a, isDefault: false }))]
-              : [...prev, newAddr];
+            let list = prev;
+            if (editAddress) {
+              list = prev.map((a) => (a.id === editAddress.id ? newAddr : a));
+            } else {
+              list = [...prev, newAddr];
+            }
+            if (newAddr.isDefault) {
+              list = [
+                ...list.map((a) => ({ ...a, isDefault: a.id === newAddr.id })),
+              ];
+            }
             return list;
           });
           setSelectedAddressId(newAddr.id);
+          setEditAddress(null);
           setIsAddressModalOpen(false);
         }}
       />

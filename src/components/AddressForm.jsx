@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
-export default function AddressForm({ onSubmit, onCancel }) {
-  const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
+export default function AddressForm({ onSubmit, onCancel, initial, submitLabel = "Use this address" }) {
+  const [name, setName] = useState(initial?.name || "");
+  const [mobile, setMobile] = useState(initial?.mobile || "");
   const [flat, setFlat] = useState("");
   const [area, setArea] = useState("");
   const [landmark, setLandmark] = useState("");
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [makeDefault, setMakeDefault] = useState(false);
+  const [makeDefault, setMakeDefault] = useState(initial?.isDefault || false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function AddressForm({ onSubmit, onCancel }) {
       .join(", ");
 
     const newAddress = {
-      id: `addr_${Date.now()}`,
+      id: initial?.id || `addr_${Date.now()}`,
       name: name.trim(),
       tag: "Home",
       addressLine,
@@ -140,7 +140,7 @@ export default function AddressForm({ onSubmit, onCancel }) {
           Cancel
         </button>
         <button type="submit" className="px-4 py-2 bg-purple-700 text-white rounded">
-          Use this address
+          {submitLabel}
         </button>
       </div>
     </form>

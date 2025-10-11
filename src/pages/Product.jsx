@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
-import { Star, ShoppingCart, Check, Truck, Shield } from "lucide-react";
+import { Star, Truck, Shield } from "lucide-react";
 
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const [selectedMaterial, setSelectedMaterial] = useState("marble");
   const [selectedSize, setSelectedSize] = useState("small");
   const [pincode, setPincode] = useState("");
@@ -43,17 +44,16 @@ export default function Product() {
   const reviews = product.reviews;
   const isCustomizable = product.isCustomizable;
 
-  // Create array of product images (you can modify these URLs to show different angles)
+  // Create array of product images (sample additional images)
   const productImages = [
     imageSrc,
-    `https://picsum.photos/300/300?random=${product.id}-1`, // Different angle 1
-    `https://picsum.photos/300/300?random=${product.id}-2`, // Different angle 2
+    `https://picsum.photos/300/300?random=${product.id}-1`,
+    `https://picsum.photos/300/300?random=${product.id}-2`,
   ];
 
   const currentImage = productImages[selectedImageIndex];
 
   const handleCheckDelivery = () => {
-    // Simulate delivery check
     if (pincode.length >= 6) {
       setDeliveryEstimate("Between 14 - 16 October, 8am - 10pm");
     }
@@ -61,19 +61,6 @@ export default function Product() {
 
   const handleThumbnailClick = (index) => {
     setSelectedImageIndex(index);
-  };
-
-  const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        id: product.id,
-        title,
-        price: product.price,
-        image: imageSrc,
-        material: selectedMaterial,
-        size: selectedSize,
-      })
-    );
   };
 
   const materialOptions = [
@@ -87,6 +74,30 @@ export default function Product() {
     { value: "large", label: "Large", description: "10 in - 15 in" },
     { value: "extra-large", label: "Extra Large", description: "Above 15 in" },
   ];
+
+  const [quantity, setQuantity] = useState(1);
+  const increment = () => setQuantity((q) => Math.min(99, q + 1));
+  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i += 1) {
+      dispatch(
+        addToCart({
+          id: product.id,
+          title,
+          price: product.price,
+          image: imageSrc,
+          material: selectedMaterial,
+          size: selectedSize,
+        })
+      );
+    }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    window.location.href = "/checkout";
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -152,18 +163,11 @@ export default function Product() {
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex items-center text-sm text-gray-600">
                   <span className="mr-1">{rating}</span>
-                  <Star
-                    size={16}
-                    className="text-yellow-500"
-                    fill="currentColor"
-                  />
+                  <Star size={16} className="text-yellow-500" fill="currentColor" />
                   <span className="ml-1">({reviews})</span>
                 </div>
                 {isCustomizable && (
-                  <span
-                    className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-md border 
-              border-purple-500"
-                  >
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-md border border-purple-500">
                     Customizable
                   </span>
                 )}
@@ -172,18 +176,10 @@ export default function Product() {
 
             {/* Pricing */}
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-purple-700">
-                ₹{product.price}
-              </span>
-              {mrp && (
-                <span className="text-lg line-through text-gray-500">
-                  ₹{mrp}
-                </span>
-              )}
+              <span className="text-3xl font-bold text-purple-700">₹{product.price}</span>
+              {mrp && <span className="text-lg line-through text-gray-500">₹{mrp}</span>}
               {discount && (
-                <span className="text-lg font-medium text-purple-600">
-                  {discount}
-                </span>
+                <span className="text-lg font-medium text-purple-600">{discount}</span>
               )}
             </div>
 
@@ -192,9 +188,7 @@ export default function Product() {
 
             {/* Delivery Check */}
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Check Delivery
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900">Check Delivery</h3>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -256,29 +250,43 @@ export default function Product() {
                       className="mr-3 text-purple-600 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-gray-900">
-                        {option.label}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        ({option.description})
-                      </div>
+                      <div className="font-medium text-gray-900">{option.label}</div>
+                      <div className="text-sm text-gray-500">({option.description})</div>
                     </div>
                   </label>
                 ))}
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
+            {/* Quantity and Actions */}
+            <div className="mt-4 flex items-center gap-4">
+              <div className="inline-flex items-center border rounded-lg overflow-hidden">
+                <button
+                  type="button"
+                  onClick={decrement}
+                  className="px-3 py-2 text-gray-700 hover:bg-gray-50"
+                >
+                  -
+                </button>
+                <div className="px-4 py-2 text-sm min-w-10 text-center">{quantity}</div>
+                <button
+                  type="button"
+                  onClick={increment}
+                  className="px-3 py-2 text-gray-700 hover:bg-gray-50"
+                >
+                  +
+                </button>
+              </div>
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-purple-700 text-purple-700 rounded-lg hover:bg-purple-50 transition font-semibold"
+                className="px-5 py-3 bg-white text-purple-700 border border-purple-700 rounded-lg hover:bg-purple-50 transition"
               >
-                <ShoppingCart size={20} />
-                Add to Cart
+                + Add to Cart
               </button>
-              <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition font-semibold">
-                <Check size={20} />
+              <button
+                onClick={handleBuyNow}
+                className="px-5 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+              >
                 Buy Now
               </button>
             </div>
@@ -289,17 +297,13 @@ export default function Product() {
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-green-600 text-xl">💳</span>
                 </div>
-                <p className="text-xs text-gray-600">
-                  Cash on Delivery available
-                </p>
+                <p className="text-xs text-gray-600">Cash on Delivery available</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                   <Truck size={20} className="text-blue-600" />
                 </div>
-                <p className="text-xs text-gray-600">
-                  Free delivery above ₹1,000
-                </p>
+                <p className="text-xs text-gray-600">Free delivery above ₹1,000</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -311,9 +315,7 @@ export default function Product() {
 
             {/* About This Item */}
             <div className="pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                About this item
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">About this item</h3>
               <p className="text-sm text-gray-600">
                 Primary Material: Hand-Carved White Indian Marble (Single Block)
               </p>

@@ -55,8 +55,24 @@ export default function Checkout() {
     [items]
   );
   const discount = Math.max(0, mrpTotal - subtotal);
-  const payable = subtotal + delivery;
   const dispatch = useDispatch();
+  // Gift wrap state (₹20 per unit)
+  const WRAP_FEE_PER_UNIT = 20;
+  const [wrapMap, setWrapMap] = useState({});
+  React.useEffect(() => {
+    setWrapMap((prev) => {
+      const next = { ...prev };
+      for (const it of items) {
+        if (next[it.id] === undefined) next[it.id] = false;
+      }
+      return next;
+    });
+  }, [items]);
+  const wrapTotal = useMemo(
+    () => items.reduce((s, i) => s + (wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0), 0),
+    [items, wrapMap]
+  );
+  const payable = useMemo(() => subtotal + delivery + wrapTotal, [subtotal, delivery, wrapTotal]);
 
   const [open, setOpen] = useState({
     address: true,
@@ -205,7 +221,7 @@ export default function Checkout() {
             ? `Netbanking ${selectedBank}`
             : paymentType,
       },
-      totals: { mrpTotal, discount, delivery, payable, subtotal },
+      totals: { mrpTotal, discount, delivery, wrap: wrapTotal, payable, subtotal },
       items,
     };
     dispatch(clearCart());
@@ -505,57 +521,61 @@ export default function Checkout() {
             actionText="Verify Items"
           >
             <div className="divide-y">
-              {items.map((i) => (
-                <div
-                  key={i.id}
-                  className="py-4 flex items-center gap-4 text-sm"
-                >
-                  <img
-                    src={i.image}
-                    alt={i.title}
-                    className="w-16 h-16 rounded object-cover"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium text-gray-900">{i.title}</div>
-                    <div className="text-gray-500">
-                      Material: {i.material || "-"} &nbsp; Size: {i.size || "-"}
+              {items.map((i) => {
+                const lineWrap = wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0;
+                const lineTotal = i.price * i.qty + lineWrap;
+                return (
+                  <div key={i.id} className="py-4 flex items-start gap-4 text-sm">
+                    <img src={i.image} alt={i.title} className="w-20 h-20 rounded object-cover" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{i.title}</div>
+                      <div className="text-gray-500">Material: {i.material || "-"} &nbsp; Size: {i.size || "-"}</div>
+                      <div className="text-purple-700 font-semibold">₹{i.price}</div>
+                      <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
+                        <input
+                          type="checkbox"
+                          checked={!!wrapMap[i.id]}
+                          onChange={(e) => setWrapMap((prev) => ({ ...prev, [i.id]: e.target.checked }))}
+                        />
+                        Gift wrap this item (₹20 for wrapping)
+                      </label>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Estimated Delivery – <span className="font-semibold">Between 14 - 16 October, 8am - 10pm</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="mt-2 text-red-600 text-xs"
+                        onClick={() => dispatch(removeFromCart(i.id))}
+                      >
+                        Remove from cart
+                      </button>
                     </div>
-                    <div className="text-purple-700 font-semibold">
-                      ₹{i.price}
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="px-2 py-1 border rounded"
+                        onClick={() =>
+                          i.qty > 1 ? dispatch(updateQty({ id: i.id, qty: i.qty - 1 })) : dispatch(removeFromCart(i.id))
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{i.qty}</span>
+                      <button
+                        className="px-2 py-1 border rounded"
+                        onClick={() => dispatch(updateQty({ id: i.id, qty: i.qty + 1 }))}
+                      >
+                        +
+                      </button>
                     </div>
-                    <div className="text-xs text-gray-500">
-                      Estimated Delivery -{" "}
-                      <span className="font-semibold">
-                        Between 14 - 16 October, 8am - 10pm
-                      </span>
+                    <div className="w-28 text-right font-medium">
+                      ₹{lineTotal}
+                      {lineWrap > 0 && (
+                        <div className="text-[11px] text-gray-500">incl. wrap ₹{lineWrap}</div>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="px-2 py-1 border rounded"
-                      onClick={() =>
-                        i.qty > 1
-                          ? dispatch(updateQty({ id: i.id, qty: i.qty - 1 }))
-                          : dispatch(removeFromCart(i.id))
-                      }
-                    >
-                      -
-                    </button>
-                    <span>{i.qty}</span>
-                    <button
-                      className="px-2 py-1 border rounded"
-                      onClick={() =>
-                        dispatch(updateQty({ id: i.id, qty: i.qty + 1 }))
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-                  <div className="w-24 text-right font-medium">
-                    ₹{i.price * i.qty}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
               {items.length === 0 && (
                 <div className="py-6 text-gray-500">Your cart is empty.</div>
               )}
@@ -581,6 +601,10 @@ export default function Checkout() {
               <div className="flex justify-between">
                 <span>Delivery Fees:</span>
                 <span>₹{delivery}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Gift wrap:</span>
+                <span>₹{wrapTotal}</span>
               </div>
               <hr />
               <div className="flex justify-between font-semibold">

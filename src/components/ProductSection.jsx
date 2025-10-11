@@ -47,15 +47,15 @@ export default function ProductSection({
             >
               {title}
             </Link>
-            {subtitle && (
+          </div>
+          {/* {subtitle && (
               <Link
                 to={`/filter?category=${getCategoryFilterId(title)}`}
                 className="text-gray-600 text-lg hover:text-purple-700"
               >
                 {subtitle}
               </Link>
-            )}
-          </div>
+            )} */}
           {showViewMore && products.length > maxItems && (
             <Link
               to={`/filter?category=${getCategoryFilterId(title)}`}
@@ -66,6 +66,7 @@ export default function ProductSection({
             </Link>
           )}
         </div>
+        <p>{subtitle}</p>
       </div>
 
       {/* Products Grid - Responsive Design */}

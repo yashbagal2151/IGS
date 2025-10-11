@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateQty, removeFromCart } from "../features/cart/cartSlice";
+import {
+  addToCart,
+  updateQty,
+  removeFromCart,
+} from "../features/cart/cartSlice";
 import { ShoppingCart, Star } from "lucide-react"; // Assuming lucide-react for icons
 
 const ProductCard = ({ product, onOpenProduct }) => {
@@ -30,6 +34,10 @@ const ProductCard = ({ product, onOpenProduct }) => {
         title: name,
         price: price,
         image: imageURL,
+        mrp: mrp,
+        discount: discount,
+        material: material,
+        size: size,
       })
     );
   };
@@ -97,16 +105,11 @@ const ProductCard = ({ product, onOpenProduct }) => {
       {/* --- Product Details Section --- */}
       <div className="p-4 flex-grow flex flex-col justify-between min-h-[120px]">
         {/* Product Title - Fixed height to prevent layout shifts */}
-        <h3
-          className="text-base font-semibold text-gray-800 mb-2 h-10 flex items-center overflow-hidden"
-          style={{
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {name}
-        </h3>
+        <div>
+          <h3 className="text-base font-semibold text-gray-800 mb-2 overflow-hidden leading-5">
+            {name}
+          </h3>
+        </div>
 
         {/* Price Row */}
         <div className="flex items-baseline space-x-2 mb-2">
@@ -120,7 +123,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
         </div>
 
         {/* Rating and Add to Cart */}
-        <div className="flex justify-between items-center gap-2 mt-auto">
+        <div className="flex flex-col xl:flex-row justify-between items-center gap-2 mt-auto">
           <div>
             <div className="flex items-center text-sm text-gray-600">
               <span>{rating}</span>
@@ -136,13 +139,13 @@ const ProductCard = ({ product, onOpenProduct }) => {
             {qtyInCart === 0 ? (
               <button
                 className="
-            flex items-center justify-center py-2 px-3 text-white 
+            flex items-center justify-center py-2 px-2 text-white 
             bg-purple-700 hover:bg-purple-800 font-semibold text-sm 
             transition-all duration-300 ease-out 
             focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
             rounded-sm
             opacity-0 translate-y-1 pointer-events-none
-            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto gap-2 md:text-sm
           "
                 onClick={(e) => {
                   e.preventDefault();
@@ -150,7 +153,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
                   handleAddToCart();
                 }}
               >
-                Add to Cart <ShoppingCart size={18} className="ml-2" />
+                Add to Cart <ShoppingCart size={18} />
               </button>
             ) : (
               <div

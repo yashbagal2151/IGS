@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
-import { Star, Truck, Shield } from "lucide-react";
+import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
 
 export default function Product() {
   const { id } = useParams();
@@ -43,6 +43,7 @@ export default function Product() {
   const rating = product.rating;
   const reviews = product.reviews;
   const isCustomizable = product.isCustomizable;
+  const isFeatured = product.isFeatured;
 
   // Create array of product images (sample additional images)
   const productImages = [
@@ -163,11 +164,42 @@ export default function Product() {
               <div className="flex items-center gap-4 mb-3">
                 <div className="flex items-center text-sm text-gray-600">
                   <span className="mr-1">{rating}</span>
-                  <Star size={16} className="text-yellow-500" fill="currentColor" />
+                  <Star
+                    size={16}
+                    className="text-yellow-500"
+                    fill="currentColor"
+                  />
                   <span className="ml-1">({reviews})</span>
                 </div>
+                {isFeatured && (
+                  <span
+                    className="text-xs 
+              font-bold
+              px-2 
+              py-1 
+              rounded-md 
+              bg-purple-100 
+              text-purple-500 
+              border 
+              border-purple-500
+              whitespace-nowrap"
+                  >
+                    Featured
+                  </span>
+                )}
                 {isCustomizable && (
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-md border border-purple-500">
+                  <span
+                    className="text-xs 
+              font-semibold 
+              px-2 
+              py-1 
+              rounded-md 
+              bg-white 
+              text-gray-500 
+              border 
+              border-gray-300
+              whitespace-nowrap"
+                  >
                     Customizable
                   </span>
                 )}
@@ -176,10 +208,18 @@ export default function Product() {
 
             {/* Pricing */}
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-purple-700">₹{product.price}</span>
-              {mrp && <span className="text-lg line-through text-gray-500">₹{mrp}</span>}
+              <span className="text-3xl font-bold text-purple-700">
+                ₹{product.price}
+              </span>
+              {mrp && (
+                <span className="text-lg line-through text-gray-500">
+                  ₹{mrp}
+                </span>
+              )}
               {discount && (
-                <span className="text-lg font-medium text-purple-600">{discount}</span>
+                <span className="text-lg font-medium text-purple-600">
+                  {discount}
+                </span>
               )}
             </div>
 
@@ -188,7 +228,9 @@ export default function Product() {
 
             {/* Delivery Check */}
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-gray-900">Check Delivery</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Check Delivery
+              </h3>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -250,8 +292,12 @@ export default function Product() {
                       className="mr-3 text-purple-600 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-gray-900">{option.label}</div>
-                      <div className="text-sm text-gray-500">({option.description})</div>
+                      <div className="font-medium text-gray-900">
+                        {option.label}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        ({option.description})
+                      </div>
                     </div>
                   </label>
                 ))}
@@ -268,7 +314,9 @@ export default function Product() {
                 >
                   -
                 </button>
-                <div className="px-4 py-2 text-sm min-w-10 text-center">{quantity}</div>
+                <div className="px-4 py-2 text-sm min-w-10 text-center">
+                  {quantity}
+                </div>
                 <button
                   type="button"
                   onClick={increment}
@@ -279,13 +327,13 @@ export default function Product() {
               </div>
               <button
                 onClick={handleAddToCart}
-                className="px-5 py-3 bg-white text-purple-700 border border-purple-700 rounded-lg hover:bg-purple-50 transition"
+                className="px-2 py-2 bg-white text-purple-700 border border-purple-700 rounded-lg hover:bg-purple-50 transition flex items-center gap-2"
               >
-                + Add to Cart
+                Add to Cart <ShoppingCart size={15} />
               </button>
               <button
                 onClick={handleBuyNow}
-                className="px-5 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+                className="px-2 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
               >
                 Buy Now
               </button>
@@ -297,13 +345,17 @@ export default function Product() {
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                   <span className="text-green-600 text-xl">💳</span>
                 </div>
-                <p className="text-xs text-gray-600">Cash on Delivery available</p>
+                <p className="text-xs text-gray-600">
+                  Cash on Delivery available
+                </p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
                   <Truck size={20} className="text-blue-600" />
                 </div>
-                <p className="text-xs text-gray-600">Free delivery above ₹1,000</p>
+                <p className="text-xs text-gray-600">
+                  Free delivery above ₹1,000
+                </p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -315,7 +367,9 @@ export default function Product() {
 
             {/* About This Item */}
             <div className="pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">About this item</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                About this item
+              </h3>
               <p className="text-sm text-gray-600">
                 Primary Material: Hand-Carved White Indian Marble (Single Block)
               </p>

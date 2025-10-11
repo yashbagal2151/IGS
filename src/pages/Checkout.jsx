@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
 
-// Minimal brand/bank/app icons to match design theme
+// Minimal brand/bank/app icons and logo fallback
 const VisaIcon = () => (
   <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[#1a1f71] border border-[#1a1f71] rounded">VISA</span>
 );
@@ -29,6 +29,18 @@ const GPayIcon = () => (
 const BankLogo = ({ code }) => (
   <span className="inline-flex items-center justify-center w-6 h-6 text-[10px] font-semibold rounded-full bg-gray-100 border text-gray-700">{code}</span>
 );
+const Logo = ({ name, alt, className = "h-4", fallback }) => {
+  const [failed, setFailed] = React.useState(false);
+  if (failed) return fallback || null;
+  return (
+    <img
+      src={`/assets/logos/${name}.svg`}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  );
+};
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -83,6 +95,59 @@ export default function Checkout() {
 
   // Modals
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+
+  // Add Card form (controlled with validation)
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState(""); // formatted with spaces
+  const [cardExpiry, setCardExpiry] = useState(""); // MM/YY
+  const [cardCvv, setCardCvv] = useState("");
+  const onlyDigits = (v) => v.replace(/\D/g, "");
+  const detectBrand = (digits) => {
+    if (/^4/.test(digits)) return "visa";
+    if (/^(5[1-5]|2[2-7])/.test(digits)) return "mastercard";
+    if (/^3[47]/.test(digits)) return "amex";
+    return "card";
+  };
+  const luhnCheck = (num) => {
+    let sum = 0;
+    let dbl = false;
+    for (let i = num.length - 1; i >= 0; i--) {
+      let d = parseInt(num[i], 10);
+      if (dbl) {
+        d *= 2;
+        if (d > 9) d -= 9;
+      }
+      sum += d;
+      dbl = !dbl;
+    }
+    return sum % 10 === 0;
+  };
+  const isFutureExpiry = (mmYY) => {
+    const m = mmYY.match(/^(\d{2})\/(\d{2})$/);
+    if (!m) return false;
+    const mm = parseInt(m[1], 10);
+    const yy = parseInt(m[2], 10);
+    if (mm < 1 || mm > 12) return false;
+    const year = 2000 + yy;
+    const exp = new Date(year, mm, 0, 23, 59, 59, 999); // last ms of month
+    return exp >= new Date();
+  };
+  const cardDigits = onlyDigits(cardNumber);
+  const cardBrand = detectBrand(cardDigits);
+  const cardErrors = React.useMemo(() => {
+    const errs = {};
+    if (!cardName.trim()) errs.name = "Name on card is required";
+    const len = cardDigits.length;
+    const brand = cardBrand;
+    const expectedLen = brand === "amex" ? 15 : 16;
+    if (len !== expectedLen) errs.number = brand === "amex" ? "AMEX requires 15 digits" : "Card number must be 16 digits";
+    else if (!luhnCheck(cardDigits)) errs.number = "Invalid card number";
+    if (!/^\d{2}\/\d{2}$/.test(cardExpiry) || !isFutureExpiry(cardExpiry)) errs.expiry = "Enter a valid future MM/YY";
+    const cvvLen = brand === "amex" ? 4 : 3;
+    if (onlyDigits(cardCvv).length !== cvvLen) errs.cvv = brand === "amex" ? "AMEX CVV must be 4 digits" : "CVV must be 3 digits";
+    return errs;
+  }, [cardName, cardDigits, cardExpiry, cardCvv, cardBrand]);
+  const isCardValid = Object.keys(cardErrors).length === 0;
 
   // Consider the Payment section primary if it's open (prevents CTA/desync when address is also open)
   const currentStep = open.payment ? 2 : open.address ? 1 : 3;
@@ -260,7 +325,10 @@ export default function Checkout() {
                     checked={paymentType === "upi" && upiApp === "phonepe"}
                     onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); }}
                   />
-                  <span className="inline-flex items-center gap-1"><PhonePeIcon /> PhonePe</span>
+                  <span className="inline-flex items-center gap-1">
+                    <Logo name="phonepe" alt="PhonePe" fallback={<PhonePeIcon />} />
+                    PhonePe
+                  </span>
                 </label>
                 <div className="flex items-center gap-2">
                   <label className="flex items-center gap-2">
@@ -270,7 +338,10 @@ export default function Checkout() {
                       checked={paymentType === "upi" && upiApp === "gpay"}
                       onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); }}
                     />
-                    <span className="inline-flex items-center gap-1"><GPayIcon /> GPay</span>
+                    <span className="inline-flex items-center gap-1">
+                      <Logo name="gpay" alt="GPay" fallback={<GPayIcon />} />
+                      GPay
+                    </span>
                   </label>
                   {paymentType === "upi" && upiApp === "gpay" && (
                     <>
@@ -335,7 +406,11 @@ export default function Checkout() {
                     onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); }}
                   />
                   <span className="inline-flex items-center gap-2">
-                    {c.brand === 'visa' ? <VisaIcon /> : <MastercardIcon />}
+                    {c.brand === 'visa' ? (
+                      <Logo name="visa" alt="VISA" fallback={<VisaIcon />} />
+                    ) : (
+                      <Logo name="mastercard" alt="Mastercard" fallback={<MastercardIcon />} />
+                    )}
                     <span>{c.label}</span>
                   </span>
                 </label>
@@ -365,7 +440,9 @@ export default function Checkout() {
                   <option value="AXIS">AXIS</option>
                   <option value="KOTAK">KOTAK</option>
                 </select>
-                {selectedBank && <BankLogo code={selectedBank} />}
+                {selectedBank && (
+                  <Logo name={selectedBank.toLowerCase()} alt={selectedBank} fallback={<BankLogo code={selectedBank} />} />
+                )}
               </div>
             </div>
 
@@ -383,6 +460,19 @@ export default function Checkout() {
               </label>
             </div>
           </Section>
+
+          {/* Section CTA aligned with your design */}
+          {open.payment && (
+            <div className="mt-4">
+              <button
+                onClick={handlePrimaryAction}
+                className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                disabled={!isPaymentValid}
+              >
+                Use this payment method
+              </button>
+            </div>
+          )}
 
           {/* Review Products */}
           <Section
@@ -528,51 +618,93 @@ export default function Checkout() {
         onClose={() => setIsCardModalOpen(false)}
         title="Add new card"
       >
-        {/* Inline minimal card form to avoid a new file */}
+        {/* Inline validated card form */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            const form = e.currentTarget;
-            const name = form.cardName.value.trim();
-            const number = form.cardNumber.value.replace(/\D/g, "");
-            const expiry = form.cardExpiry.value.trim();
-            const cvv = form.cardCvv.value.replace(/\D/g, "");
-            if (!name || number.length < 12 || !/^\d{2}\/\d{2}$/.test(expiry) || cvv.length < 3) return;
-            const mask = number.slice(-4);
+            if (!isCardValid) return;
+            const mask = cardDigits.slice(-4);
             const card = {
-              id: `card_new_${mask}`,
-              brand: "card",
+              id: `card_${cardBrand}_${mask}`,
+              brand: cardBrand,
               mask,
-              label: `New card ending with ${mask}`,
+              label:
+                cardBrand === "visa"
+                  ? `VISA card ending with ${mask}`
+                  : cardBrand === "mastercard"
+                  ? `Mastercard ending with ${mask}`
+                  : cardBrand === "amex"
+                  ? `Amex card ending with ${mask}`
+                  : `Card ending with ${mask}`,
             };
             setCards((prev) => [...prev, card]);
             setSelectedCardId(card.id);
             setPaymentType("card");
             setIsCardModalOpen(false);
+            // reset form
+            setCardName("");
+            setCardNumber("");
+            setCardExpiry("");
+            setCardCvv("");
           }}
           className="space-y-3"
         >
           <div>
             <label className="block text-sm mb-1">Name on card</label>
-            <input name="cardName" className="w-full border rounded px-3 py-2" required />
+            <input
+              className={`w-full border rounded px-3 py-2 ${cardErrors.name ? "border-red-500" : ""}`}
+              value={cardName}
+              onChange={(e) => setCardName(e.target.value)}
+              placeholder="John Doe"
+            />
+            {cardErrors.name && <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>}
           </div>
           <div>
             <label className="block text-sm mb-1">Card number</label>
-            <input name="cardNumber" className="w-full border rounded px-3 py-2" inputMode="numeric" required />
+            <input
+              className={`w-full border rounded px-3 py-2 ${cardErrors.number ? "border-red-500" : ""}`}
+              value={cardNumber}
+              onChange={(e) => {
+                const digits = onlyDigits(e.target.value).slice(0, 19);
+                const grouped = digits.replace(/(.{4})/g, "$1 ").trim();
+                setCardNumber(grouped);
+              }}
+              inputMode="numeric"
+              placeholder="1234 5678 9012 3456"
+            />
+            {cardErrors.number && <p className="text-xs text-red-600 mt-1">{cardErrors.number}</p>}
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm mb-1">Expiry (MM/YY)</label>
-              <input name="cardExpiry" className="w-full border rounded px-3 py-2" placeholder="MM/YY" required />
+              <input
+                className={`w-full border rounded px-3 py-2 ${cardErrors.expiry ? "border-red-500" : ""}`}
+                value={cardExpiry}
+                onChange={(e) => {
+                  const v = onlyDigits(e.target.value).slice(0, 4);
+                  const mm = v.slice(0, 2);
+                  const rest = v.slice(2);
+                  setCardExpiry(mm + (rest ? "/" + rest : ""));
+                }}
+                placeholder="MM/YY"
+              />
+              {cardErrors.expiry && <p className="text-xs text-red-600 mt-1">{cardErrors.expiry}</p>}
             </div>
             <div>
               <label className="block text-sm mb-1">CVV</label>
-              <input name="cardCvv" className="w-full border rounded px-3 py-2" inputMode="numeric" required />
+              <input
+                className={`w-full border rounded px-3 py-2 ${cardErrors.cvv ? "border-red-500" : ""}`}
+                value={cardCvv}
+                onChange={(e) => setCardCvv(onlyDigits(e.target.value).slice(0, 4))}
+                inputMode="numeric"
+                placeholder={cardBrand === "amex" ? "4 digits" : "3 digits"}
+              />
+              {cardErrors.cvv && <p className="text-xs text-red-600 mt-1">{cardErrors.cvv}</p>}
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <button type="button" onClick={() => setIsCardModalOpen(false)} className="px-4 py-2 border rounded">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-purple-700 text-white rounded">Save card</button>
+            <button type="submit" disabled={!isCardValid} className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50">Save card</button>
           </div>
         </form>
       </Modal>

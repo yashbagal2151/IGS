@@ -276,7 +276,7 @@ export default function Checkout() {
                     type="radio"
                     name="address"
                     checked={selectedAddressId === addr.id}
-                    onChange={() => setSelectedAddressId(addr.id)}
+                    onChange={() => { setSelectedAddressId(addr.id); const y = window.scrollY; setTimeout(() => window.scrollTo(0, y), 0); }}
                     className="mt-1 text-purple-700"
                   />
                   <div className="text-sm">
@@ -469,14 +469,29 @@ export default function Checkout() {
             <div>
               <div className="text-sm font-semibold mb-2">Cash on Delivery</div>
               <label className="flex items-center gap-2 text-sm">
-                <input
+                  <input
                   type="radio"
                   name="paytype"
                   checked={paymentType === "cod"}
-                  onChange={() => setPaymentType("cod")}
+                    onChange={() => { setPaymentType("cod"); const y = window.scrollY; setTimeout(() => window.scrollTo(0, y), 0); }}
                 />
                 Cash on Delivery
               </label>
+            </div>
+            {/* Inline CTA as per design */}
+            <div className="mt-4">
+              <button
+                type="button"
+                className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                disabled={!isPaymentValid}
+                onClick={() => {
+                  if (!isPaymentValid) return;
+                  setOpen({ address: false, payment: false, review: true });
+                  setDone((d) => ({ ...d, payment: true }));
+                }}
+              >
+                Use this payment method
+              </button>
             </div>
           </Section>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateQty, removeFromCart } from "../features/cart/cartSlice";
 import { ShoppingCart, Star } from "lucide-react"; // Assuming lucide-react for icons
 
 const ProductCard = ({ product, onOpenProduct }) => {
@@ -18,6 +18,10 @@ const ProductCard = ({ product, onOpenProduct }) => {
     isCustomizable,
     imageURL,
   } = product;
+
+  const qtyInCart = useSelector(
+    (s) => s.cart.items.find((i) => i.id === id)?.qty || 0
+  );
 
   const handleAddToCart = () => {
     dispatch(
@@ -129,24 +133,65 @@ const ProductCard = ({ product, onOpenProduct }) => {
             </div>
           </div>
           <div>
-            <button
-              className="
-          flex items-center justify-center py-2 px-3 text-white 
-          bg-purple-700 hover:bg-purple-800 font-semibold text-sm 
-          transition-all duration-300 ease-out 
-          focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
-          rounded-sm
-          opacity-0 translate-y-1 pointer-events-none
-          group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
-        "
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleAddToCart();
-              }}
-            >
-              Add to Cart <ShoppingCart size={18} className="ml-2" />
-            </button>
+            {qtyInCart === 0 ? (
+              <button
+                className="
+            flex items-center justify-center py-2 px-3 text-white 
+            bg-purple-700 hover:bg-purple-800 font-semibold text-sm 
+            transition-all duration-300 ease-out 
+            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
+            rounded-sm
+            opacity-0 translate-y-1 pointer-events-none
+            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+          "
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleAddToCart();
+                }}
+              >
+                Add to Cart <ShoppingCart size={18} className="ml-2" />
+              </button>
+            ) : (
+              <div
+                className="
+              inline-flex items-center bg-white border border-purple-700 text-purple-700 rounded-sm 
+              opacity-0 translate-y-1 pointer-events-none
+              group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+            "
+              >
+                <button
+                  className="px-2 py-1 hover:bg-purple-50"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (qtyInCart > 1) {
+                      dispatch(updateQty({ id, qty: qtyInCart - 1 }));
+                    } else {
+                      dispatch(removeFromCart(id));
+                    }
+                  }}
+                  aria-label="Decrease quantity"
+                >
+                  –
+                </button>
+                <span className="px-2 select-none text-sm">{qtyInCart}</span>
+                <button
+                  className="px-2 py-1 hover:bg-purple-50"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // use addToCart to increment by 1
+                    dispatch(
+                      addToCart({ id, title: name, price, image: imageURL })
+                    );
+                  }}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

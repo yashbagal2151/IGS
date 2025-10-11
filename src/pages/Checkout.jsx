@@ -10,6 +10,20 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
 
+// Minimal brand/bank icons to match design theme
+const VisaIcon = () => (
+  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[#1a1f71] border border-[#1a1f71] rounded">VISA</span>
+);
+const MastercardIcon = () => (
+  <span className="inline-flex items-center">
+    <span className="w-3 h-3 rounded-full bg-[#EB001B]"></span>
+    <span className="w-3 h-3 -ml-1 rounded-full bg-[#F79E1B]"></span>
+  </span>
+);
+const BankLogo = ({ code }) => (
+  <span className="inline-flex items-center justify-center w-6 h-6 text-[10px] font-semibold rounded-full bg-gray-100 border text-gray-700">{code}</span>
+);
+
 export default function Checkout() {
   const navigate = useNavigate();
   const items = useSelector((s) => s.cart.items);
@@ -43,14 +57,14 @@ export default function Checkout() {
   const [editAddress, setEditAddress] = useState(null);
 
   // Payment selection
-  const [paymentType, setPaymentType] = useState("card"); // 'upi' | 'card' | 'netbanking' | 'cod'
+  const [paymentType, setPaymentType] = useState(""); // 'upi' | 'card' | 'netbanking' | 'cod'
 
   // Cards
   const [cards, setCards] = useState([
     { id: "card_boi_0000", brand: "visa", mask: "0000", label: "Bank of India debit card ending with 0000" },
     { id: "card_hdfc_0000", brand: "mastercard", mask: "0000", label: "HDFC Bank credit card ending with 0000" },
   ]);
-  const [selectedCardId, setSelectedCardId] = useState("card_boi_0000");
+  const [selectedCardId, setSelectedCardId] = useState("");
   const selectedCard = useMemo(() => cards.find((c) => c.id === selectedCardId), [cards, selectedCardId]);
 
   // Netbanking
@@ -138,6 +152,7 @@ export default function Checkout() {
   const Section = ({ title, isOpen, onToggle, children, actionText }) => (
     <div className="border rounded-lg mb-4 overflow-hidden">
       <button
+        type="button"
         onClick={onToggle}
         className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100"
       >
@@ -312,7 +327,10 @@ export default function Checkout() {
                     checked={paymentType === "card" && selectedCardId === c.id}
                     onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); }}
                   />
-                  {c.label}
+                  <span className="inline-flex items-center gap-2">
+                    {c.brand === 'visa' ? <VisaIcon /> : <MastercardIcon />}
+                    <span>{c.label}</span>
+                  </span>
                 </label>
               ))}
               <button
@@ -340,6 +358,7 @@ export default function Checkout() {
                   <option value="AXIS">AXIS</option>
                   <option value="KOTAK">KOTAK</option>
                 </select>
+                {selectedBank && <BankLogo code={selectedBank} />}
               </div>
             </div>
 

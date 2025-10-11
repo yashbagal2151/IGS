@@ -20,14 +20,14 @@ export default function Checkout() {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState({ address: true, payment: false, review: false });
+  const [addrList, setAddrList] = useState(addresses);
   const [selectedAddressId, setSelectedAddressId] = useState(
     addresses.find((a) => a.isDefault)?.id || addresses[0]?.id
   );
   const selectedAddress = useMemo(
-    () => addresses.find((a) => a.id === selectedAddressId),
-    [selectedAddressId]
+    () => addrList.find((a) => a.id === selectedAddressId),
+    [selectedAddressId, addrList]
   );
-  const [addrList, setAddrList] = useState(addresses);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   // Payment selection
@@ -76,6 +76,13 @@ export default function Checkout() {
       handlePay();
     }
   };
+
+  // If there are no addresses, prompt to add one immediately
+  React.useEffect(() => {
+    if (addrList.length === 0 && !isAddressModalOpen) {
+      setIsAddressModalOpen(true);
+    }
+  }, [addrList.length, isAddressModalOpen]);
 
   const Section = ({ title, isOpen, onToggle, children, actionText }) => (
     <div className="border rounded-lg mb-4 overflow-hidden">
@@ -132,7 +139,13 @@ export default function Checkout() {
               <button className="text-sm text-purple-700" onClick={() => setIsAddressModalOpen(true)}>
                 Add new address
               </button>
-              <button className="px-4 py-2 bg-purple-700 text-white rounded">Deliver to this address</button>
+              <button
+                className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                disabled={!selectedAddress}
+                onClick={() => setOpen({ address: false, payment: true, review: false })}
+              >
+                Deliver to this address
+              </button>
             </div>
           </div>
         </Section>

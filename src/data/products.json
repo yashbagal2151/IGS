@@ -11,7 +11,9 @@
     "isFeatured": true,
     "isCustomizable": true,
     "imageURL": "https://picsum.photos/300/300?random=1",
-    "material": "marble"
+    "material": "marble",
+    "size": "small",
+    "sizeDescription": "Under 6 in"
   },
   {
     "id": "MTVT002",
@@ -25,7 +27,9 @@
     "isFeatured": false,
     "isCustomizable": true,
     "imageURL": "https://picsum.photos/300/300?random=1",
-    "material": "resin"
+    "material": "resin",
+    "size": "medium",
+    "sizeDescription": "6 in - 10 in"
   },
   {
     "id": "GNP003",
@@ -39,7 +43,9 @@
     "isFeatured": true,
     "isCustomizable": false,
     "imageURL": "https://picsum.photos/300/300?random=1",
-    "material": "marble"
+    "material": "marble",
+    "size": "large",
+    "sizeDescription": "10 in - 15 in"
   },
   {
     "id": "MTVT003",
@@ -53,6 +59,8 @@
     "isFeatured": false,
     "isCustomizable": true,
     "imageURL": "https://picsum.photos/300/300?random=1",
-    "material": "resin"
+    "material": "resin",
+    "size": "medium",
+    "sizeDescription": "6 in - 10 in"
   }
 ]

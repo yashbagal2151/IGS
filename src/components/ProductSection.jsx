@@ -68,8 +68,8 @@ export default function ProductSection({
         </div>
       </div>
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Products Grid - Responsive Design */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6">
         {displayedProducts.map((product) => (
           <ProductCard
             key={product.id}

@@ -17,7 +17,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=5",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "SHV002",
@@ -31,7 +33,9 @@
           "isFeatured": true,
           "isCustomizable": false,
           "imageURL": "https://picsum.photos/300/300?random=6",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "SHV003",
@@ -45,7 +49,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=7",
-          "material": "resin"
+          "material": "resin",
+          "size": "large",
+          "sizeDescription": "10 in - 15 in"
         },
         {
           "id": "SHV004",
@@ -59,7 +65,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=8",
-          "material": "marble"
+          "material": "marble",
+          "size": "extra-large",
+          "sizeDescription": "Above 15 in"
         }
       ]
     },
@@ -80,7 +88,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=9",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "MVL002",
@@ -94,7 +104,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=10",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "MVL003",
@@ -108,7 +120,9 @@
           "isFeatured": true,
           "isCustomizable": false,
           "imageURL": "https://picsum.photos/300/300?random=11",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "MVL004",
@@ -122,7 +136,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=12",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         }
       ]
     },
@@ -143,7 +159,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=13",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "GOD002",
@@ -157,7 +175,9 @@
           "isFeatured": true,
           "isCustomizable": false,
           "imageURL": "https://picsum.photos/300/300?random=14",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "GOD003",
@@ -171,7 +191,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=15",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "GOD004",
@@ -185,7 +207,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=16",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         }
       ]
     },
@@ -206,7 +230,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=17",
-          "material": "bronze"
+          "material": "bronze",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "MOT002",
@@ -220,7 +246,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=18",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "MOT003",
@@ -234,7 +262,9 @@
           "isFeatured": false,
           "isCustomizable": false,
           "imageURL": "https://picsum.photos/300/300?random=19",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "MOT004",
@@ -248,7 +278,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=20",
-          "material": "marble"
+          "material": "marble",
+          "size": "large",
+          "sizeDescription": "10 in - 15 in"
         }
       ]
     },
@@ -269,7 +301,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=21",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "DEC002",
@@ -283,7 +317,9 @@
           "isFeatured": true,
           "isCustomizable": false,
           "imageURL": "https://picsum.photos/300/300?random=22",
-          "material": "marble"
+          "material": "marble",
+          "size": "medium",
+          "sizeDescription": "6 in - 10 in"
         },
         {
           "id": "DEC003",
@@ -297,7 +333,9 @@
           "isFeatured": false,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=23",
-          "material": "resin"
+          "material": "resin",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         },
         {
           "id": "DEC004",
@@ -311,7 +349,9 @@
           "isFeatured": true,
           "isCustomizable": true,
           "imageURL": "https://picsum.photos/300/300?random=24",
-          "material": "marble"
+          "material": "marble",
+          "size": "small",
+          "sizeDescription": "Under 6 in"
         }
       ]
     }

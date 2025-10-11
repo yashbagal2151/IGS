@@ -1,14 +1,19 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
-import { Star } from "lucide-react";
+import { Star, ShoppingCart, Check, Truck, Shield } from "lucide-react";
 
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [selectedMaterial, setSelectedMaterial] = useState("marble");
+  const [selectedSize, setSelectedSize] = useState("small");
+  const [pincode, setPincode] = useState("");
+  const [deliveryEstimate, setDeliveryEstimate] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Build a unified product list from categories and standalone products
   const getAllProducts = () => {
@@ -36,67 +41,283 @@ export default function Product() {
   const discount = product.discount;
   const rating = product.rating;
   const reviews = product.reviews;
-  const material = product.material;
+  const isCustomizable = product.isCustomizable;
+
+  // Create array of product images (you can modify these URLs to show different angles)
+  const productImages = [
+    imageSrc,
+    `https://picsum.photos/300/300?random=${product.id}-1`, // Different angle 1
+    `https://picsum.photos/300/300?random=${product.id}-2`, // Different angle 2
+  ];
+
+  const currentImage = productImages[selectedImageIndex];
+
+  const handleCheckDelivery = () => {
+    // Simulate delivery check
+    if (pincode.length >= 6) {
+      setDeliveryEstimate("Between 14 - 16 October, 8am - 10pm");
+    }
+  };
+
+  const handleThumbnailClick = (index) => {
+    setSelectedImageIndex(index);
+  };
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        title,
+        price: product.price,
+        image: imageSrc,
+        material: selectedMaterial,
+        size: selectedSize,
+      })
+    );
+  };
+
+  const materialOptions = [
+    { value: "marble", label: "Marble (Hand-Carved)" },
+    { value: "resin", label: "Resin (High-Density)" },
+  ];
+
+  const sizeOptions = [
+    { value: "small", label: "Small", description: "Under 6 in" },
+    { value: "medium", label: "Medium", description: "6 in - 10 in" },
+    { value: "large", label: "Large", description: "10 in - 15 in" },
+    { value: "extra-large", label: "Extra Large", description: "Above 15 in" },
+  ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
-        {/* Image */}
-        <div className="flex items-center justify-center bg-gray-50 rounded-xl p-4">
-          <img
-            src={imageSrc}
-            alt={title}
-            className="max-h-[500px] w-auto object-contain rounded-lg"
-          />
+    <div className="min-h-screen bg-white">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="text-sm text-gray-600">
+            <Link to="/" className="hover:text-purple-700">
+              Home
+            </Link>
+            <span className="mx-2">&gt;</span>
+            <Link to="/filter" className="hover:text-purple-700">
+              Products
+            </Link>
+            <span className="mx-2">&gt;</span>
+            <span className="text-gray-900">{product.category}</span>
+            <span className="mx-2">&gt;</span>
+            <span className="text-gray-900">{title}</span>
+          </nav>
         </div>
+      </div>
 
-        {/* Details */}
-        <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
-
-          {(rating || reviews) && (
-            <div className="flex items-center text-sm text-gray-600">
-              {rating && (
-                <>
-                  <span className="mr-1">{rating}</span>
-                  <Star size={16} className="text-yellow-500" fill="currentColor" />
-                </>
-              )}
-              {reviews && <span className="ml-2 text-gray-500">({reviews} reviews)</span>}
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Left: Product Images */}
+          <div className="space-y-4">
+            {/* Main Product Image */}
+            <div className="bg-gray-100 rounded-lg p-8 flex items-center justify-center">
+              <img
+                src={currentImage}
+                alt={title}
+                className="max-h-[500px] w-auto object-contain"
+              />
             </div>
-          )}
 
-          <div className="flex items-baseline gap-3">
-            <span className="text-2xl font-extrabold text-purple-700">₹{product.price}</span>
-            {mrp && (
-              <span className="text-sm line-through text-gray-500">MRP: ₹{mrp}</span>
-            )}
-            {discount && (
-              <span className="text-sm font-medium text-purple-600">{discount}</span>
-            )}
+            {/* Thumbnail Gallery */}
+            <div className="flex gap-3">
+              {productImages.map((img, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleThumbnailClick(index)}
+                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200 ${
+                    index === selectedImageIndex
+                      ? "border-purple-500 ring-2 ring-purple-200"
+                      : "border-gray-200 hover:border-purple-300"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${title} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
-          {material && (
-            <div className="text-sm text-gray-700">Material: <span className="font-medium capitalize">{material}</span></div>
-          )}
+          {/* Right: Product Details */}
+          <div className="space-y-6">
+            {/* Header */}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
+              <div className="flex items-center gap-4 mb-3">
+                <div className="flex items-center text-sm text-gray-600">
+                  <span className="mr-1">{rating}</span>
+                  <Star
+                    size={16}
+                    className="text-yellow-500"
+                    fill="currentColor"
+                  />
+                  <span className="ml-1">({reviews})</span>
+                </div>
+                {isCustomizable && (
+                  <span
+                    className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-md border 
+              border-purple-500"
+                  >
+                    Customizable
+                  </span>
+                )}
+              </div>
+            </div>
 
-          <div className="mt-4 flex gap-3">
-            <button
-              onClick={() =>
-                dispatch(
-                  addToCart({ id: product.id, title, price: product.price, image: imageSrc })
-                )
-              }
-              className="px-5 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
-            >
-              Add to Cart
-            </button>
-            <a
-              href="/checkout"
-              className="px-5 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-            >
-              Buy Now
-            </a>
+            {/* Pricing */}
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-bold text-purple-700">
+                ₹{product.price}
+              </span>
+              {mrp && (
+                <span className="text-lg line-through text-gray-500">
+                  ₹{mrp}
+                </span>
+              )}
+              {discount && (
+                <span className="text-lg font-medium text-purple-600">
+                  {discount}
+                </span>
+              )}
+            </div>
+
+            {/* Purchase Stats */}
+            <p className="text-sm text-gray-600">50 purchased in last month</p>
+
+            {/* Delivery Check */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Check Delivery
+              </h3>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Enter pincode"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <button
+                  onClick={handleCheckDelivery}
+                  className="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+                >
+                  Check
+                </button>
+              </div>
+              {deliveryEstimate && (
+                <p className="text-sm text-green-600">{deliveryEstimate}</p>
+              )}
+            </div>
+
+            {/* Material Selection */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-900">Material</h3>
+              <div className="grid grid-cols-4 gap-2">
+                {materialOptions.map((option) => (
+                  <label
+                    key={option.value}
+                    className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-purple-300 transition"
+                  >
+                    <input
+                      type="radio"
+                      name="material"
+                      value={option.value}
+                      checked={selectedMaterial === option.value}
+                      onChange={(e) => setSelectedMaterial(e.target.value)}
+                      className="mr-3 text-purple-600 focus:ring-purple-500"
+                    />
+                    <span className="text-gray-700">{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Size Selection */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-900">Size</h3>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                {sizeOptions.map((option) => (
+                  <label
+                    key={option.value}
+                    className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-purple-300 transition"
+                  >
+                    <input
+                      type="radio"
+                      name="size"
+                      value={option.value}
+                      checked={selectedSize === option.value}
+                      onChange={(e) => setSelectedSize(e.target.value)}
+                      className="mr-3 text-purple-600 focus:ring-purple-500"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {option.label}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        ({option.description})
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-purple-700 text-purple-700 rounded-lg hover:bg-purple-50 transition font-semibold"
+              >
+                <ShoppingCart size={20} />
+                Add to Cart
+              </button>
+              <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition font-semibold">
+                <Check size={20} />
+                Buy Now
+              </button>
+            </div>
+
+            {/* Features Grid */}
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <span className="text-green-600 text-xl">💳</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Cash on Delivery available
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <Truck size={20} className="text-blue-600" />
+                </div>
+                <p className="text-xs text-gray-600">
+                  Free delivery above ₹1,000
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <Shield size={20} className="text-purple-600" />
+                </div>
+                <p className="text-xs text-gray-600">Secure Payments</p>
+              </div>
+            </div>
+
+            {/* About This Item */}
+            <div className="pt-6 border-t border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                About this item
+              </h3>
+              <p className="text-sm text-gray-600">
+                Primary Material: Hand-Carved White Indian Marble (Single Block)
+              </p>
+            </div>
           </div>
         </div>
       </div>

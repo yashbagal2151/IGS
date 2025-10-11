@@ -1,63 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import SlideshowStripe from "../components/SlideshowStripe.jsx";
 import ProductSection from "../components/ProductSection.jsx";
 import carouselData from "../data/carousel.json";
 import categoriesData from "../data/categories.json";
 import Clippathgroup from "../assets/clip-path-group.svg";
-import Modal from "../components/Modal";
-import FilterSidebar from "../components/FilterSidebar";
 import { useNavigate } from "react-router-dom";
-import ProductInfoModal from "../components/ProductInfoModal";
 
 function Home() {
   const navigate = useNavigate();
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isProductOpen, setIsProductOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [modalFilters, setModalFilters] = useState({
-    category: null,
-    material: null,
-    size: null,
-    priceRange: "all",
-    minPrice: "",
-    maxPrice: "",
-    inStockOnly: false,
-    discount: null,
-  });
-
-  const openFilterModal = () => setIsFilterOpen(true);
-  const closeFilterModal = () => setIsFilterOpen(false);
-  const handleModalFiltersChange = (newFilters) => setModalFilters(newFilters);
-  const handleModalReset = () =>
-    setModalFilters({
-      category: null,
-      material: null,
-      size: null,
-      priceRange: "all",
-      minPrice: "",
-      maxPrice: "",
-      inStockOnly: false,
-      discount: null,
-    });
-  const handleApplyFilters = () => {
-    const params = new URLSearchParams();
-    Object.entries(modalFilters).forEach(([key, value]) => {
-      if (value && value !== "all" && value !== "") {
-        params.set(key, value);
-      }
-    });
-    closeFilterModal();
-    navigate(`/filter?${params.toString()}`);
-  };
-
-  const openProductModal = (product) => {
-    setSelectedProduct(product);
-    setIsProductOpen(true);
-  };
-  const closeProductModal = () => {
-    setIsProductOpen(false);
-    setSelectedProduct(null);
-  };
   return (
     <div className="bg-white">
       {/* Hero Section */}
@@ -77,7 +27,7 @@ min-height: 100dvh;"
           </p>
           <div className="flex flex-wrap gap-4 py-5">
             <button
-              onClick={openFilterModal}
+              onClick={() => navigate("/filter")}
               className="bg-purple-900 text-white py-1 px-2 rounded-lg font-medium hover:bg-purple-800 transition"
             >
               Explore Collection
@@ -155,42 +105,9 @@ min-height: 100dvh;"
             showViewMore={true}
             maxItems={4}
             categoryId={section.id}
-            onOpenProduct={openProductModal}
           />
         </div>
       ))}
-
-      {/* Filter Modal */}
-      <Modal isOpen={isFilterOpen} onClose={closeFilterModal} title="Filter Products">
-        <div className="flex flex-col md:flex-row gap-4">
-          <FilterSidebar
-            filters={modalFilters}
-            onFiltersChange={handleModalFiltersChange}
-            onResetFilters={handleModalReset}
-          />
-          <div className="flex md:flex-col gap-3 md:ml-2">
-            <button
-              onClick={handleApplyFilters}
-              className="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800"
-            >
-              View Results
-            </button>
-            <button
-              onClick={handleModalReset}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Product Info Modal */}
-      <ProductInfoModal
-        isOpen={isProductOpen}
-        onClose={closeProductModal}
-        product={selectedProduct}
-      />
     </div>
   );
 }

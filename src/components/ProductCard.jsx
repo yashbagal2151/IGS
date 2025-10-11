@@ -39,29 +39,30 @@ const ProductCard = ({ product, onOpenProduct }) => {
       flex flex-col
       rounded-2xl
       group
+      h-full
+      shadow-sm
+      hover:shadow-lg
       focus:outline-none focus:ring-2 focus:ring-purple-500
     "
     >
       {/* --- Image and Tag Section --- */}
-      {/* The image container has rounded top corners */}
-      <div className="relative h-70 w-full bg-gray-50 rounded-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-2xl group-hover:ring-2 group-hover:ring-purple-200">
-        {/* Placeholder for the image. Ensure your 'imageURL' points to a valid asset. */}
+      <div className="relative h-48 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-2xl group-hover:ring-2 group-hover:ring-purple-200">
         <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}
-        <div className="absolute top-3 left-3 flex space-x-2">
+        <div className="absolute top-3 left-3 flex flex-row gap-1.5">
           {isFeatured && (
             <span
               className="
               text-xs 
-              font-medium 
+              font-bold
               px-2 
               py-1 
-              rounded-full 
+              rounded-md 
               bg-purple-100 
-              text-purple-700 
+              text-purple-500 
               border 
-              border-purple-300
+              border-purple-500
               whitespace-nowrap
             "
             >
@@ -72,12 +73,12 @@ const ProductCard = ({ product, onOpenProduct }) => {
             <span
               className="
               text-xs 
-              font-medium 
+              font-semibold 
               px-2 
               py-1 
-              rounded-full 
+              rounded-md 
               bg-white 
-              text-gray-700 
+              text-gray-500 
               border 
               border-gray-300
               whitespace-nowrap
@@ -90,13 +91,22 @@ const ProductCard = ({ product, onOpenProduct }) => {
       </div>
 
       {/* --- Product Details Section --- */}
-      <div className="p-4 flex-grow flex flex-col justify-between">
-        <h3 className="text-base font-semibold text-gray-800 mb-1">{name}</h3>
-        {/* Adjusted font size slightly */}
+      <div className="p-4 flex-grow flex flex-col justify-between min-h-[120px]">
+        {/* Product Title - Fixed height to prevent layout shifts */}
+        <h3
+          className="text-base font-semibold text-gray-800 mb-2 h-10 flex items-center overflow-hidden"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {name}
+        </h3>
+
         {/* Price Row */}
         <div className="flex items-baseline space-x-2 mb-2">
           <span className="text-lg font-bold text-purple-700">₹{price}</span>
-          {/* Adjusted font size */}
           <span className="text-xs line-through text-gray-500">
             MRP: ₹{mrp}
           </span>
@@ -104,9 +114,10 @@ const ProductCard = ({ product, onOpenProduct }) => {
             {discount}
           </span>
         </div>
-        <div className="flex justify-between items-center gap-2">
+
+        {/* Rating and Add to Cart */}
+        <div className="flex justify-between items-center gap-2 mt-auto">
           <div>
-            {/* Rating Row */}
             <div className="flex items-center text-sm text-gray-600">
               <span>{rating}</span>
               <Star
@@ -139,9 +150,6 @@ const ProductCard = ({ product, onOpenProduct }) => {
           </div>
         </div>
       </div>
-
-      {/* --- Add to Cart Button --- */}
-      {/* Button now has rounded bottom corners, matching the card */}
     </div>
   );
   if (onOpenProduct) {
@@ -155,9 +163,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
       </button>
     );
   }
-  return (
-    <Link to={`/product/${id}`}>{content}</Link>
-  );
+  return <Link to={`/product/${id}`}>{content}</Link>;
 };
 
 export default ProductCard;

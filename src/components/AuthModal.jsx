@@ -70,8 +70,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
         {/* Tabs */}
         <div className="flex justify-center mb-4">
           <div className="inline-flex bg-gray-100 rounded-full p-1">
-            <button type="button" className={`w-28 px-4 py-1 text-sm rounded-full ${tab==='login' ? 'bg-white shadow font-semibold' : 'text-gray-600'}`} onClick={() => setTab('login')}>Log In</button>
-            <button type="button" className={`w-28 px-4 py-1 text-sm rounded-full ${tab==='signup' ? 'bg-white shadow font-semibold' : 'text-gray-600'}`} onClick={() => setTab('signup')}>Sign Up</button>
+            <button type="button" className={`w-28 px-4 py-1 text-sm rounded-full ${tab==='login' ? 'bg-white shadow font-semibold' : 'text-gray-600'}`} onClick={() => setTab('login')} aria-pressed={tab==='login'}>Log In</button>
+            <button type="button" className={`w-28 px-4 py-1 text-sm rounded-full ${tab==='signup' ? 'bg-white shadow font-semibold' : 'text-gray-600'}`} onClick={() => setTab('signup')} aria-pressed={tab==='signup'}>Sign Up</button>
           </div>
         </div>
 
@@ -79,11 +79,11 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
           <form onSubmit={handleLogin} className="space-y-3">
             <div>
               <label className="block text-sm mb-1">Email/Mobile Number <span className="text-red-500">*</span></label>
-              <input className="w-full border border-gray-200 rounded px-3 py-2" placeholder="john@gmail.com" value={loginEmail} onChange={(e)=>setLoginEmail(e.target.value)} />
+              <input className="w-full border border-gray-200 rounded px-3 py-2" placeholder="john@gmail.com" value={loginEmail} onChange={(e)=>setLoginEmail(e.target.value)} autoComplete="username" />
             </div>
             <div>
               <label className="block text-sm mb-1">Password <span className="text-red-500">*</span></label>
-              <input type="password" className="w-full border border-gray-200 rounded px-3 py-2" value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} />
+              <input type="password" className="w-full border border-gray-200 rounded px-3 py-2" value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} autoComplete="current-password" />
             </div>
             {loginError && <p className="text-xs text-red-600">{loginError}</p>}
             <button type="submit" className="w-full px-4 py-2 bg-gray-200 text-gray-500 rounded disabled:opacity-60" disabled={(!emailRegex.test(loginEmail) && !mobileRegex.test(loginEmail)) || loginPassword.length < 8}>Log In</button>
@@ -105,22 +105,22 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
             </div>
             <div>
               <label className="block text-sm mb-1">Mobile Number <span className="text-red-500">*</span></label>
-              <input className={`w-full border rounded px-3 py-2 ${errors.mobile? 'border-red-500':'border-gray-200'}`} value={mobile} onChange={(e)=>setMobile(e.target.value.replace(/\D/g,''))} placeholder="000 000 0000" />
+              <input className={`w-full border rounded px-3 py-2 ${errors.mobile? 'border-red-500':'border-gray-200'}`} value={mobile} onChange={(e)=>setMobile(e.target.value.replace(/\D/g,''))} placeholder="987 654 3210" inputMode="numeric" maxLength={10} />
               {errors.mobile && <p className="text-xs text-red-600">{errors.mobile}</p>}
             </div>
             <div>
               <label className="block text-sm mb-1">Email/Mobile Number <span className="text-red-500">*</span></label>
-              <input className={`w-full border rounded px-3 py-2 ${errors.email? 'border-red-500':'border-gray-200'}`} value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="john@gmail.com" />
+              <input className={`w-full border rounded px-3 py-2 ${errors.email? 'border-red-500':'border-gray-200'}`} value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="jay@gmail.com" autoComplete="email" />
               {errors.email && <p className="text-xs text-red-600">{errors.email}</p>}
             </div>
             <div>
               <label className="block text-sm mb-1">Password <span className="text-red-500">*</span></label>
-              <input type="password" className={`w-full border rounded px-3 py-2 ${errors.password? 'border-red-500':'border-gray-200'}`} value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Min 8 chars, letters & numbers" />
+              <input type="password" className={`w-full border rounded px-3 py-2 ${errors.password? 'border-red-500':'border-gray-200'}`} value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Min 8 chars, letters & numbers" autoComplete="new-password" />
               {errors.password && <p className="text-xs text-red-600">{errors.password}</p>}
             </div>
             <div>
               <label className="block text-sm mb-1">Confirm Password <span className="text-red-500">*</span></label>
-              <input type="password" className={`w-full border rounded px-3 py-2 ${errors.confirmPassword? 'border-red-500':'border-gray-200'}`} value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} />
+              <input type="password" className={`w-full border rounded px-3 py-2 ${errors.confirmPassword? 'border-red-500':'border-gray-200'}`} value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} autoComplete="new-password" />
               {errors.confirmPassword && <p className="text-xs text-red-600">{errors.confirmPassword}</p>}
             </div>
             <button type="submit" className="w-full px-4 py-2 bg-gray-200 text-gray-500 rounded disabled:opacity-60" disabled={!name || !mobileRegex.test(mobile) || !emailRegex.test(email) || !strongPassword(password) || password!==confirmPassword}>Sign Up</button>

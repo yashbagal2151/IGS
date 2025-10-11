@@ -12,6 +12,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState('login');
 
   // Redux: Get the total number of items in the cart
   const totalItems = useSelector((s) =>
@@ -186,13 +187,13 @@ export default function Navbar() {
               ) : (
                 <>
                   <button
-                    onClick={() => setIsAuthOpen(true)}
+                    onClick={() => { setAuthTab('login'); setIsAuthOpen(true); }}
                     className="text-gray-700 hover:text-purple-700 text-sm font-medium transition hidden sm:block"
                   >
                     Log In
                   </button>
                   <button
-                    onClick={() => setIsAuthOpen(true)}
+                    onClick={() => { setAuthTab('signup'); setIsAuthOpen(true); }}
                     className="px-5 py-2 text-sm font-medium text-white bg-purple-700 rounded hover:bg-purple-800 transition"
                   >
                     Sign Up
@@ -333,7 +334,7 @@ export default function Navbar() {
               {user.isAuthenticated ? (
                 <button onClick={() => { toggleMenu(); dispatch(logout()); }} className="text-gray-700 font-semibold hover:text-purple-700">Logout</button>
               ) : (
-                <button onClick={() => { toggleMenu(); setIsAuthOpen(true); }} className="text-gray-700 font-semibold hover:text-purple-700">Log In</button>
+                <button onClick={() => { toggleMenu(); setAuthTab('login'); setIsAuthOpen(true); }} className="text-gray-700 font-semibold hover:text-purple-700">Log In</button>
               )}
               <button
                 onClick={() => {
@@ -349,7 +350,7 @@ export default function Navbar() {
             {/* Sign Up Button (Prominent CTA) */}
             {!user.isAuthenticated && (
               <button
-                onClick={() => { toggleMenu(); setIsAuthOpen(true); }}
+                onClick={() => { toggleMenu(); setAuthTab('signup'); setIsAuthOpen(true); }}
                 className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
               >
                 Sign Up
@@ -361,7 +362,7 @@ export default function Navbar() {
 
       {/* --- Cart Drawer Component (Always positioned outside the Navbar) --- */}
       <CartDrawer isOpen={isCartOpen} onClose={toggleCart} />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialTab="login" />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialTab={authTab} />
     </>
   );
 }

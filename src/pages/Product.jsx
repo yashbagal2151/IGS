@@ -58,9 +58,15 @@ export default function Product() {
   const currentImage = productImages[selectedImageIndex];
 
   const handleCheckDelivery = () => {
-    if (pincode.length >= 6) {
-      setDeliveryEstimate("Between 14 - 16 October, 8am - 10pm");
+    const pin = pincode.replace(/\D/g, "");
+    if (pin.length !== 6) {
+      setDeliveryEstimate("Please enter a valid 6-digit pincode");
+      return;
     }
+    const eta = new Date();
+    eta.setDate(eta.getDate() + 7);
+    const formatted = eta.toLocaleDateString(undefined, { day: "2-digit", month: "long" });
+    setDeliveryEstimate(`By ${formatted}, 8am - 10pm`);
   };
 
   const handleThumbnailClick = (index) => {

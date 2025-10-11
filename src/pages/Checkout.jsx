@@ -6,6 +6,7 @@ import {
   removeFromCart,
 } from "../features/cart/cartSlice";
 import addresses from "../data/addresses.json";
+import { addOrUpdateAddress } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
@@ -45,6 +46,7 @@ const Logo = ({ name, alt, className = "h-4", fallback }) => {
 export default function Checkout() {
   const navigate = useNavigate();
   const items = useSelector((s) => s.cart.items);
+  const user = useSelector((s) => s.user);
   const subtotal = useMemo(
     () => items.reduce((s, i) => s + i.price * i.qty, 0),
     [items]
@@ -79,10 +81,8 @@ export default function Checkout() {
     payment: false,
     review: false,
   });
-  const [addrList, setAddrList] = useState(addresses);
-  const [selectedAddressId, setSelectedAddressId] = useState(
-    addresses.find((a) => a.isDefault)?.id || addresses[0]?.id
-  );
+  const [addrList, setAddrList] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const selectedAddress = useMemo(
     () => addrList.find((a) => a.id === selectedAddressId),
     [selectedAddressId, addrList]
@@ -250,6 +250,22 @@ export default function Checkout() {
       handlePay();
     }
   };
+
+  // Sync address list from user profile if logged in; otherwise use sample JSON
+  React.useEffect(() => {
+    if (user?.isAuthenticated) {
+      const list = user.profile.addresses || [];
+      setAddrList(list);
+      setSelectedAddressId(
+        list.find((a) => a.isDefault)?.id || list[0]?.id || null
+      );
+    } else {
+      setAddrList(addresses);
+      setSelectedAddressId(
+        addresses.find((a) => a.isDefault)?.id || addresses[0]?.id || null
+      );
+    }
+  }, [user?.isAuthenticated, user?.profile?.addresses]);
 
   // If there are no addresses, prompt to add one immediately
   React.useEffect(() => {
@@ -649,23 +665,22 @@ export default function Checkout() {
             setIsAddressModalOpen(false);
           }}
           onSubmit={(newAddr) => {
-            setAddrList((prev) => {
-              let list = prev;
-              if (editAddress) {
-                list = prev.map((a) => (a.id === editAddress.id ? newAddr : a));
-              } else {
-                list = [...prev, newAddr];
-              }
-              if (newAddr.isDefault) {
-                list = [
-                  ...list.map((a) => ({
-                    ...a,
-                    isDefault: a.id === newAddr.id,
-                  })),
-                ];
-              }
-              return list;
-            });
+            if (user?.isAuthenticated) {
+              dispatch(addOrUpdateAddress(newAddr));
+            } else {
+              setAddrList((prev) => {
+                let list = prev;
+                if (editAddress) {
+                  list = prev.map((a) => (a.id === editAddress.id ? newAddr : a));
+                } else {
+                  list = [...prev, newAddr];
+                }
+                if (newAddr.isDefault) {
+                  list = list.map((a) => ({ ...a, isDefault: a.id === newAddr.id }));
+                }
+                return list;
+              });
+            }
             setSelectedAddressId(newAddr.id);
             setEditAddress(null);
             setIsAddressModalOpen(false);

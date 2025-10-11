@@ -1,23 +1,36 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Menu, X, Search, ChevronDown } from "lucide-react";
 import CartDrawer from "./CartDrawer"; // Make sure this path is correct
+import AuthModal from "./AuthModal";
+import { logout } from "../features/user/userSlice";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   // Redux: Get the total number of items in the cart
   const totalItems = useSelector((s) =>
     s.cart.items.reduce((sum, item) => sum + item.qty, 0)
   );
+  const user = useSelector((s) => s.user);
 
   const toggleCart = () => setIsCartOpen(!isCartOpen);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleProductsDropdown = () =>
     setIsProductsDropdownOpen(!isProductsDropdownOpen);
+
+  // Auto-open login after 7s if not authenticated
+  useEffect(() => {
+    if (!user.isAuthenticated) {
+      const t = setTimeout(() => setIsAuthOpen(true), 7000);
+      return () => clearTimeout(t);
+    }
+  }, [user.isAuthenticated]);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -158,19 +171,29 @@ export default function Navbar() {
                 )}
               </button>
 
-              <Link
-                to="/login"
-                className="text-gray-700 hover:text-purple-700 text-sm font-medium transition hidden sm:block"
-              >
-                Log In
-              </Link>
-
-              <Link
-                to="/signup"
-                className="px-5 py-2 text-sm font-medium text-white bg-purple-700 rounded hover:bg-purple-800 transition"
-              >
-                Sign Up
-              </Link>
+              {user.isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-semibold">
+                    {user.profile.name?.[0] || 'U'}
+                  </div>
+                  <button className="text-sm text-gray-600 hover:text-purple-700" onClick={() => dispatch(logout())}>Logout</button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setIsAuthOpen(true)}
+                    className="text-gray-700 hover:text-purple-700 text-sm font-medium transition hidden sm:block"
+                  >
+                    Log In
+                  </button>
+                  <button
+                    onClick={() => setIsAuthOpen(true)}
+                    className="px-5 py-2 text-sm font-medium text-white bg-purple-700 rounded hover:bg-purple-800 transition"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              )}
 
               {/* --- Mobile Menu Button --- */}
               <div className="flex lg:hidden">
@@ -236,7 +259,7 @@ export default function Navbar() {
           </div>
 
           {/* Navigation Links (Scrollable area) */}
-          <div className="flex-1 px-4 py-4 space-y-1">
+            <div className="flex-1 px-4 py-4 space-y-1">
             {/* Mobile Products Dropdown */}
             <div className="border-b border-gray-100 pb-2 mb-2">
               <button
@@ -302,13 +325,11 @@ export default function Navbar() {
           <div className="p-4 border-t shadow-inner">
             {/* Cart Status and Login */}
             <div className="flex justify-between items-center mb-3">
-              <Link
-                to="/login"
-                onClick={toggleMenu}
-                className="text-gray-700 font-semibold hover:text-purple-700"
-              >
-                Log In
-              </Link>
+              {user.isAuthenticated ? (
+                <button onClick={() => { toggleMenu(); dispatch(logout()); }} className="text-gray-700 font-semibold hover:text-purple-700">Logout</button>
+              ) : (
+                <button onClick={() => { toggleMenu(); setIsAuthOpen(true); }} className="text-gray-700 font-semibold hover:text-purple-700">Log In</button>
+              )}
               <button
                 onClick={() => {
                   toggleMenu();
@@ -321,19 +342,21 @@ export default function Navbar() {
             </div>
 
             {/* Sign Up Button (Prominent CTA) */}
-            <Link
-              to="/signup"
-              onClick={toggleMenu}
-              className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
-            >
-              Sign Up
-            </Link>
+            {!user.isAuthenticated && (
+              <button
+                onClick={() => { toggleMenu(); setIsAuthOpen(true); }}
+                className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
+              >
+                Sign Up
+              </button>
+            )}
           </div>
         </div>
       </nav>
 
       {/* --- Cart Drawer Component (Always positioned outside the Navbar) --- */}
       <CartDrawer isOpen={isCartOpen} onClose={toggleCart} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
 }

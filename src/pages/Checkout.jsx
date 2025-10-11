@@ -545,7 +545,7 @@ export default function Checkout() {
                         <input
                           type="checkbox"
                           checked={!!wrapMap[i.id]}
-                          onChange={(e) => setWrapMap((prev) => ({ ...prev, [i.id]: e.target.checked }))}
+                          onChange={(e) => { keepScroll(); setWrapMap((prev) => ({ ...prev, [i.id]: e.target.checked })); }}
                         />
                         Gift wrap this item (₹20 for wrapping)
                       </label>
@@ -555,24 +555,27 @@ export default function Checkout() {
                       <button
                         type="button"
                         className="mt-2 text-red-600 text-xs"
-                        onClick={() => dispatch(removeFromCart(i.id))}
+                        onClick={() => { keepScroll(); dispatch(removeFromCart(i.id)); }}
                       >
                         Remove from cart
                       </button>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
+                        type="button"
                         className="px-2 py-1 border rounded"
-                        onClick={() =>
-                          i.qty > 1 ? dispatch(updateQty({ id: i.id, qty: i.qty - 1 })) : dispatch(removeFromCart(i.id))
-                        }
+                        onClick={() => {
+                          keepScroll();
+                          i.qty > 1 ? dispatch(updateQty({ id: i.id, qty: i.qty - 1 })) : dispatch(removeFromCart(i.id));
+                        }}
                       >
                         -
                       </button>
                       <span>{i.qty}</span>
                       <button
+                        type="button"
                         className="px-2 py-1 border rounded"
-                        onClick={() => dispatch(updateQty({ id: i.id, qty: i.qty + 1 }))}
+                        onClick={() => { keepScroll(); dispatch(updateQty({ id: i.id, qty: i.qty + 1 })); }}
                       >
                         +
                       </button>

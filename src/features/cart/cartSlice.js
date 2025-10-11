@@ -34,14 +34,14 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.items = [];
     },
-    openCartDrawer: (state) => {
-      state.isCartDrawerOpen = true;
-    },
-    closeCartDrawer: (state) => {
-      state.isCartDrawerOpen = false;
-    },
+    // openCartDrawer: (state) => {
+    //   state.isCartDrawerOpen = true;
+    // },
+    // closeCartDrawer: (state) => {
+    //   state.isCartDrawerOpen = false;
+    // },
   },
 });
-
-export const { addToCart, removeFromCart, updateQty, clearCart, openCartDrawer, closeCartDrawer } = cartSlice.actions;
+// openCartDrawer, closeCartDrawer
+export const { addToCart, removeFromCart, updateQty, clearCart, } = cartSlice.actions;
 export default cartSlice.reducer;

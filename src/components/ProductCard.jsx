@@ -17,6 +17,8 @@ const ProductCard = ({ product, onOpenProduct }) => {
     mrp,
     discount,
     rating,
+    material,
+    size,
     reviews,
     isFeatured,
     isCustomizable,

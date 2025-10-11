@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
 
-// Minimal brand/bank icons to match design theme
+// Minimal brand/bank/app icons to match design theme
 const VisaIcon = () => (
   <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[#1a1f71] border border-[#1a1f71] rounded">VISA</span>
 );
@@ -19,6 +19,12 @@ const MastercardIcon = () => (
     <span className="w-3 h-3 rounded-full bg-[#EB001B]"></span>
     <span className="w-3 h-3 -ml-1 rounded-full bg-[#F79E1B]"></span>
   </span>
+);
+const PhonePeIcon = () => (
+  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#5F259F] text-white text-[10px] font-semibold">P</span>
+);
+const GPayIcon = () => (
+  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#34A853] text-white text-[10px] font-semibold">G</span>
 );
 const BankLogo = ({ code }) => (
   <span className="inline-flex items-center justify-center w-6 h-6 text-[10px] font-semibold rounded-full bg-gray-100 border text-gray-700">{code}</span>
@@ -78,7 +84,8 @@ export default function Checkout() {
   // Modals
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
-  const currentStep = open.address ? 1 : open.payment ? 2 : 3;
+  // Consider the Payment section primary if it's open (prevents CTA/desync when address is also open)
+  const currentStep = open.payment ? 2 : open.address ? 1 : 3;
   const ctaLabel = (() => {
     if (currentStep === 1) return "Deliver to this address";
     if (currentStep === 2) return "Use this payment method";
@@ -253,7 +260,7 @@ export default function Checkout() {
                     checked={paymentType === "upi" && upiApp === "phonepe"}
                     onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); }}
                   />
-                  PhonePe
+                  <span className="inline-flex items-center gap-1"><PhonePeIcon /> PhonePe</span>
                 </label>
                 <div className="flex items-center gap-2">
                   <label className="flex items-center gap-2">
@@ -263,7 +270,7 @@ export default function Checkout() {
                       checked={paymentType === "upi" && upiApp === "gpay"}
                       onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); }}
                     />
-                    GPay
+                    <span className="inline-flex items-center gap-1"><GPayIcon /> GPay</span>
                   </label>
                   {paymentType === "upi" && upiApp === "gpay" && (
                     <>

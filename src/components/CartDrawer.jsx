@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { lockBodyScroll, unlockBodyScroll } from "../utils/bodyScrollLock";
 import { useSelector } from "react-redux";
 import { X } from "lucide-react";
 import Cart from "../pages/Cart.jsx"; // We'll rename your original Cart.jsx
@@ -8,15 +9,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
   // Determine the number of items for the title
   const itemCount = useSelector((s) => s.cart.items.length);
 
-  // Lock scrolling when the drawer is open
+  // Lock scrolling when the drawer is open (shared util, supports nested modals)
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    if (isOpen) lockBodyScroll();
     return () => {
-      document.body.style.overflow = "unset";
+      if (isOpen) unlockBodyScroll();
     };
   }, [isOpen]);
 

@@ -96,6 +96,15 @@ export default function Checkout() {
   // Modals
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
+  // Step completion indicators
+  const [done, setDone] = useState({ address: false, payment: false });
+
+  // Prevent scroll jump when toggling radios/selects
+  const keepScroll = () => {
+    const y = window.scrollY;
+    setTimeout(() => window.scrollTo(0, y), 0);
+  };
+
   // Add Card form (controlled with validation)
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState(""); // formatted with spaces
@@ -206,9 +215,11 @@ export default function Checkout() {
   const handlePrimaryAction = () => {
     if (currentStep === 1) {
       setOpen({ address: false, payment: true, review: false });
+      setDone((d) => ({ ...d, address: true }));
     } else if (currentStep === 2) {
       if (!isPaymentValid) return;
       setOpen({ address: false, payment: false, review: true });
+      setDone((d) => ({ ...d, payment: true }));
     } else {
       handlePay();
     }
@@ -221,14 +232,19 @@ export default function Checkout() {
     }
   }, [addrList.length, isAddressModalOpen]);
 
-  const Section = ({ title, isOpen, onToggle, children, actionText }) => (
+  const Section = ({ title, isOpen, onToggle, children, actionText, completed }) => (
     <div className="border rounded-lg mb-4 overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
         className="w-full flex justify-between items-center px-4 py-3 bg-gray-50 hover:bg-gray-100"
       >
-        <span className="font-semibold text-gray-800">{title}</span>
+        <span className="font-semibold text-gray-800 flex items-center gap-2">
+          {title}
+          {completed && (
+            <span className="inline-flex items-center justify-center w-4 h-4 text-[10px] rounded-full bg-green-600 text-white">✓</span>
+          )}
+        </span>
         <span className="text-sm text-purple-700">{actionText}</span>
       </button>
       {isOpen && <div className="p-4">{children}</div>}
@@ -248,6 +264,7 @@ export default function Checkout() {
             isOpen={open.address}
             onToggle={() => setOpen((p) => ({ ...p, address: !p.address }))}
             actionText="Add new address"
+            completed={done.address}
           >
             <div className="space-y-3">
               {addrList.map((addr) => (
@@ -297,9 +314,10 @@ export default function Checkout() {
                 <button
                   className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
                   disabled={!selectedAddress}
-                  onClick={() =>
-                    setOpen({ address: false, payment: true, review: false })
-                  }
+                  onClick={() => {
+                    setDone((d) => ({ ...d, address: true }));
+                    setOpen({ address: false, payment: true, review: false });
+                  }}
                 >
                   Deliver to this address
                 </button>
@@ -313,6 +331,7 @@ export default function Checkout() {
             isOpen={open.payment}
             onToggle={() => setOpen((p) => ({ ...p, payment: !p.payment }))}
             actionText="Change"
+            completed={done.payment}
           >
             {/* UPI */}
             <div className="mb-4">
@@ -323,7 +342,7 @@ export default function Checkout() {
                     type="radio"
                     name="paytype"
                     checked={paymentType === "upi" && upiApp === "phonepe"}
-                    onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); }}
+                    onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); keepScroll(); }}
                   />
                   <span className="inline-flex items-center gap-1">
                     <Logo name="phonepe" alt="PhonePe" fallback={<PhonePeIcon />} />
@@ -336,7 +355,7 @@ export default function Checkout() {
                       type="radio"
                       name="paytype"
                       checked={paymentType === "upi" && upiApp === "gpay"}
-                      onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); }}
+                      onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); keepScroll(); }}
                     />
                     <span className="inline-flex items-center gap-1">
                       <Logo name="gpay" alt="GPay" fallback={<GPayIcon />} />
@@ -367,7 +386,7 @@ export default function Checkout() {
                     type="radio"
                     name="paytype"
                     checked={paymentType === "upi" && upiApp === "other"}
-                    onChange={() => { setPaymentType("upi"); setUpiApp("other"); setUpiVerified(false); }}
+                    onChange={() => { setPaymentType("upi"); setUpiApp("other"); setUpiVerified(false); keepScroll(); }}
                   />
                   Other UPI App
                 </label>
@@ -403,7 +422,7 @@ export default function Checkout() {
                     type="radio"
                     name="paytype_card"
                     checked={paymentType === "card" && selectedCardId === c.id}
-                    onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); }}
+                    onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); keepScroll(); }}
                   />
                   <span className="inline-flex items-center gap-2">
                     {c.brand === 'visa' ? (
@@ -431,7 +450,7 @@ export default function Checkout() {
                 <select
                   className="border rounded px-2 py-1 text-sm"
                   value={selectedBank}
-                  onChange={(e) => { setSelectedBank(e.target.value); setPaymentType("netbanking"); }}
+                  onChange={(e) => { setSelectedBank(e.target.value); setPaymentType("netbanking"); keepScroll(); }}
                 >
                   <option value="">Select your bank</option>
                   <option value="SBI">SBI</option>
@@ -461,18 +480,7 @@ export default function Checkout() {
             </div>
           </Section>
 
-          {/* Section CTA aligned with your design */}
-          {open.payment && (
-            <div className="mt-4">
-              <button
-                onClick={handlePrimaryAction}
-                className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-                disabled={!isPaymentValid}
-              >
-                Use this payment method
-              </button>
-            </div>
-          )}
+          {/* No inline CTA. Use the right-side primary CTA */}
 
           {/* Review Products */}
           <Section

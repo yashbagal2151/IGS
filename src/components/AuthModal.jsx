@@ -64,6 +64,16 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
     onClose?.();
   };
 
+  const isLoginValid = React.useMemo(() => {
+    return ((emailRegex.test(loginEmail) || mobileRegex.test(loginEmail)) && loginPassword.length >= 8);
+  }, [loginEmail, loginPassword]);
+
+  const isSignupValid = React.useMemo(() => {
+    return (
+      !!name && mobileRegex.test(mobile) && emailRegex.test(email) && strongPassword(password) && password === confirmPassword
+    );
+  }, [name, mobile, email, password, confirmPassword]);
+
   return (
     <Modal isOpen={isOpen} onClose={() => { resetForms(); onClose?.(); }} title="Welcome to Ishita Gallery">
       <div className="px-2">
@@ -86,7 +96,13 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
               <input type="password" className="w-full border border-gray-200 rounded px-3 py-2" value={loginPassword} onChange={(e)=>setLoginPassword(e.target.value)} autoComplete="current-password" />
             </div>
             {loginError && <p className="text-xs text-red-600">{loginError}</p>}
-            <button type="submit" className="w-full px-4 py-2 bg-gray-200 text-gray-500 rounded disabled:opacity-60" disabled={(!emailRegex.test(loginEmail) && !mobileRegex.test(loginEmail)) || loginPassword.length < 8}>Log In</button>
+            <button
+              type="submit"
+              className={`w-full px-4 py-2 rounded transition ${isLoginValid ? 'bg-brand-900 text-white hover:bg-brand-800' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              disabled={!isLoginValid}
+            >
+              Log In
+            </button>
             <div className="text-center text-xs text-gray-600">Forgot password? <button type="button" className="text-purple-700">Click here to reset</button></div>
             <div className="border-t my-2" />
             <div className="text-center text-xs text-gray-500">Or Login with</div>
@@ -123,7 +139,13 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
               <input type="password" className={`w-full border rounded px-3 py-2 ${errors.confirmPassword? 'border-red-500':'border-gray-200'}`} value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} autoComplete="new-password" />
               {errors.confirmPassword && <p className="text-xs text-red-600">{errors.confirmPassword}</p>}
             </div>
-            <button type="submit" className="w-full px-4 py-2 bg-gray-200 text-gray-500 rounded disabled:opacity-60" disabled={!name || !mobileRegex.test(mobile) || !emailRegex.test(email) || !strongPassword(password) || password!==confirmPassword}>Sign Up</button>
+            <button
+              type="submit"
+              className={`w-full px-4 py-2 rounded transition ${isSignupValid ? 'bg-brand-900 text-white hover:bg-brand-800' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+              disabled={!isSignupValid}
+            >
+              Sign Up
+            </button>
             <div className="border-t my-2" />
             <div className="text-center text-xs text-gray-500">Or Sign up with</div>
             <div className="flex justify-center gap-3 mt-2">

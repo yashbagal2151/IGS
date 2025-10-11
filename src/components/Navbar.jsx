@@ -24,10 +24,15 @@ export default function Navbar() {
   const toggleProductsDropdown = () =>
     setIsProductsDropdownOpen(!isProductsDropdownOpen);
 
-  // Auto-open login after 7s if not authenticated
+  // Auto-open login after 5s on first load if not authenticated
   useEffect(() => {
     if (!user.isAuthenticated) {
-      const t = setTimeout(() => setIsAuthOpen(true), 7000);
+      const alreadyPrompted = sessionStorage.getItem('igs_auth_prompted');
+      if (alreadyPrompted) return;
+      const t = setTimeout(() => {
+        setIsAuthOpen(true);
+        sessionStorage.setItem('igs_auth_prompted', '1');
+      }, 5000);
       return () => clearTimeout(t);
     }
   }, [user.isAuthenticated]);

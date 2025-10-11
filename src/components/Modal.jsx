@@ -13,12 +13,12 @@ export default function Modal({
     // FIX: High z-index and fixed positioning forces the modal to cover the whole viewport,
     // regardless of the parent cart drawer's boundary.
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 transition-opacity"
+      className="fixed inset-0 z-[100] flex items-center justify-center backdrop-blur-2xl bg-opacity-50 transition-opacity"
       onClick={onClose}
     >
       {/* Modal Content Container: This is the white box that appears in the center */}
       <div
-        className="bg-white rounded-xl shadow-2xl max-w-lg w-full m-4 transform transition-all overflow-hidden"
+        className="bg-white rounded-sm shadow-2xl max-w-lg w-full m-4 transform transition-all h-[80%] overflow-x-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

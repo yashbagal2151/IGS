@@ -45,12 +45,14 @@ export default function Product() {
   const isCustomizable = product.isCustomizable;
   const isFeatured = product.isFeatured;
 
-  // Create array of product images (sample additional images)
-  const productImages = [
-    imageSrc,
-    `https://picsum.photos/300/300?random=${product.id}-1`,
-    `https://picsum.photos/300/300?random=${product.id}-2`,
-  ];
+  // Images – prefer product.images from JSON if present
+  const productImages = Array.isArray(product.images) && product.images.length
+    ? product.images
+    : [
+        imageSrc,
+        `https://picsum.photos/300/300?random=${product.id}-1`,
+        `https://picsum.photos/300/300?random=${product.id}-2`,
+      ];
 
   const currentImage = productImages[selectedImageIndex];
 
@@ -64,17 +66,30 @@ export default function Product() {
     setSelectedImageIndex(index);
   };
 
-  const materialOptions = [
-    { value: "marble", label: "Marble (Hand-Carved)" },
-    { value: "resin", label: "Resin (High-Density)" },
-  ];
+  // Materials – derive dynamically from JSON if provided
+  const materialOptions = (Array.isArray(product.materials) && product.materials.length
+    ? product.materials
+    : ["marble", "resin"]) // fallback options
+    .map((m) =>
+      typeof m === "string"
+        ? { value: m.toLowerCase(), label: m.charAt(0).toUpperCase() + m.slice(1) }
+        : m
+    );
 
-  const sizeOptions = [
-    { value: "small", label: "Small", description: "Under 6 in" },
-    { value: "medium", label: "Medium", description: "6 in - 10 in" },
-    { value: "large", label: "Large", description: "10 in - 15 in" },
-    { value: "extra-large", label: "Extra Large", description: "Above 15 in" },
-  ];
+  // Sizes – derive dynamically from JSON if provided
+  const sizeOptions = (Array.isArray(product.sizes) && product.sizes.length
+    ? product.sizes
+    : [
+        { value: "small", label: "Small", description: "Under 6 in" },
+        { value: "medium", label: "Medium", description: "6 in - 10 in" },
+        { value: "large", label: "Large", description: "10 in - 15 in" },
+        { value: "extra-large", label: "Extra Large", description: "Above 15 in" },
+      ]
+  ).map((s) =>
+    typeof s === "string"
+      ? { value: s, label: s.charAt(0).toUpperCase() + s.slice(1) }
+      : s
+  );
 
   const [quantity, setQuantity] = useState(1);
   const increment = () => setQuantity((q) => Math.min(99, q + 1));
@@ -367,12 +382,40 @@ export default function Product() {
 
             {/* About This Item */}
             <div className="pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                About this item
-              </h3>
-              <p className="text-sm text-gray-600">
-                Primary Material: Hand-Carved White Indian Marble (Single Block)
-              </p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">About this item</h3>
+              {product.description && (
+                <p className="text-sm text-gray-700 mb-3">{product.description}</p>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                  <span className="text-gray-600">Primary Material</span>
+                  <span className="font-medium capitalize">
+                    {product.primaryMaterial || selectedMaterial || product.material || "marble"}
+                  </span>
+                </div>
+                <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                  <span className="text-gray-600">Category</span>
+                  <span className="font-medium">{product.categoryName || product.category}</span>
+                </div>
+                <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                  <span className="text-gray-600">Size</span>
+                  <span className="font-medium">{selectedSize}</span>
+                </div>
+                <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                  <span className="text-gray-600">Customizable</span>
+                  <span className="font-medium">{isCustomizable ? "Yes" : "No"}</span>
+                </div>
+              </div>
+              {Array.isArray(product.specs) && product.specs.length > 0 && (
+                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  {product.specs.map((spec, idx) => (
+                    <div key={idx} className="flex justify-between border rounded-md p-2">
+                      <span className="text-gray-600">{spec.label}</span>
+                      <span className="font-medium">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

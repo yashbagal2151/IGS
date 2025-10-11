@@ -2,8 +2,10 @@ import React, { useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart, updateQty, removeFromCart } from "../features/cart/cartSlice";
 import addresses from "../data/addresses.json";
+import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const items = useSelector((s) => s.cart.items);
   const subtotal = useMemo(() => items.reduce((s, i) => s + i.price * i.qty, 0), [items]);
   const delivery = items.length > 0 ? 40 : 0;
@@ -24,9 +26,51 @@ export default function Checkout() {
     [selectedAddressId]
   );
 
+  // Payment selection
+  const [paymentType, setPaymentType] = useState("card"); // 'upi' | 'card' | 'netbanking' | 'cod'
+  const [selectedCardMask, setSelectedCardMask] = useState("**0000");
+  const [upiId, setUpiId] = useState("");
+
+  const currentStep = open.address ? 1 : open.payment ? 2 : 3;
+  const ctaLabel = (() => {
+    if (currentStep === 1) return "Deliver to this address";
+    if (currentStep === 2) return "Use this payment method";
+    if (paymentType === "card") return `Pay with debit card ${selectedCardMask}`;
+    if (paymentType === "upi") return "Pay with UPI";
+    if (paymentType === "netbanking") return "Pay via Netbanking";
+    if (paymentType === "cod") return "Place order (COD)";
+    return "Place order";
+  })();
+
   const handlePay = async () => {
-    alert("Payment placeholder. Integrate your gateway here.");
+    const order = {
+      id: `ABC-${Math.floor(100 + Math.random() * 900)}`,
+      date: new Date().toISOString(),
+      address: selectedAddress,
+      payment: {
+        type: paymentType,
+        label:
+          paymentType === "card"
+            ? `debit card ${selectedCardMask}`
+            : paymentType === "upi"
+            ? `UPI ${upiId || "(ID verified)"}`
+            : paymentType,
+      },
+      totals: { mrpTotal, discount, delivery, payable, subtotal },
+      items,
+    };
     dispatch(clearCart());
+    navigate("/order-success", { state: { order } });
+  };
+
+  const handlePrimaryAction = () => {
+    if (currentStep === 1) {
+      setOpen({ address: false, payment: true, review: false });
+    } else if (currentStep === 2) {
+      setOpen({ address: false, payment: false, review: true });
+    } else {
+      handlePay();
+    }
   };
 
   const Section = ({ title, isOpen, onToggle, children, actionText }) => (
@@ -99,15 +143,38 @@ export default function Checkout() {
             <div className="text-sm font-semibold mb-2">UPI</div>
             <div className="flex items-center gap-4 mb-3 text-sm">
               <label className="flex items-center gap-2">
-                <input type="radio" name="upi" /> PhonePe
+                <input
+                  type="radio"
+                  name="paytype"
+                  checked={paymentType === "upi"}
+                  onChange={() => setPaymentType("upi")}
+                />
+                PhonePe
               </label>
               <label className="flex items-center gap-2">
-                <input type="radio" name="upi" /> GPay
+                <input
+                  type="radio"
+                  name="paytype"
+                  checked={paymentType === "upi"}
+                  onChange={() => setPaymentType("upi")}
+                />
+                GPay
               </label>
               <label className="flex items-center gap-2">
-                <input type="radio" name="upi" /> Other UPI App
+                <input
+                  type="radio"
+                  name="paytype"
+                  checked={paymentType === "upi"}
+                  onChange={() => setPaymentType("upi")}
+                />
+                Other UPI App
               </label>
-              <input className="border px-2 py-1 rounded text-sm" placeholder="Enter UPI ID" />
+              <input
+                className="border px-2 py-1 rounded text-sm"
+                placeholder="Enter UPI ID"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
+              />
               <button className="text-purple-700 text-sm">Verify ID</button>
             </div>
           </div>
@@ -116,10 +183,28 @@ export default function Checkout() {
           <div className="mb-4">
             <div className="text-sm font-semibold mb-2">Credit or Debit Card</div>
             <label className="flex items-center gap-2 mb-2 text-sm">
-              <input type="radio" name="card" defaultChecked /> Bank of India debit card ending with 0000
+              <input
+                type="radio"
+                name="paytype"
+                checked={paymentType === "card"}
+                onChange={() => {
+                  setPaymentType("card");
+                  setSelectedCardMask("**0000");
+                }}
+              />
+              Bank of India debit card ending with 0000
             </label>
             <label className="flex items-center gap-2 mb-2 text-sm">
-              <input type="radio" name="card" /> HDFC Bank credit card ending with 0000
+              <input
+                type="radio"
+                name="paytype"
+                checked={paymentType === "card"}
+                onChange={() => {
+                  setPaymentType("card");
+                  setSelectedCardMask("**0000");
+                }}
+              />
+              HDFC Bank credit card ending with 0000
             </label>
             <button className="text-purple-700 text-sm">Add new card</button>
           </div>
@@ -127,7 +212,10 @@ export default function Checkout() {
           {/* Netbanking */}
           <div className="mb-4">
             <div className="text-sm font-semibold mb-2">Netbanking</div>
-            <select className="border rounded px-2 py-1 text-sm">
+            <select
+              className="border rounded px-2 py-1 text-sm"
+              onChange={() => setPaymentType("netbanking")}
+            >
               <option>Select your bank</option>
               <option>SBI</option>
               <option>HDFC</option>
@@ -139,7 +227,13 @@ export default function Checkout() {
           <div>
             <div className="text-sm font-semibold mb-2">Cash on Delivery</div>
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="cod" /> Cash on Delivery
+              <input
+                type="radio"
+                name="paytype"
+                checked={paymentType === "cod"}
+                onChange={() => setPaymentType("cod")}
+              />
+              Cash on Delivery
             </label>
           </div>
         </Section>
@@ -216,11 +310,11 @@ export default function Checkout() {
             </div>
           </div>
           <button
-            onClick={handlePay}
+            onClick={handlePrimaryAction}
             className="w-full mt-4 px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
             disabled={items.length === 0}
           >
-            Deliver to this address
+            {ctaLabel}
           </button>
         </div>
       </div>

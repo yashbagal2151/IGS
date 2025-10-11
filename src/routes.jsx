@@ -5,6 +5,7 @@ import ProductCollections from "./pages/ProductCollections.jsx";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 import CategoryPage from "./pages/CategoryPage";
 import FilterPage from "./pages/FilterPage";
 
@@ -18,6 +19,7 @@ export default function RoutesMap() {
       <Route path="/filter" element={<FilterPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/order-success" element={<OrderSuccess />} />
     </Routes>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
@@ -9,6 +9,7 @@ import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
 export default function Product() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [selectedMaterial, setSelectedMaterial] = useState("marble");
   const [selectedSize, setSelectedSize] = useState("small");
@@ -103,6 +104,8 @@ export default function Product() {
           title,
           price: product.price,
           image: imageSrc,
+          mrp: mrp,
+          discount,
           material: selectedMaterial,
           size: selectedSize,
         })
@@ -112,7 +115,8 @@ export default function Product() {
 
   const handleBuyNow = () => {
     handleAddToCart();
-    window.location.href = "/checkout";
+    // Use client-side navigation so Redux cart state is preserved
+    navigate("/checkout");
   };
 
   return (

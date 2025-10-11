@@ -13,7 +13,9 @@ import AddressForm from "../components/AddressForm";
 
 // Minimal brand/bank/app icons and logo fallback
 const VisaIcon = () => (
-  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[#1a1f71] border border-[#1a1f71] rounded">VISA</span>
+  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-[#1a1f71] border border-[#1a1f71] rounded">
+    VISA
+  </span>
 );
 const MastercardIcon = () => (
   <span className="inline-flex items-center">
@@ -22,13 +24,19 @@ const MastercardIcon = () => (
   </span>
 );
 const PhonePeIcon = () => (
-  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#5F259F] text-white text-[10px] font-semibold">P</span>
+  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#5F259F] text-white text-[10px] font-semibold">
+    P
+  </span>
 );
 const GPayIcon = () => (
-  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#34A853] text-white text-[10px] font-semibold">G</span>
+  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#34A853] text-white text-[10px] font-semibold">
+    G
+  </span>
 );
 const BankLogo = ({ code }) => (
-  <span className="inline-flex items-center justify-center w-6 h-6 text-[10px] font-semibold rounded-full bg-gray-100 border text-gray-700">{code}</span>
+  <span className="inline-flex items-center justify-center w-6 h-6 text-[10px] font-semibold rounded-full bg-gray-100 border text-gray-700">
+    {code}
+  </span>
 );
 const Logo = ({ name, alt, className = "h-4", fallback }) => {
   const [failed, setFailed] = React.useState(false);
@@ -71,10 +79,17 @@ export default function Checkout() {
     });
   }, [items]);
   const wrapTotal = useMemo(
-    () => items.reduce((s, i) => s + (wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0), 0),
+    () =>
+      items.reduce(
+        (s, i) => s + (wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0),
+        0
+      ),
     [items, wrapMap]
   );
-  const payable = useMemo(() => subtotal + delivery + wrapTotal, [subtotal, delivery, wrapTotal]);
+  const payable = useMemo(
+    () => subtotal + delivery + wrapTotal,
+    [subtotal, delivery, wrapTotal]
+  );
 
   const [open, setOpen] = useState({
     address: true,
@@ -95,11 +110,24 @@ export default function Checkout() {
 
   // Cards
   const [cards, setCards] = useState([
-    { id: "card_boi_0000", brand: "visa", mask: "0000", label: "Bank of India debit card ending with 0000" },
-    { id: "card_hdfc_0000", brand: "mastercard", mask: "0000", label: "HDFC Bank credit card ending with 0000" },
+    {
+      id: "card_boi_0000",
+      brand: "visa",
+      mask: "0000",
+      label: "Bank of India debit card ending with 0000",
+    },
+    {
+      id: "card_hdfc_0000",
+      brand: "mastercard",
+      mask: "0000",
+      label: "HDFC Bank credit card ending with 0000",
+    },
   ]);
   const [selectedCardId, setSelectedCardId] = useState("");
-  const selectedCard = useMemo(() => cards.find((c) => c.id === selectedCardId), [cards, selectedCardId]);
+  const selectedCard = useMemo(
+    () => cards.find((c) => c.id === selectedCardId),
+    [cards, selectedCardId]
+  );
 
   // Netbanking
   const [selectedBank, setSelectedBank] = useState("");
@@ -165,11 +193,18 @@ export default function Checkout() {
     const len = cardDigits.length;
     const brand = cardBrand;
     const expectedLen = brand === "amex" ? 15 : 16;
-    if (len !== expectedLen) errs.number = brand === "amex" ? "AMEX requires 15 digits" : "Card number must be 16 digits";
+    if (len !== expectedLen)
+      errs.number =
+        brand === "amex"
+          ? "AMEX requires 15 digits"
+          : "Card number must be 16 digits";
     else if (!luhnCheck(cardDigits)) errs.number = "Invalid card number";
-    if (!/^\d{2}\/\d{2}$/.test(cardExpiry) || !isFutureExpiry(cardExpiry)) errs.expiry = "Enter a valid future MM/YY";
+    if (!/^\d{2}\/\d{2}$/.test(cardExpiry) || !isFutureExpiry(cardExpiry))
+      errs.expiry = "Enter a valid future MM/YY";
     const cvvLen = brand === "amex" ? 4 : 3;
-    if (onlyDigits(cardCvv).length !== cvvLen) errs.cvv = brand === "amex" ? "AMEX CVV must be 4 digits" : "CVV must be 3 digits";
+    if (onlyDigits(cardCvv).length !== cvvLen)
+      errs.cvv =
+        brand === "amex" ? "AMEX CVV must be 4 digits" : "CVV must be 3 digits";
     return errs;
   }, [cardName, cardDigits, cardExpiry, cardCvv, cardBrand]);
   const isCardValid = Object.keys(cardErrors).length === 0;
@@ -197,7 +232,8 @@ export default function Checkout() {
     return x;
   };
   const etaExact = addDays(now, 7);
-  const formatEta = (d) => d.toLocaleDateString(undefined, { day: "2-digit", month: "long" });
+  const formatEta = (d) =>
+    d.toLocaleDateString(undefined, { day: "2-digit", month: "long" });
 
   const isPaymentValid = React.useMemo(() => {
     if (currentStep !== 2) return true;
@@ -213,7 +249,15 @@ export default function Checkout() {
       default:
         return false;
     }
-  }, [currentStep, paymentType, upiApp, upiId, upiVerified, selectedCardId, selectedBank]);
+  }, [
+    currentStep,
+    paymentType,
+    upiApp,
+    upiId,
+    upiVerified,
+    selectedCardId,
+    selectedBank,
+  ]);
 
   const handlePay = async () => {
     const order = {
@@ -231,7 +275,14 @@ export default function Checkout() {
             ? `Netbanking ${selectedBank}`
             : paymentType,
       },
-      totals: { mrpTotal, discount, delivery, wrap: wrapTotal, payable, subtotal },
+      totals: {
+        mrpTotal,
+        discount,
+        delivery,
+        wrap: wrapTotal,
+        payable,
+        subtotal,
+      },
       items,
     };
     dispatch(clearCart());
@@ -274,8 +325,15 @@ export default function Checkout() {
     }
   }, [addrList.length, isAddressModalOpen]);
 
-  const Section = ({ title, isOpen, onToggle, children, actionText, completed }) => (
-    <div className="border rounded-lg mb-4 overflow-hidden">
+  const Section = ({
+    title,
+    isOpen,
+    onToggle,
+    children,
+    actionText,
+    completed,
+  }) => (
+    <div className="border border-gray-200 rounded-lg mb-4 overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
@@ -284,7 +342,9 @@ export default function Checkout() {
         <span className="font-semibold text-gray-800 flex items-center gap-2">
           {title}
           {completed && (
-            <span className="inline-flex items-center justify-center w-4 h-4 text-[10px] rounded-full bg-green-600 text-white">✓</span>
+            <span className="inline-flex items-center justify-center w-4 h-4 text-[10px] rounded-full bg-green-600 text-white">
+              ✓
+            </span>
           )}
         </span>
         <span className="text-sm text-purple-700">{actionText}</span>
@@ -295,37 +355,40 @@ export default function Checkout() {
 
   return (
     <>
+      <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Steps */}
         <div className="lg:col-span-2">
-          <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
-
           {/* Address */}
           <Section
             title="User Address Details"
             isOpen={open.address}
             onToggle={() => setOpen((p) => ({ ...p, address: !p.address }))}
-            actionText="Add new address"
+            actionText=""
             completed={done.address}
           >
             <div className="space-y-3">
               {addrList.map((addr) => (
                 <label
                   key={addr.id}
-                  className="flex gap-3 items-start p-3 border rounded-md"
+                  className="flex gap-3 items-start p-3 border border-gray-200 rounded-md"
                 >
                   <input
                     type="radio"
                     name="address"
                     checked={selectedAddressId === addr.id}
-                    onChange={() => { setSelectedAddressId(addr.id); const y = window.scrollY; setTimeout(() => window.scrollTo(0, y), 0); }}
+                    onChange={() => {
+                      setSelectedAddressId(addr.id);
+                      const y = window.scrollY;
+                      setTimeout(() => window.scrollTo(0, y), 0);
+                    }}
                     className="mt-1 text-purple-700"
                   />
                   <div className="text-sm">
                     <div className="font-medium text-gray-900">
                       {addr.name}
                       {addr.tag && (
-                        <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border text-gray-600">
+                        <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-gray-600">
                           {addr.tag}
                         </span>
                       )}
@@ -372,7 +435,7 @@ export default function Checkout() {
             title="Payment Details"
             isOpen={open.payment}
             onToggle={() => setOpen((p) => ({ ...p, payment: !p.payment }))}
-            actionText="Change"
+            actionText=""
             completed={done.payment}
           >
             {/* UPI */}
@@ -384,10 +447,19 @@ export default function Checkout() {
                     type="radio"
                     name="paytype"
                     checked={paymentType === "upi" && upiApp === "phonepe"}
-                    onChange={() => { setPaymentType("upi"); setUpiApp("phonepe"); setUpiVerified(false); keepScroll(); }}
+                    onChange={() => {
+                      setPaymentType("upi");
+                      setUpiApp("phonepe");
+                      setUpiVerified(false);
+                      keepScroll();
+                    }}
                   />
                   <span className="inline-flex items-center gap-1">
-                    <Logo name="phonepe" alt="PhonePe" fallback={<PhonePeIcon />} />
+                    <Logo
+                      name="phonepe"
+                      alt="PhonePe"
+                      fallback={<PhonePeIcon />}
+                    />
                     PhonePe
                   </span>
                 </label>
@@ -397,7 +469,12 @@ export default function Checkout() {
                       type="radio"
                       name="paytype"
                       checked={paymentType === "upi" && upiApp === "gpay"}
-                      onChange={() => { setPaymentType("upi"); setUpiApp("gpay"); setUpiVerified(false); keepScroll(); }}
+                      onChange={() => {
+                        setPaymentType("upi");
+                        setUpiApp("gpay");
+                        setUpiVerified(false);
+                        keepScroll();
+                      }}
                     />
                     <span className="inline-flex items-center gap-1">
                       <Logo name="gpay" alt="GPay" fallback={<GPayIcon />} />
@@ -407,18 +484,29 @@ export default function Checkout() {
                   {paymentType === "upi" && upiApp === "gpay" && (
                     <>
                       <input
-                        className={`border px-2 py-1 rounded text-sm ${upiId && !isValidUpiId(upiId) ? 'border-red-500' : ''}`}
+                        className={`border px-2 py-1 rounded text-sm ${
+                          upiId && !isValidUpiId(upiId)
+                            ? "border-red-500"
+                            : "border-gray-200"
+                        }`}
                         placeholder="Enter UPI ID"
                         value={upiId}
-                        onChange={(e) => { setUpiId(e.target.value); setUpiVerified(false); }}
+                        onChange={(e) => {
+                          setUpiId(e.target.value);
+                          setUpiVerified(false);
+                        }}
                       />
                       <button
                         type="button"
-                        className={`text-purple-700 text-sm ${isValidUpiId(upiId) ? '' : 'opacity-50 cursor-not-allowed'}`}
+                        className={`text-purple-700 text-sm ${
+                          isValidUpiId(upiId)
+                            ? ""
+                            : "opacity-50 cursor-not-allowed"
+                        }`}
                         disabled={!isValidUpiId(upiId)}
                         onClick={() => setUpiVerified(true)}
                       >
-                        {upiVerified ? 'Verified' : 'Verify ID'}
+                        {upiVerified ? "Verified" : "Verify ID"}
                       </button>
                     </>
                   )}
@@ -428,7 +516,12 @@ export default function Checkout() {
                     type="radio"
                     name="paytype"
                     checked={paymentType === "upi" && upiApp === "other"}
-                    onChange={() => { setPaymentType("upi"); setUpiApp("other"); setUpiVerified(false); keepScroll(); }}
+                    onChange={() => {
+                      setPaymentType("upi");
+                      setUpiApp("other");
+                      setUpiVerified(false);
+                      keepScroll();
+                    }}
                   />
                   Other UPI App
                 </label>
@@ -436,18 +529,27 @@ export default function Checkout() {
               {paymentType === "upi" && upiApp !== "gpay" && (
                 <div className="flex items-center gap-3 text-sm">
                   <input
-                    className={`border px-2 py-1 rounded text-sm ${upiId && !isValidUpiId(upiId) ? 'border-red-500' : ''}`}
+                    className={`border border-gray-200 px-2 py-1 rounded text-sm ${
+                      upiId && !isValidUpiId(upiId)
+                        ? "border-red-500"
+                        : "border-gray-200"
+                    }`}
                     placeholder="Enter UPI ID"
                     value={upiId}
-                    onChange={(e) => { setUpiId(e.target.value); setUpiVerified(false); }}
+                    onChange={(e) => {
+                      setUpiId(e.target.value);
+                      setUpiVerified(false);
+                    }}
                   />
                   <button
                     type="button"
-                    className={`text-purple-700 text-sm ${isValidUpiId(upiId) ? '' : 'opacity-50 cursor-not-allowed'}`}
+                    className={`text-purple-700 text-sm ${
+                      isValidUpiId(upiId) ? "" : "opacity-50 cursor-not-allowed"
+                    }`}
                     disabled={!isValidUpiId(upiId)}
                     onClick={() => setUpiVerified(true)}
                   >
-                    {upiVerified ? 'Verified' : 'Verify ID'}
+                    {upiVerified ? "Verified" : "Verify ID"}
                   </button>
                 </div>
               )}
@@ -459,18 +561,29 @@ export default function Checkout() {
                 Credit or Debit Card
               </div>
               {cards.map((c) => (
-                <label key={c.id} className="flex items-center gap-2 mb-2 text-sm">
+                <label
+                  key={c.id}
+                  className="flex items-center gap-2 mb-2 text-sm"
+                >
                   <input
                     type="radio"
                     name="paytype_card"
                     checked={paymentType === "card" && selectedCardId === c.id}
-                    onChange={() => { setPaymentType("card"); setSelectedCardId(c.id); keepScroll(); }}
+                    onChange={() => {
+                      setPaymentType("card");
+                      setSelectedCardId(c.id);
+                      keepScroll();
+                    }}
                   />
                   <span className="inline-flex items-center gap-2">
-                    {c.brand === 'visa' ? (
+                    {c.brand === "visa" ? (
                       <Logo name="visa" alt="VISA" fallback={<VisaIcon />} />
                     ) : (
-                      <Logo name="mastercard" alt="Mastercard" fallback={<MastercardIcon />} />
+                      <Logo
+                        name="mastercard"
+                        alt="Mastercard"
+                        fallback={<MastercardIcon />}
+                      />
                     )}
                     <span>{c.label}</span>
                   </span>
@@ -479,7 +592,10 @@ export default function Checkout() {
               <button
                 type="button"
                 className="text-purple-700 text-sm"
-                onClick={() => { setPaymentType("card"); setIsCardModalOpen(true); }}
+                onClick={() => {
+                  setPaymentType("card");
+                  setIsCardModalOpen(true);
+                }}
               >
                 Add new card
               </button>
@@ -490,9 +606,13 @@ export default function Checkout() {
               <div className="text-sm font-semibold mb-2">Netbanking</div>
               <div className="flex items-center gap-2">
                 <select
-                  className="border rounded px-2 py-1 text-sm"
+                  className="border border-gray-200 rounded px-2 py-1 text-sm"
                   value={selectedBank}
-                  onChange={(e) => { setSelectedBank(e.target.value); setPaymentType("netbanking"); keepScroll(); }}
+                  onChange={(e) => {
+                    setSelectedBank(e.target.value);
+                    setPaymentType("netbanking");
+                    keepScroll();
+                  }}
                 >
                   <option value="">Select your bank</option>
                   <option value="SBI">SBI</option>
@@ -502,7 +622,11 @@ export default function Checkout() {
                   <option value="KOTAK">KOTAK</option>
                 </select>
                 {selectedBank && (
-                  <Logo name={selectedBank.toLowerCase()} alt={selectedBank} fallback={<BankLogo code={selectedBank} />} />
+                  <Logo
+                    name={selectedBank.toLowerCase()}
+                    alt={selectedBank}
+                    fallback={<BankLogo code={selectedBank} />}
+                  />
                 )}
               </div>
             </div>
@@ -511,11 +635,15 @@ export default function Checkout() {
             <div>
               <div className="text-sm font-semibold mb-2">Cash on Delivery</div>
               <label className="flex items-center gap-2 text-sm">
-                  <input
+                <input
                   type="radio"
                   name="paytype"
                   checked={paymentType === "cod"}
-                    onChange={() => { setPaymentType("cod"); const y = window.scrollY; setTimeout(() => window.scrollTo(0, y), 0); }}
+                  onChange={() => {
+                    setPaymentType("cod");
+                    const y = window.scrollY;
+                    setTimeout(() => window.scrollTo(0, y), 0);
+                  }}
                 />
                 Cash on Delivery
               </label>
@@ -544,65 +672,111 @@ export default function Checkout() {
             title="Review Products"
             isOpen={open.review}
             onToggle={() => setOpen((p) => ({ ...p, review: !p.review }))}
-            actionText="Verify Items"
+            actionText=""
           >
-            <div className="divide-y">
+            <div className="">
               {items.map((i) => {
                 const lineWrap = wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0;
                 const lineTotal = i.price * i.qty + lineWrap;
                 return (
-                  <div key={i.id} className="py-4 flex items-start gap-4 text-sm">
-                    <img src={i.image} alt={i.title} className="w-20 h-20 rounded object-cover" />
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{i.title}</div>
-                      <div className="text-gray-500">Material: {i.material || "-"} &nbsp; Size: {i.size || "-"}</div>
-                      <div className="text-purple-700 font-semibold">₹{i.price}</div>
-                      <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
-                        <input
-                          type="checkbox"
-                          checked={!!wrapMap[i.id]}
-                          onChange={(e) => { keepScroll(); setWrapMap((prev) => ({ ...prev, [i.id]: e.target.checked })); }}
-                        />
-                        Gift wrap this item (₹20 for wrapping)
-                      </label>
-                      <div className="text-xs text-gray-500 mt-1">
-                        Estimated Delivery – <span className="font-semibold">By {formatEta(etaExact)}, 8am - 10pm</span>
+                  <>
+                    <div
+                      key={i.id}
+                      className="py-4 flex items-start gap-4 text-sm "
+                    >
+                      <img
+                        src={i.image}
+                        alt={i.title}
+                        className="w-20 h-30 rounded object-cover"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {i.title}
+                        </div>
+                        <div className="text-gray-500">
+                          Material: {i.material || "-"} &nbsp; Size:{" "}
+                          {i.size || "-"}
+                        </div>
+                        <div className="text-purple-700 font-semibold">
+                          ₹{i.price}
+                        </div>
+                        <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
+                          <input
+                            type="checkbox"
+                            checked={!!wrapMap[i.id]}
+                            onChange={(e) => {
+                              keepScroll();
+                              setWrapMap((prev) => ({
+                                ...prev,
+                                [i.id]: e.target.checked,
+                              }));
+                            }}
+                          />
+                          Gift wrap this item (₹20 for wrapping)
+                        </label>
+                        <div className="text-xs text-gray-500 mt-1">
+                          Estimated Delivery –{" "}
+                          <span className="font-semibold">
+                            By {formatEta(etaExact)}, 8am - 10pm
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-5">
+                      <div className="flex items-center gap-2 border border-gray-200 rounded">
+                        <button
+                          type="button"
+                          className="px-2"
+                          onClick={() => {
+                            keepScroll();
+                            i.qty > 1
+                              ? dispatch(
+                                  updateQty({ id: i.id, qty: i.qty - 1 })
+                                )
+                              : dispatch(removeFromCart(i.id));
+                          }}
+                        >
+                          -
+                        </button>
+                        <span>{i.qty}</span>
+                        <button
+                          type="button"
+                          className="px-2"
+                          onClick={() => {
+                            keepScroll();
+                            dispatch(updateQty({ id: i.id, qty: i.qty + 1 }));
+                          }}
+                        >
+                          +
+                        </button>
                       </div>
                       <button
                         type="button"
-                        className="mt-2 text-red-600 text-xs"
-                        onClick={() => { keepScroll(); dispatch(removeFromCart(i.id)); }}
+                        className="text-red-600 text-xs"
+                        onClick={() => {
+                          keepScroll();
+                          dispatch(removeFromCart(i.id));
+                        }}
                       >
                         Remove from cart
                       </button>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        className="px-2 py-1 border rounded"
-                        onClick={() => {
-                          keepScroll();
-                          i.qty > 1 ? dispatch(updateQty({ id: i.id, qty: i.qty - 1 })) : dispatch(removeFromCart(i.id));
-                        }}
-                      >
-                        -
-                      </button>
-                      <span>{i.qty}</span>
-                      <button
-                        type="button"
-                        className="px-2 py-1 border rounded"
-                        onClick={() => { keepScroll(); dispatch(updateQty({ id: i.id, qty: i.qty + 1 })); }}
-                      >
-                        +
-                      </button>
-                    </div>
-                    <div className="w-28 text-right font-medium">
-                      ₹{lineTotal}
+
+                    <div className="text-right font-medium">
+                      <div>
+                        Subtotal (<span>{i.qty}</span> item):{" "}
+                        <span className="text-purple-700 font-semibold">
+                          ₹{lineTotal}
+                        </span>
+                      </div>
                       {lineWrap > 0 && (
-                        <div className="text-[11px] text-gray-500">incl. wrap ₹{lineWrap}</div>
+                        <div className="text-[11px] text-gray-500">
+                          incl. wrap ₹{lineWrap}
+                        </div>
                       )}
                     </div>
-                  </div>
+                  </>
                 );
               })}
               {items.length === 0 && (
@@ -614,7 +788,7 @@ export default function Checkout() {
 
         {/* Right: Pricing Summary */}
         <div>
-          <div className="border rounded-lg p-4 bg-white shadow">
+          <div className="border border-gray-200 rounded-lg p-4 bg-white shadow">
             <h2 className="font-semibold mb-3 text-gray-800">
               Pricing Details
             </h2>
@@ -644,7 +818,9 @@ export default function Checkout() {
             <button
               onClick={handlePrimaryAction}
               className="w-full mt-4 px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-              disabled={items.length === 0 || (currentStep === 2 && !isPaymentValid)}
+              disabled={
+                items.length === 0 || (currentStep === 2 && !isPaymentValid)
+              }
             >
               {ctaLabel}
             </button>
@@ -727,17 +903,23 @@ export default function Checkout() {
           <div>
             <label className="block text-sm mb-1">Name on card</label>
             <input
-              className={`w-full border rounded px-3 py-2 ${cardErrors.name ? "border-red-500" : ""}`}
+              className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                cardErrors.name ? "border-red-500" : "border-gray-200"
+              }`}
               value={cardName}
               onChange={(e) => setCardName(e.target.value)}
               placeholder="John Doe"
             />
-            {cardErrors.name && <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>}
+            {cardErrors.name && (
+              <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm mb-1">Card number</label>
             <input
-              className={`w-full border rounded px-3 py-2 ${cardErrors.number ? "border-red-500" : ""}`}
+              className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                cardErrors.number ? "border-red-500" : "border-gray-200"
+              }`}
               value={cardNumber}
               onChange={(e) => {
                 const digits = onlyDigits(e.target.value).slice(0, 19);
@@ -747,13 +929,17 @@ export default function Checkout() {
               inputMode="numeric"
               placeholder="1234 5678 9012 3456"
             />
-            {cardErrors.number && <p className="text-xs text-red-600 mt-1">{cardErrors.number}</p>}
+            {cardErrors.number && (
+              <p className="text-xs text-red-600 mt-1">{cardErrors.number}</p>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm mb-1">Expiry (MM/YY)</label>
               <input
-                className={`w-full border rounded px-3 py-2 ${cardErrors.expiry ? "border-red-500" : ""}`}
+                className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                  cardErrors.expiry ? "border-red-500" : "border-gray-200"
+                }`}
                 value={cardExpiry}
                 onChange={(e) => {
                   const v = onlyDigits(e.target.value).slice(0, 4);
@@ -763,23 +949,43 @@ export default function Checkout() {
                 }}
                 placeholder="MM/YY"
               />
-              {cardErrors.expiry && <p className="text-xs text-red-600 mt-1">{cardErrors.expiry}</p>}
+              {cardErrors.expiry && (
+                <p className="text-xs text-red-600 mt-1">{cardErrors.expiry}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm mb-1">CVV</label>
               <input
-                className={`w-full border rounded px-3 py-2 ${cardErrors.cvv ? "border-red-500" : ""}`}
+                className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                  cardErrors.cvv ? "border-red-500" : "border-gray-200"
+                }`}
                 value={cardCvv}
-                onChange={(e) => setCardCvv(onlyDigits(e.target.value).slice(0, 4))}
+                onChange={(e) =>
+                  setCardCvv(onlyDigits(e.target.value).slice(0, 4))
+                }
                 inputMode="numeric"
                 placeholder={cardBrand === "amex" ? "4 digits" : "3 digits"}
               />
-              {cardErrors.cvv && <p className="text-xs text-red-600 mt-1">{cardErrors.cvv}</p>}
+              {cardErrors.cvv && (
+                <p className="text-xs text-red-600 mt-1">{cardErrors.cvv}</p>
+              )}
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={() => setIsCardModalOpen(false)} className="px-4 py-2 border rounded">Cancel</button>
-            <button type="submit" disabled={!isCardValid} className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50">Save card</button>
+            <button
+              type="button"
+              onClick={() => setIsCardModalOpen(false)}
+              className="px-4 py-2 border rounded"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!isCardValid}
+              className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+            >
+              Save card
+            </button>
           </div>
         </form>
       </Modal>

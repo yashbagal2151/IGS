@@ -47,13 +47,14 @@ export default function Product() {
   const isFeatured = product.isFeatured;
 
   // Images – prefer product.images from JSON if present
-  const productImages = Array.isArray(product.images) && product.images.length
-    ? product.images
-    : [
-        imageSrc,
-        `https://picsum.photos/300/300?random=${product.id}-1`,
-        `https://picsum.photos/300/300?random=${product.id}-2`,
-      ];
+  const productImages =
+    Array.isArray(product.images) && product.images.length
+      ? product.images
+      : [
+          imageSrc,
+          `https://picsum.photos/300/300?random=${product.id}-1`,
+          `https://picsum.photos/300/300?random=${product.id}-2`,
+        ];
 
   const currentImage = productImages[selectedImageIndex];
 
@@ -65,7 +66,10 @@ export default function Product() {
     }
     const eta = new Date();
     eta.setDate(eta.getDate() + 7);
-    const formatted = eta.toLocaleDateString(undefined, { day: "2-digit", month: "long" });
+    const formatted = eta.toLocaleDateString(undefined, {
+      day: "2-digit",
+      month: "long",
+    });
     setDeliveryEstimate(`By ${formatted}, 8am - 10pm`);
   };
 
@@ -74,24 +78,34 @@ export default function Product() {
   };
 
   // Materials – derive dynamically from JSON if provided
-  const materialOptions = (Array.isArray(product.materials) && product.materials.length
-    ? product.materials
-    : ["marble", "resin"]) // fallback options
+  const materialOptions = (
+    Array.isArray(product.materials) && product.materials.length
+      ? product.materials
+      : ["marble", "resin"]
+  ) // fallback options
     .map((m) =>
       typeof m === "string"
-        ? { value: m.toLowerCase(), label: m.charAt(0).toUpperCase() + m.slice(1) }
+        ? {
+            value: m.toLowerCase(),
+            label: m.charAt(0).toUpperCase() + m.slice(1),
+          }
         : m
     );
 
   // Sizes – derive dynamically from JSON if provided
-  const sizeOptions = (Array.isArray(product.sizes) && product.sizes.length
-    ? product.sizes
-    : [
-        { value: "small", label: "Small", description: "Under 6 in" },
-        { value: "medium", label: "Medium", description: "6 in - 10 in" },
-        { value: "large", label: "Large", description: "10 in - 15 in" },
-        { value: "extra-large", label: "Extra Large", description: "Above 15 in" },
-      ]
+  const sizeOptions = (
+    Array.isArray(product.sizes) && product.sizes.length
+      ? product.sizes
+      : [
+          { value: "small", label: "Small", description: "Under 6 in" },
+          { value: "medium", label: "Medium", description: "6 in - 10 in" },
+          { value: "large", label: "Large", description: "10 in - 15 in" },
+          {
+            value: "extra-large",
+            label: "Extra Large",
+            description: "Above 15 in",
+          },
+        ]
   ).map((s) =>
     typeof s === "string"
       ? { value: s, label: s.charAt(0).toUpperCase() + s.slice(1) }
@@ -262,7 +276,7 @@ export default function Product() {
                   placeholder="Enter pincode"
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent max-w-[20%] lg:max-w-[30%]"
                 />
                 <button
                   onClick={handleCheckDelivery}
@@ -392,20 +406,29 @@ export default function Product() {
 
             {/* About This Item */}
             <div className="pt-6 border-t border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">About this item</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                About this item
+              </h3>
               {product.description && (
-                <p className="text-sm text-gray-700 mb-3">{product.description}</p>
+                <p className="text-sm text-gray-700 mb-3">
+                  {product.description}
+                </p>
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <div className="flex justify-between border rounded-md p-2 bg-gray-50">
                   <span className="text-gray-600">Primary Material</span>
                   <span className="font-medium capitalize">
-                    {product.primaryMaterial || selectedMaterial || product.material || "marble"}
+                    {product.primaryMaterial ||
+                      selectedMaterial ||
+                      product.material ||
+                      "marble"}
                   </span>
                 </div>
                 <div className="flex justify-between border rounded-md p-2 bg-gray-50">
                   <span className="text-gray-600">Category</span>
-                  <span className="font-medium">{product.categoryName || product.category}</span>
+                  <span className="font-medium">
+                    {product.categoryName || product.category}
+                  </span>
                 </div>
                 <div className="flex justify-between border rounded-md p-2 bg-gray-50">
                   <span className="text-gray-600">Size</span>
@@ -413,13 +436,18 @@ export default function Product() {
                 </div>
                 <div className="flex justify-between border rounded-md p-2 bg-gray-50">
                   <span className="text-gray-600">Customizable</span>
-                  <span className="font-medium">{isCustomizable ? "Yes" : "No"}</span>
+                  <span className="font-medium">
+                    {isCustomizable ? "Yes" : "No"}
+                  </span>
                 </div>
               </div>
               {Array.isArray(product.specs) && product.specs.length > 0 && (
                 <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                   {product.specs.map((spec, idx) => (
-                    <div key={idx} className="flex justify-between border rounded-md p-2">
+                    <div
+                      key={idx}
+                      className="flex justify-between border rounded-md p-2"
+                    >
                       <span className="text-gray-600">{spec.label}</span>
                       <span className="font-medium">{spec.value}</span>
                     </div>

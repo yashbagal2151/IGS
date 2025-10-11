@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCart, updateQty, removeFromCart } from "../features/cart/cartSlice";
 import addresses from "../data/addresses.json";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
+import AddressForm from "../components/AddressForm";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ export default function Checkout() {
     () => addresses.find((a) => a.id === selectedAddressId),
     [selectedAddressId]
   );
+  const [addrList, setAddrList] = useState(addresses);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   // Payment selection
   const [paymentType, setPaymentType] = useState("card"); // 'upi' | 'card' | 'netbanking' | 'cod'
@@ -100,7 +104,7 @@ export default function Checkout() {
           actionText="Add new address"
         >
           <div className="space-y-3">
-            {addresses.map((addr) => (
+            {addrList.map((addr) => (
               <label key={addr.id} className="flex gap-3 items-start p-3 border rounded-md">
                 <input
                   type="radio"
@@ -125,7 +129,9 @@ export default function Checkout() {
               </label>
             ))}
             <div className="flex justify-between items-center">
-              <button className="text-sm text-purple-700">Add new address</button>
+              <button className="text-sm text-purple-700" onClick={() => setIsAddressModalOpen(true)}>
+                Add new address
+              </button>
               <button className="px-4 py-2 bg-purple-700 text-white rounded">Deliver to this address</button>
             </div>
           </div>
@@ -319,5 +325,21 @@ export default function Checkout() {
         </div>
       </div>
     </div>
+    {/* Add Address Modal */}
+    <Modal isOpen={isAddressModalOpen} onClose={() => setIsAddressModalOpen(false)} title="Add new Address">
+      <AddressForm
+        onCancel={() => setIsAddressModalOpen(false)}
+        onSubmit={(newAddr) => {
+          setAddrList((prev) => {
+            const list = newAddr.isDefault
+              ? [{ ...newAddr, isDefault: true }, ...prev.map((a) => ({ ...a, isDefault: false }))]
+              : [...prev, newAddr];
+            return list;
+          });
+          setSelectedAddressId(newAddr.id);
+          setIsAddressModalOpen(false);
+        }}
+      />
+    </Modal>
   );
 }

@@ -5,10 +5,9 @@ import {
   updateQty,
   clearCart,
 } from "../features/cart/cartSlice";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Trash2, X, Minus, Plus } from "lucide-react";
-import Modal from "../components/Modal";
-import CheckoutContent from "../components/CheckoutContent";
+// Removed in-drawer payment modal; we navigate to /checkout instead
 import EmptyShoppingCart from "../assets/empty-shopping-cart.svg";
 
 /**
@@ -17,7 +16,7 @@ import EmptyShoppingCart from "../assets/empty-shopping-cart.svg";
  * @param {function} onClose - Function to close the parent drawer/popup.
  */
 export default function Cart({ isDrawer = false, onClose }) {
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   // Redux State and Dispatch
   const items = useSelector((s) => s.cart.items);
@@ -53,15 +52,10 @@ export default function Cart({ isDrawer = false, onClose }) {
     dispatch(clearCart());
   };
 
-  // Handler to open the modal (used in both drawer and full page)
-  const handleOpenPaymentModal = () => {
-    setIsPaymentModalOpen(true);
-  };
-
-  // Handler run after payment is successfully simulated in CheckoutContent
-  const handlePaymentSuccessAndClose = () => {
-    setIsPaymentModalOpen(false); // Close the Payment Modal
-    if (onClose) onClose(); // Close the cart drawer ONLY after successful payment
+  // Navigate to full checkout page (same flow as Buy Now)
+  const handleProceedToCheckout = () => {
+    if (onClose) onClose();
+    navigate("/checkout");
   };
 
   // --- Conditional Styling ---
@@ -298,13 +292,13 @@ export default function Cart({ isDrawer = false, onClose }) {
                   <span>Total:</span>
                   <span className="text-purple-700">₹{total}</span>
                 </div>
-                <Link
-                  to="#"
-                  onClick={handleOpenPaymentModal} // Opens modal, DOES NOT close drawer
+                <button
+                  type="button"
+                  onClick={handleProceedToCheckout}
                   className="w-full inline-block text-center px-4 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition"
                 >
                   Proceed to Checkout
-                </Link>
+                </button>
                 <button
                   onClick={handleClearCart}
                   className="w-full mt-2 text-sm text-gray-500 hover:text-gray-700 transition"
@@ -330,13 +324,13 @@ export default function Cart({ isDrawer = false, onClose }) {
                   </div>
                 </div>
                 {/* Checkout Button */}
-                <Link
-                  to="#"
-                  onClick={handleOpenPaymentModal} // Opens modal
+                <button
+                  type="button"
+                  onClick={handleProceedToCheckout}
                   className="w-full mt-6 inline-block px-4 py-3 text-center bg-purple-700 text-white rounded-lg font-semibold hover:bg-purple-800 transition shadow-lg"
                 >
                   Proceed to Checkout
-                </Link>
+                </button>
                 <div className="text-center text-xs text-gray-500 mt-4">
                   Taxes and shipping calculated at checkout.
                 </div>
@@ -346,15 +340,7 @@ export default function Cart({ isDrawer = false, onClose }) {
         )}
       </div>
 
-      {/* --- MODAL COMPONENT (Viewport Centered) --- */}
-      <Modal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)} // User can close the modal manually
-        title="Secure Payment"
-      >
-        {/* Passes the success handler to close the modal AND the cart drawer on payment */}
-        <CheckoutContent onSuccess={handlePaymentSuccessAndClose} />
-      </Modal>
+      {/* No modal - we navigate to /checkout so the flow matches Buy Now */}
     </>
   );
 }

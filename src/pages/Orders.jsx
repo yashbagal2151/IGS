@@ -26,11 +26,17 @@ export default function Orders() {
   };
 
   const currentOrders = React.useMemo(
-    () => allOrders.filter((o) => ["placed", "processing"].includes(o.status) && matchesQuery(o)),
+    () =>
+      allOrders.filter(
+        (o) => ["placed", "processing"].includes(o.status) && matchesQuery(o)
+      ),
     [allOrders, query]
   );
   const previousOrders = React.useMemo(
-    () => allOrders.filter((o) => ["delivered", "cancelled"].includes(o.status) && matchesQuery(o)),
+    () =>
+      allOrders.filter(
+        (o) => ["delivered", "cancelled"].includes(o.status) && matchesQuery(o)
+      ),
     [allOrders, query]
   );
   const filteredAll = React.useMemo(
@@ -38,7 +44,12 @@ export default function Orders() {
     [allOrders, query]
   );
 
-  const data = activeTab === "orders" ? filteredAll : activeTab === "current" ? currentOrders : previousOrders;
+  const data =
+    activeTab === "orders"
+      ? filteredAll
+      : activeTab === "current"
+      ? currentOrders
+      : previousOrders;
 
   const StatusPill = ({ status }) => {
     const label =
@@ -66,18 +77,28 @@ export default function Orders() {
     if (activeTab === "previous") {
       return (
         <div className="flex flex-col gap-2">
-          <button className="px-3 py-1 border rounded text-sm">Download Invoice</button>
-          <button className="px-3 py-1 border rounded text-sm">View order details</button>
+          <button className="px-3 py-1 border rounded text-sm">
+            Download Invoice
+          </button>
+          <button className="px-3 py-1 border rounded text-sm">
+            View order details
+          </button>
         </div>
       );
     }
     return (
       <div className="flex flex-col gap-2">
-        <button className="px-3 py-1 bg-purple-700 text-white rounded text-sm">Track package</button>
-        <button className="px-3 py-1 border rounded text-sm">View or Edit order</button>
+        <button className="px-3 py-1 bg-purple-700 text-white rounded text-sm">
+          Track package
+        </button>
+        <button className="px-3 py-1 border rounded text-sm">
+          View or Edit order
+        </button>
         <button
           className="px-3 py-1 border rounded text-sm text-red-600"
-          onClick={() => dispatch(updateOrderStatus({ id: order.id, status: "cancelled" }))}
+          onClick={() =>
+            dispatch(updateOrderStatus({ id: order.id, status: "cancelled" }))
+          }
         >
           Cancel Order
         </button>
@@ -92,19 +113,31 @@ export default function Orders() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-6 text-sm">
           <button
-            className={`pb-2 ${activeTab === "orders" ? "border-b-2 border-purple-700 text-purple-700" : "text-gray-600"}`}
+            className={`pb-2 ${
+              activeTab === "orders"
+                ? "border-b-2 border-purple-700 text-purple-700"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("orders")}
           >
             Orders
           </button>
           <button
-            className={`pb-2 ${activeTab === "current" ? "border-b-2 border-purple-700 text-purple-700" : "text-gray-600"}`}
+            className={`pb-2 ${
+              activeTab === "current"
+                ? "border-b-2 border-purple-700 text-purple-700"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("current")}
           >
             Current Orders
           </button>
           <button
-            className={`pb-2 ${activeTab === "previous" ? "border-b-2 border-purple-700 text-purple-700" : "text-gray-600"}`}
+            className={`pb-2 ${
+              activeTab === "previous"
+                ? "border-b-2 border-purple-700 text-purple-700"
+                : "text-gray-600"
+            }`}
             onClick={() => setActiveTab("previous")}
           >
             Previous Orders
@@ -137,25 +170,48 @@ export default function Orders() {
               </div>
               {/* Body rows: one per item with actions inline to mirror screenshot */}
               {order.items.map((it, idx) => (
-                <div key={idx} className="grid grid-cols-12 items-stretch gap-3 px-4 py-3 border-t text-sm">
+                <div
+                  key={idx}
+                  className="grid grid-cols-12 items-stretch gap-3 px-4 py-3 border-t text-sm"
+                >
                   <div className="col-span-2 flex items-center">{order.id}</div>
                   <div className="col-span-5 flex gap-4">
-                    <img src={it.image} alt={it.title} className="w-24 h-24 object-cover rounded" />
+                    <img
+                      src={it.image}
+                      alt={it.title}
+                      className="w-24 h-24 object-cover rounded"
+                    />
                     <div className="flex-1">
                       <div className="font-medium">{it.title}</div>
-                      <div className="text-xs text-gray-500">Material: {it.material || "-"} &nbsp; Size: {it.size || "-"}</div>
-                      <div className="text-purple-700 font-semibold">₹{it.price}</div>
-                      <div className="text-[11px] text-gray-500">Will be delivered by - {formatDate(order.date)}, 8am - 10pm</div>
+                      <div className="text-xs text-gray-500">
+                        Material: {it.material || "-"} &nbsp; Size:{" "}
+                        {it.size || "-"}
+                      </div>
+                      <div className="text-purple-700 font-semibold">
+                        ₹{it.price}
+                      </div>
+                      <div className="text-[11px] text-gray-500">
+                        Will be delivered by - {formatDate(order.date)}, 8am -
+                        10pm
+                      </div>
                     </div>
                     {/* Actions */}
                     <div className="flex flex-col gap-2 min-w-[150px] justify-center">
                       <ActionButtons order={order} />
                     </div>
                   </div>
-                  <div className="col-span-1 flex items-center"><StatusPill status={order.status || "placed"} /></div>
-                  <div className="col-span-2 flex items-center">{formatDate(order.date)}</div>
-                  <div className="col-span-1 flex items-center">{it.qty || 1}</div>
-                  <div className="col-span-1 flex items-center">₹{order.totals?.payable || it.price}</div>
+                  <div className="col-span-1 flex items-center">
+                    <StatusPill status={order.status || "placed"} />
+                  </div>
+                  <div className="col-span-2 flex items-center">
+                    {formatDate(order.date)}
+                  </div>
+                  <div className="col-span-1 flex items-center">
+                    {it.qty || 1}
+                  </div>
+                  <div className="col-span-1 flex items-center">
+                    ₹{order.totals?.payable || it.price}
+                  </div>
                 </div>
               ))}
             </div>

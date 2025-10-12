@@ -44,7 +44,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         {/* Drawer Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-2xl font-bold text-gray-900">
-            Your Cart ({itemCount})
+            Your Shopping Cart {/* {itemCount === 0 ? "" : itemCount} */}
           </h2>
           <button
             onClick={onClose}
@@ -56,7 +56,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         </div>
 
         {/* Cart Content (Scrollable) */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 flex justify-center items-center">
           {/* Render the full Cart content inside the drawer */}
           <Cart isDrawer={true} onClose={onClose} />
         </div>

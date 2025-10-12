@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import categoriesData from "../data/categories.json";
-import customTile from "../data/customTile.json";
 
 // Responsive 3-cards first row, 2-cards second row grid
 export default function CategoryMosaic() {
@@ -72,20 +71,18 @@ export default function CategoryMosaic() {
           {row1[0] && <Card section={row1[0]} overlay="top" />}
           {row1[1] && (
             <button
-              onClick={() => navigate(customTile?.link || "/filter?customizable=true")}
+              onClick={() => navigate("/filter?customizable=true")}
               className="group relative rounded-xl overflow-hidden aspect-[4/3]"
             >
               <img
-                src={customTile?.image}
-                alt={customTile?.title || "Custom Order"}
+                src={row1[1]?.products?.[0]?.imageURL}
+                alt="Custom Order"
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/40"></div>
               <div className="absolute bottom-3 left-3 right-3 text-white text-left">
-                <div className="text-md font-bold leading-tight">{customTile?.title || "Custom Order"}</div>
-                {customTile?.description && (
-                  <div className="text-sm opacity-90 line-clamp-2">{customTile.description}</div>
-                )}
+                <div className="text-md font-bold leading-tight">Custom Order</div>
+                <div className="text-sm opacity-90 line-clamp-2">Turn your vision into a personalized, one-of-a-kind sculpture.</div>
               </div>
             </button>
           )}

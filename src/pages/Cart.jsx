@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Trash2, X, Minus, Plus } from "lucide-react";
 import Modal from "../components/Modal";
 import CheckoutContent from "../components/CheckoutContent";
+import EmptyShoppingCart from "../assets/empty-shopping-cart.svg";
 
 /**
  * Cart Component: Handles both the full-page cart view and the narrow drawer/popup view.
@@ -81,27 +82,21 @@ export default function Cart({ isDrawer = false, onClose }) {
           <div
             className={`${
               isDrawer
-                ? "py-10 text-center"
+                ? "text-center flex flex-col items-center"
                 : "py-16 bg-white rounded-xl shadow-md text-center"
             }`}
           >
+            <img src={EmptyShoppingCart} alt="" />
             <p className="text-xl text-gray-600 mb-4">
-              Your cart is feeling a bit light! Start shopping now.
+              Your cart seems kind empty.
             </p>
-            <Link
-              to="/"
-              onClick={onClose}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-purple-600 hover:bg-purple-700 transition"
-            >
-              Continue Shopping →
-            </Link>
           </div>
         ) : (
           // MAIN CONTENT LAYOUT
           <div
             className={`flex ${
               isDrawer
-                ? "flex-col pt-4 px-4 h-dvh"
+                ? "flex-col pt-4 h-dvh"
                 : "flex-col md:flex-row gap-8 h-100 "
             }`}
           >
@@ -158,13 +153,9 @@ export default function Cart({ isDrawer = false, onClose }) {
                       </div>
                       <div className={`${isDrawer ? "text-lg font-bold" : "hidden"} text-gray-900`}>₹{it.price * it.qty}</div>
                       {!isDrawer && (<div className="text-lg font-bold text-gray-900 w-24 text-right">₹{it.price * it.qty}</div>)}
-                      {!isDrawer && (
-                        <button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition" aria-label="Remove item"><Trash2 size={20} /></button>
-                      )}
+                      {!isDrawer && (<button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition" aria-label="Remove item"><Trash2 size={20} /></button>)}
                     </div>
-                    {isDrawer && (
-                      <button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition absolute top-4 right-0" aria-label="Remove item"><Trash2 size={20} /></button>
-                    )}
+                    {isDrawer && (<button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition absolute top-4 right-0" aria-label="Remove item"><Trash2 size={20} /></button>)}
                   </div>
                 );
               })}
@@ -185,7 +176,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             {/* --- Order Summary / Checkout Section --- */}
             {isDrawer ? (
               // DRAWER: Sticky Bottom Checkout
-              <div className="sticky bottom-0 bg-white p-4 border-t shadow-lg z-10">
+              <div className="sticky bottom-0 bg-white py-4 border-t shadow-lg z-10">
                 <div className="flex justify-between items-center text-xl font-bold mb-4">
                   <span>Total:</span>
                   <span className="text-purple-700">₹{total}</span>

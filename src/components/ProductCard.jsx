@@ -160,9 +160,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
             ) : (
               <div
                 className="
-              inline-flex items-center bg-purple-800 text-white border border-purple-700 rounded-sm 
-              opacity-0 translate-y-1 pointer-events-none
-              group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
+              inline-flex items-center bg-purple-800 text-white border border-purple-700 rounded-sm translate-y-1 pointer-events-none group:translate-y-0 group:pointer-events-auto
             "
               >
                 <button

@@ -355,136 +355,193 @@ export default function Checkout() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Steps */}
-        <div className="lg:col-span-2">
-          {/* Address */}
-          <Section
-            title="User Address Details"
-            isOpen={open.address}
-            onToggle={() => setOpen((p) => ({ ...p, address: !p.address }))}
-            actionText=""
-            completed={done.address}
-          >
-            <div className="space-y-3">
-              {addrList.map((addr) => (
-                <label
-                  key={addr.id}
-                  className="flex gap-3 items-start p-3 border border-gray-200 rounded-md"
-                >
-                  <input
-                    type="radio"
-                    name="address"
-                    checked={selectedAddressId === addr.id}
-                    onChange={() => {
-                      setSelectedAddressId(addr.id);
-                      const y = window.scrollY;
-                      setTimeout(() => window.scrollTo(0, y), 0);
-                    }}
-                    className="mt-1 text-purple-700"
-                  />
-                  <div className="text-sm">
-                    <div className="font-medium text-gray-900">
-                      {addr.name}
-                      {addr.tag && (
-                        <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-gray-600">
-                          {addr.tag}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-gray-600">{addr.addressLine}</div>
-                    <div className="text-gray-600">Mobile: {addr.mobile}</div>
-                    <div className="text-gray-600">Email: {addr.email}</div>
+      <div className="py-6 px-4 md:px-15 lg:px-20">
+        <div className="container mx-auto">
+          <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left: Steps */}
+            <div className="lg:col-span-2">
+              {/* Address */}
+              <Section
+                title="User Address Details"
+                isOpen={open.address}
+                onToggle={() => setOpen((p) => ({ ...p, address: !p.address }))}
+                actionText=""
+                completed={done.address}
+              >
+                <div className="space-y-3">
+                  {addrList.map((addr) => (
+                    <label
+                      key={addr.id}
+                      className="flex gap-3 items-start p-3 border border-gray-200 rounded-md"
+                    >
+                      <input
+                        type="radio"
+                        name="address"
+                        checked={selectedAddressId === addr.id}
+                        onChange={() => {
+                          setSelectedAddressId(addr.id);
+                          const y = window.scrollY;
+                          setTimeout(() => window.scrollTo(0, y), 0);
+                        }}
+                        className="mt-1 text-purple-700"
+                      />
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900">
+                          {addr.name}
+                          {addr.tag && (
+                            <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-gray-600">
+                              {addr.tag}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-gray-600">{addr.addressLine}</div>
+                        <div className="text-gray-600">
+                          Mobile: {addr.mobile}
+                        </div>
+                        <div className="text-gray-600">Email: {addr.email}</div>
+                        <button
+                          type="button"
+                          className="text-xs text-purple-700 mt-1"
+                          onClick={() => {
+                            setEditAddress(addr);
+                            setIsAddressModalOpen(true);
+                          }}
+                        >
+                          Edit address
+                        </button>
+                      </div>
+                    </label>
+                  ))}
+                  <div className="flex justify-between items-center">
                     <button
-                      type="button"
-                      className="text-xs text-purple-700 mt-1"
+                      className="text-sm text-purple-700"
+                      onClick={() => setIsAddressModalOpen(true)}
+                    >
+                      Add new address
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                      disabled={!selectedAddress}
                       onClick={() => {
-                        setEditAddress(addr);
-                        setIsAddressModalOpen(true);
+                        setDone((d) => ({ ...d, address: true }));
+                        setOpen({
+                          address: false,
+                          payment: true,
+                          review: false,
+                        });
                       }}
                     >
-                      Edit address
+                      Deliver to this address
                     </button>
                   </div>
-                </label>
-              ))}
-              <div className="flex justify-between items-center">
-                <button
-                  className="text-sm text-purple-700"
-                  onClick={() => setIsAddressModalOpen(true)}
-                >
-                  Add new address
-                </button>
-                <button
-                  className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-                  disabled={!selectedAddress}
-                  onClick={() => {
-                    setDone((d) => ({ ...d, address: true }));
-                    setOpen({ address: false, payment: true, review: false });
-                  }}
-                >
-                  Deliver to this address
-                </button>
-              </div>
-            </div>
-          </Section>
+                </div>
+              </Section>
 
-          {/* Payment Details */}
-          <Section
-            title="Payment Details"
-            isOpen={open.payment}
-            onToggle={() => setOpen((p) => ({ ...p, payment: !p.payment }))}
-            actionText=""
-            completed={done.payment}
-          >
-            {/* UPI */}
-            <div className="mb-4">
-              <div className="text-sm font-semibold mb-2">UPI</div>
-              <div className="flex flex-wrap items-center gap-4 mb-3 text-sm">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="paytype"
-                    checked={paymentType === "upi" && upiApp === "phonepe"}
-                    onChange={() => {
-                      setPaymentType("upi");
-                      setUpiApp("phonepe");
-                      setUpiVerified(false);
-                      keepScroll();
-                    }}
-                  />
-                  <span className="inline-flex items-center gap-1">
-                    <Logo
-                      name="phonepe"
-                      alt="PhonePe"
-                      fallback={<PhonePeIcon />}
-                    />
-                    PhonePe
-                  </span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="paytype"
-                      checked={paymentType === "upi" && upiApp === "gpay"}
-                      onChange={() => {
-                        setPaymentType("upi");
-                        setUpiApp("gpay");
-                        setUpiVerified(false);
-                        keepScroll();
-                      }}
-                    />
-                    <span className="inline-flex items-center gap-1">
-                      <Logo name="gpay" alt="GPay" fallback={<GPayIcon />} />
-                      GPay
-                    </span>
-                  </label>
-                  {paymentType === "upi" && upiApp === "gpay" && (
-                    <>
+              {/* Payment Details */}
+              <Section
+                title="Payment Details"
+                isOpen={open.payment}
+                onToggle={() => setOpen((p) => ({ ...p, payment: !p.payment }))}
+                actionText=""
+                completed={done.payment}
+              >
+                {/* UPI */}
+                <div className="mb-4">
+                  <div className="text-sm font-semibold mb-2">UPI</div>
+                  <div className="flex flex-wrap items-center gap-4 mb-3 text-sm">
+                    <label className="flex items-center gap-2">
                       <input
-                        className={`border px-2 py-1 rounded text-sm ${
+                        type="radio"
+                        name="paytype"
+                        checked={paymentType === "upi" && upiApp === "phonepe"}
+                        onChange={() => {
+                          setPaymentType("upi");
+                          setUpiApp("phonepe");
+                          setUpiVerified(false);
+                          keepScroll();
+                        }}
+                      />
+                      <span className="inline-flex items-center gap-1">
+                        <Logo
+                          name="phonepe"
+                          alt="PhonePe"
+                          fallback={<PhonePeIcon />}
+                        />
+                        PhonePe
+                      </span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="paytype"
+                          checked={paymentType === "upi" && upiApp === "gpay"}
+                          onChange={() => {
+                            setPaymentType("upi");
+                            setUpiApp("gpay");
+                            setUpiVerified(false);
+                            keepScroll();
+                          }}
+                        />
+                        <span className="inline-flex items-center gap-1">
+                          <Logo
+                            name="gpay"
+                            alt="GPay"
+                            fallback={<GPayIcon />}
+                          />
+                          GPay
+                        </span>
+                      </label>
+                      {paymentType === "upi" && upiApp === "gpay" && (
+                        <>
+                          <input
+                            className={`border px-2 py-1 rounded text-sm ${
+                              upiId && !isValidUpiId(upiId)
+                                ? "border-red-500"
+                                : "border-gray-200"
+                            }`}
+                            placeholder="Enter UPI ID"
+                            value={upiId}
+                            onChange={(e) => {
+                              setUpiId(e.target.value);
+                              setUpiVerified(false);
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className={`text-purple-700 text-sm ${
+                              isValidUpiId(upiId)
+                                ? ""
+                                : "opacity-50 cursor-not-allowed"
+                            }`}
+                            disabled={!isValidUpiId(upiId)}
+                            onClick={() => setUpiVerified(true)}
+                          >
+                            {upiVerified ? "Verified" : "Verify ID"}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="paytype"
+                        checked={paymentType === "upi" && upiApp === "other"}
+                        onChange={() => {
+                          setPaymentType("upi");
+                          setUpiApp("other");
+                          setUpiVerified(false);
+                          keepScroll();
+                        }}
+                      />
+                      Other UPI App
+                    </label>
+                  </div>
+                  {paymentType === "upi" && upiApp !== "gpay" && (
+                    <div className="flex items-center gap-3 text-sm">
+                      <input
+                        className={`border border-gray-200 px-2 py-1 rounded text-sm ${
                           upiId && !isValidUpiId(upiId)
                             ? "border-red-500"
                             : "border-gray-200"
@@ -508,487 +565,473 @@ export default function Checkout() {
                       >
                         {upiVerified ? "Verified" : "Verify ID"}
                       </button>
-                    </>
+                    </div>
                   )}
                 </div>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="paytype"
-                    checked={paymentType === "upi" && upiApp === "other"}
-                    onChange={() => {
-                      setPaymentType("upi");
-                      setUpiApp("other");
-                      setUpiVerified(false);
-                      keepScroll();
-                    }}
-                  />
-                  Other UPI App
-                </label>
-              </div>
-              {paymentType === "upi" && upiApp !== "gpay" && (
-                <div className="flex items-center gap-3 text-sm">
-                  <input
-                    className={`border border-gray-200 px-2 py-1 rounded text-sm ${
-                      upiId && !isValidUpiId(upiId)
-                        ? "border-red-500"
-                        : "border-gray-200"
-                    }`}
-                    placeholder="Enter UPI ID"
-                    value={upiId}
-                    onChange={(e) => {
-                      setUpiId(e.target.value);
-                      setUpiVerified(false);
-                    }}
-                  />
+
+                {/* Cards */}
+                <div className="mb-4">
+                  <div className="text-sm font-semibold mb-2">
+                    Credit or Debit Card
+                  </div>
+                  {cards.map((c) => (
+                    <label
+                      key={c.id}
+                      className="flex items-center gap-2 mb-2 text-sm"
+                    >
+                      <input
+                        type="radio"
+                        name="paytype_card"
+                        checked={
+                          paymentType === "card" && selectedCardId === c.id
+                        }
+                        onChange={() => {
+                          setPaymentType("card");
+                          setSelectedCardId(c.id);
+                          keepScroll();
+                        }}
+                      />
+                      <span className="inline-flex items-center gap-2">
+                        {c.brand === "visa" ? (
+                          <Logo
+                            name="visa"
+                            alt="VISA"
+                            fallback={<VisaIcon />}
+                          />
+                        ) : (
+                          <Logo
+                            name="mastercard"
+                            alt="Mastercard"
+                            fallback={<MastercardIcon />}
+                          />
+                        )}
+                        <span>{c.label}</span>
+                      </span>
+                    </label>
+                  ))}
                   <button
                     type="button"
-                    className={`text-purple-700 text-sm ${
-                      isValidUpiId(upiId) ? "" : "opacity-50 cursor-not-allowed"
-                    }`}
-                    disabled={!isValidUpiId(upiId)}
-                    onClick={() => setUpiVerified(true)}
+                    className="text-purple-700 text-sm"
+                    onClick={() => {
+                      setPaymentType("card");
+                      setIsCardModalOpen(true);
+                    }}
                   >
-                    {upiVerified ? "Verified" : "Verify ID"}
+                    Add new card
                   </button>
                 </div>
-              )}
-            </div>
 
-            {/* Cards */}
-            <div className="mb-4">
-              <div className="text-sm font-semibold mb-2">
-                Credit or Debit Card
-              </div>
-              {cards.map((c) => (
-                <label
-                  key={c.id}
-                  className="flex items-center gap-2 mb-2 text-sm"
-                >
-                  <input
-                    type="radio"
-                    name="paytype_card"
-                    checked={paymentType === "card" && selectedCardId === c.id}
-                    onChange={() => {
-                      setPaymentType("card");
-                      setSelectedCardId(c.id);
-                      keepScroll();
-                    }}
-                  />
-                  <span className="inline-flex items-center gap-2">
-                    {c.brand === "visa" ? (
-                      <Logo name="visa" alt="VISA" fallback={<VisaIcon />} />
-                    ) : (
+                {/* Netbanking */}
+                <div className="mb-4">
+                  <div className="text-sm font-semibold mb-2">Netbanking</div>
+                  <div className="flex items-center gap-2">
+                    <select
+                      className="border border-gray-200 rounded px-2 py-1 text-sm"
+                      value={selectedBank}
+                      onChange={(e) => {
+                        setSelectedBank(e.target.value);
+                        setPaymentType("netbanking");
+                        keepScroll();
+                      }}
+                    >
+                      <option value="">Select your bank</option>
+                      <option value="SBI">SBI</option>
+                      <option value="HDFC">HDFC</option>
+                      <option value="ICICI">ICICI</option>
+                      <option value="AXIS">AXIS</option>
+                      <option value="KOTAK">KOTAK</option>
+                    </select>
+                    {selectedBank && (
                       <Logo
-                        name="mastercard"
-                        alt="Mastercard"
-                        fallback={<MastercardIcon />}
+                        name={selectedBank.toLowerCase()}
+                        alt={selectedBank}
+                        fallback={<BankLogo code={selectedBank} />}
                       />
                     )}
-                    <span>{c.label}</span>
-                  </span>
-                </label>
-              ))}
-              <button
-                type="button"
-                className="text-purple-700 text-sm"
-                onClick={() => {
-                  setPaymentType("card");
-                  setIsCardModalOpen(true);
-                }}
+                  </div>
+                </div>
+
+                {/* COD */}
+                <div>
+                  <div className="text-sm font-semibold mb-2">
+                    Cash on Delivery
+                  </div>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name="paytype"
+                      checked={paymentType === "cod"}
+                      onChange={() => {
+                        setPaymentType("cod");
+                        const y = window.scrollY;
+                        setTimeout(() => window.scrollTo(0, y), 0);
+                      }}
+                    />
+                    Cash on Delivery
+                  </label>
+                </div>
+                {/* Inline CTA as per design */}
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                    disabled={!isPaymentValid}
+                    onClick={() => {
+                      if (!isPaymentValid) return;
+                      setOpen({ address: false, payment: false, review: true });
+                      setDone((d) => ({ ...d, payment: true }));
+                    }}
+                  >
+                    Use this payment method
+                  </button>
+                </div>
+              </Section>
+
+              {/* No inline CTA. Use the right-side primary CTA */}
+
+              {/* Review Products */}
+              <Section
+                title="Review Products"
+                isOpen={open.review}
+                onToggle={() => setOpen((p) => ({ ...p, review: !p.review }))}
+                actionText=""
               >
-                Add new card
-              </button>
+                <div className="">
+                  {items.map((i) => {
+                    const lineWrap = wrapMap[i.id]
+                      ? WRAP_FEE_PER_UNIT * i.qty
+                      : 0;
+                    const lineTotal = i.price * i.qty + lineWrap;
+                    return (
+                      <>
+                        <div
+                          key={i.id}
+                          className="py-4 flex items-start gap-4 text-sm "
+                        >
+                          <img
+                            src={i.image}
+                            alt={i.title}
+                            className="w-30 h-40 rounded object-cover"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">
+                              {i.title}
+                            </div>
+                            <div className="text-gray-500">
+                              Material: {i.material || "-"} &nbsp; Size:{" "}
+                              {i.size || "-"}
+                            </div>
+                            <div className="text-purple-700 font-semibold">
+                              ₹{i.price}
+                            </div>
+                            <div className="flex gap-5 py-2">
+                              <div className="flex items-center gap-2 border border-gray-200 rounded">
+                                <button
+                                  type="button"
+                                  className="px-2"
+                                  onClick={() => {
+                                    keepScroll();
+                                    i.qty > 1
+                                      ? dispatch(
+                                          updateQty({
+                                            id: i.id,
+                                            qty: i.qty - 1,
+                                          })
+                                        )
+                                      : dispatch(removeFromCart(i.id));
+                                  }}
+                                >
+                                  -
+                                </button>
+                                <span>{i.qty}</span>
+                                <button
+                                  type="button"
+                                  className="px-2"
+                                  onClick={() => {
+                                    keepScroll();
+                                    dispatch(
+                                      updateQty({ id: i.id, qty: i.qty + 1 })
+                                    );
+                                  }}
+                                >
+                                  +
+                                </button>
+                              </div>
+                              <button
+                                type="button"
+                                className="text-red-600 text-xs"
+                                onClick={() => {
+                                  keepScroll();
+                                  dispatch(removeFromCart(i.id));
+                                }}
+                              >
+                                Remove from cart
+                              </button>
+                            </div>
+                            <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
+                              <input
+                                type="checkbox"
+                                checked={!!wrapMap[i.id]}
+                                onChange={(e) => {
+                                  keepScroll();
+                                  setWrapMap((prev) => ({
+                                    ...prev,
+                                    [i.id]: e.target.checked,
+                                  }));
+                                }}
+                              />
+                              Gift wrap this item (₹20 for wrapping)
+                            </label>
+                            <div className="text-xs text-gray-500 mt-1">
+                              Estimated Delivery –{" "}
+                              <span className="font-semibold">
+                                By {formatEta(etaExact)}, 8am - 10pm
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="text-right font-medium">
+                          <div>
+                            Subtotal (<span>{i.qty}</span> item):{" "}
+                            <span className="text-purple-700 font-semibold">
+                              ₹{lineTotal}
+                            </span>
+                          </div>
+                          {lineWrap > 0 && (
+                            <div className="text-[11px] text-gray-500">
+                              incl. wrap ₹{lineWrap}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })}
+                  {items.length === 0 && (
+                    <div className="py-6 text-gray-500">
+                      Your cart is empty.
+                    </div>
+                  )}
+                </div>
+              </Section>
             </div>
 
-            {/* Netbanking */}
-            <div className="mb-4">
-              <div className="text-sm font-semibold mb-2">Netbanking</div>
-              <div className="flex items-center gap-2">
-                <select
-                  className="border border-gray-200 rounded px-2 py-1 text-sm"
-                  value={selectedBank}
-                  onChange={(e) => {
-                    setSelectedBank(e.target.value);
-                    setPaymentType("netbanking");
-                    keepScroll();
-                  }}
+            {/* Right: Pricing Summary */}
+            <div>
+              <div className="border border-gray-200 rounded-lg p-4 sticky top-2/12 bg-white shadow">
+                <h2 className="font-semibold mb-3 text-gray-800">
+                  Pricing Details
+                </h2>
+                <div className="text-sm space-y-2">
+                  <div className="flex justify-between">
+                    <span>Price:</span>
+                    <span>₹{mrpTotal}</span>
+                  </div>
+                  <div className="flex justify-between text-green-700">
+                    <span>Discount:</span>
+                    <span>-₹{discount}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Delivery Fees:</span>
+                    <span>₹{delivery}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Gift wrap:</span>
+                    <span>₹{wrapTotal}</span>
+                  </div>
+                  <hr />
+                  <div className="flex justify-between font-semibold">
+                    <span>Payable Price:</span>
+                    <span>₹{payable}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={handlePrimaryAction}
+                  className="w-full mt-4 px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                  disabled={
+                    items.length === 0 || (currentStep === 2 && !isPaymentValid)
+                  }
                 >
-                  <option value="">Select your bank</option>
-                  <option value="SBI">SBI</option>
-                  <option value="HDFC">HDFC</option>
-                  <option value="ICICI">ICICI</option>
-                  <option value="AXIS">AXIS</option>
-                  <option value="KOTAK">KOTAK</option>
-                </select>
-                {selectedBank && (
-                  <Logo
-                    name={selectedBank.toLowerCase()}
-                    alt={selectedBank}
-                    fallback={<BankLogo code={selectedBank} />}
-                  />
+                  {ctaLabel}
+                </button>
+              </div>
+            </div>
+          </div>
+          {/* Add Address Modal */}
+          <Modal
+            isOpen={isAddressModalOpen}
+            onClose={() => setIsAddressModalOpen(false)}
+            title="Add new Address"
+          >
+            <AddressForm
+              initial={editAddress || undefined}
+              submitLabel={editAddress ? "Save address" : "Use this address"}
+              onCancel={() => {
+                setEditAddress(null);
+                setIsAddressModalOpen(false);
+              }}
+              onSubmit={(newAddr) => {
+                if (user?.isAuthenticated) {
+                  dispatch(addOrUpdateAddress(newAddr));
+                } else {
+                  setAddrList((prev) => {
+                    let list = prev;
+                    if (editAddress) {
+                      list = prev.map((a) =>
+                        a.id === editAddress.id ? newAddr : a
+                      );
+                    } else {
+                      list = [...prev, newAddr];
+                    }
+                    if (newAddr.isDefault) {
+                      list = list.map((a) => ({
+                        ...a,
+                        isDefault: a.id === newAddr.id,
+                      }));
+                    }
+                    return list;
+                  });
+                }
+                setSelectedAddressId(newAddr.id);
+                setEditAddress(null);
+                setIsAddressModalOpen(false);
+              }}
+            />
+          </Modal>
+          {/* Add Card Modal */}
+          <Modal
+            isOpen={isCardModalOpen}
+            onClose={() => setIsCardModalOpen(false)}
+            title="Add new card"
+          >
+            {/* Inline validated card form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!isCardValid) return;
+                const mask = cardDigits.slice(-4);
+                const card = {
+                  id: `card_${cardBrand}_${mask}`,
+                  brand: cardBrand,
+                  mask,
+                  label:
+                    cardBrand === "visa"
+                      ? `VISA card ending with ${mask}`
+                      : cardBrand === "mastercard"
+                      ? `Mastercard ending with ${mask}`
+                      : cardBrand === "amex"
+                      ? `Amex card ending with ${mask}`
+                      : `Card ending with ${mask}`,
+                };
+                setCards((prev) => [...prev, card]);
+                setSelectedCardId(card.id);
+                setPaymentType("card");
+                setIsCardModalOpen(false);
+                // reset form
+                setCardName("");
+                setCardNumber("");
+                setCardExpiry("");
+                setCardCvv("");
+              }}
+              className="space-y-3"
+            >
+              <div>
+                <label className="block text-sm mb-1">Name on card</label>
+                <input
+                  className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                    cardErrors.name ? "border-red-500" : "border-gray-200"
+                  }`}
+                  value={cardName}
+                  onChange={(e) => setCardName(e.target.value)}
+                  placeholder="John Doe"
+                />
+                {cardErrors.name && (
+                  <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>
                 )}
               </div>
-            </div>
-
-            {/* COD */}
-            <div>
-              <div className="text-sm font-semibold mb-2">Cash on Delivery</div>
-              <label className="flex items-center gap-2 text-sm">
+              <div>
+                <label className="block text-sm mb-1">Card number</label>
                 <input
-                  type="radio"
-                  name="paytype"
-                  checked={paymentType === "cod"}
-                  onChange={() => {
-                    setPaymentType("cod");
-                    const y = window.scrollY;
-                    setTimeout(() => window.scrollTo(0, y), 0);
+                  className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                    cardErrors.number ? "border-red-500" : "border-gray-200"
+                  }`}
+                  value={cardNumber}
+                  onChange={(e) => {
+                    const digits = onlyDigits(e.target.value).slice(0, 19);
+                    const grouped = digits.replace(/(.{4})/g, "$1 ").trim();
+                    setCardNumber(grouped);
                   }}
+                  inputMode="numeric"
+                  placeholder="1234 5678 9012 3456"
                 />
-                Cash on Delivery
-              </label>
-            </div>
-            {/* Inline CTA as per design */}
-            <div className="mt-4">
-              <button
-                type="button"
-                className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-                disabled={!isPaymentValid}
-                onClick={() => {
-                  if (!isPaymentValid) return;
-                  setOpen({ address: false, payment: false, review: true });
-                  setDone((d) => ({ ...d, payment: true }));
-                }}
-              >
-                Use this payment method
-              </button>
-            </div>
-          </Section>
-
-          {/* No inline CTA. Use the right-side primary CTA */}
-
-          {/* Review Products */}
-          <Section
-            title="Review Products"
-            isOpen={open.review}
-            onToggle={() => setOpen((p) => ({ ...p, review: !p.review }))}
-            actionText=""
-          >
-            <div className="">
-              {items.map((i) => {
-                const lineWrap = wrapMap[i.id] ? WRAP_FEE_PER_UNIT * i.qty : 0;
-                const lineTotal = i.price * i.qty + lineWrap;
-                return (
-                  <>
-                    <div
-                      key={i.id}
-                      className="py-4 flex items-start gap-4 text-sm "
-                    >
-                      <img
-                        src={i.image}
-                        alt={i.title}
-                        className="w-20 h-30 rounded object-cover"
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900">
-                          {i.title}
-                        </div>
-                        <div className="text-gray-500">
-                          Material: {i.material || "-"} &nbsp; Size:{" "}
-                          {i.size || "-"}
-                        </div>
-                        <div className="text-purple-700 font-semibold">
-                          ₹{i.price}
-                        </div>
-                        <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
-                          <input
-                            type="checkbox"
-                            checked={!!wrapMap[i.id]}
-                            onChange={(e) => {
-                              keepScroll();
-                              setWrapMap((prev) => ({
-                                ...prev,
-                                [i.id]: e.target.checked,
-                              }));
-                            }}
-                          />
-                          Gift wrap this item (₹20 for wrapping)
-                        </label>
-                        <div className="text-xs text-gray-500 mt-1">
-                          Estimated Delivery –{" "}
-                          <span className="font-semibold">
-                            By {formatEta(etaExact)}, 8am - 10pm
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-5">
-                      <div className="flex items-center gap-2 border border-gray-200 rounded">
-                        <button
-                          type="button"
-                          className="px-2"
-                          onClick={() => {
-                            keepScroll();
-                            i.qty > 1
-                              ? dispatch(
-                                  updateQty({ id: i.id, qty: i.qty - 1 })
-                                )
-                              : dispatch(removeFromCart(i.id));
-                          }}
-                        >
-                          -
-                        </button>
-                        <span>{i.qty}</span>
-                        <button
-                          type="button"
-                          className="px-2"
-                          onClick={() => {
-                            keepScroll();
-                            dispatch(updateQty({ id: i.id, qty: i.qty + 1 }));
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                      <button
-                        type="button"
-                        className="text-red-600 text-xs"
-                        onClick={() => {
-                          keepScroll();
-                          dispatch(removeFromCart(i.id));
-                        }}
-                      >
-                        Remove from cart
-                      </button>
-                    </div>
-
-                    <div className="text-right font-medium">
-                      <div>
-                        Subtotal (<span>{i.qty}</span> item):{" "}
-                        <span className="text-purple-700 font-semibold">
-                          ₹{lineTotal}
-                        </span>
-                      </div>
-                      {lineWrap > 0 && (
-                        <div className="text-[11px] text-gray-500">
-                          incl. wrap ₹{lineWrap}
-                        </div>
-                      )}
-                    </div>
-                  </>
-                );
-              })}
-              {items.length === 0 && (
-                <div className="py-6 text-gray-500">Your cart is empty.</div>
-              )}
-            </div>
-          </Section>
-        </div>
-
-        {/* Right: Pricing Summary */}
-        <div>
-          <div className="border border-gray-200 rounded-lg p-4 bg-white shadow">
-            <h2 className="font-semibold mb-3 text-gray-800">
-              Pricing Details
-            </h2>
-            <div className="text-sm space-y-2">
-              <div className="flex justify-between">
-                <span>Price:</span>
-                <span>₹{mrpTotal}</span>
+                {cardErrors.number && (
+                  <p className="text-xs text-red-600 mt-1">
+                    {cardErrors.number}
+                  </p>
+                )}
               </div>
-              <div className="flex justify-between text-green-700">
-                <span>Discount:</span>
-                <span>-₹{discount}</span>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm mb-1">Expiry (MM/YY)</label>
+                  <input
+                    className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                      cardErrors.expiry ? "border-red-500" : "border-gray-200"
+                    }`}
+                    value={cardExpiry}
+                    onChange={(e) => {
+                      const v = onlyDigits(e.target.value).slice(0, 4);
+                      const mm = v.slice(0, 2);
+                      const rest = v.slice(2);
+                      setCardExpiry(mm + (rest ? "/" + rest : ""));
+                    }}
+                    placeholder="MM/YY"
+                  />
+                  {cardErrors.expiry && (
+                    <p className="text-xs text-red-600 mt-1">
+                      {cardErrors.expiry}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">CVV</label>
+                  <input
+                    className={`w-full border border-gray-200 rounded px-3 py-2 ${
+                      cardErrors.cvv ? "border-red-500" : "border-gray-200"
+                    }`}
+                    value={cardCvv}
+                    onChange={(e) =>
+                      setCardCvv(onlyDigits(e.target.value).slice(0, 4))
+                    }
+                    inputMode="numeric"
+                    placeholder={cardBrand === "amex" ? "4 digits" : "3 digits"}
+                  />
+                  {cardErrors.cvv && (
+                    <p className="text-xs text-red-600 mt-1">
+                      {cardErrors.cvv}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span>Delivery Fees:</span>
-                <span>₹{delivery}</span>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCardModalOpen(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!isCardValid}
+                  className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                >
+                  Save card
+                </button>
               </div>
-              <div className="flex justify-between">
-                <span>Gift wrap:</span>
-                <span>₹{wrapTotal}</span>
-              </div>
-              <hr />
-              <div className="flex justify-between font-semibold">
-                <span>Payable Price:</span>
-                <span>₹{payable}</span>
-              </div>
-            </div>
-            <button
-              onClick={handlePrimaryAction}
-              className="w-full mt-4 px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-              disabled={
-                items.length === 0 || (currentStep === 2 && !isPaymentValid)
-              }
-            >
-              {ctaLabel}
-            </button>
-          </div>
+            </form>
+          </Modal>
         </div>
       </div>
-      {/* Add Address Modal */}
-      <Modal
-        isOpen={isAddressModalOpen}
-        onClose={() => setIsAddressModalOpen(false)}
-        title="Add new Address"
-      >
-        <AddressForm
-          initial={editAddress || undefined}
-          submitLabel={editAddress ? "Save address" : "Use this address"}
-          onCancel={() => {
-            setEditAddress(null);
-            setIsAddressModalOpen(false);
-          }}
-          onSubmit={(newAddr) => {
-            if (user?.isAuthenticated) {
-              dispatch(addOrUpdateAddress(newAddr));
-            } else {
-              setAddrList((prev) => {
-                let list = prev;
-                if (editAddress) {
-                  list = prev.map((a) => (a.id === editAddress.id ? newAddr : a));
-                } else {
-                  list = [...prev, newAddr];
-                }
-                if (newAddr.isDefault) {
-                  list = list.map((a) => ({ ...a, isDefault: a.id === newAddr.id }));
-                }
-                return list;
-              });
-            }
-            setSelectedAddressId(newAddr.id);
-            setEditAddress(null);
-            setIsAddressModalOpen(false);
-          }}
-        />
-      </Modal>
-      {/* Add Card Modal */}
-      <Modal
-        isOpen={isCardModalOpen}
-        onClose={() => setIsCardModalOpen(false)}
-        title="Add new card"
-      >
-        {/* Inline validated card form */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!isCardValid) return;
-            const mask = cardDigits.slice(-4);
-            const card = {
-              id: `card_${cardBrand}_${mask}`,
-              brand: cardBrand,
-              mask,
-              label:
-                cardBrand === "visa"
-                  ? `VISA card ending with ${mask}`
-                  : cardBrand === "mastercard"
-                  ? `Mastercard ending with ${mask}`
-                  : cardBrand === "amex"
-                  ? `Amex card ending with ${mask}`
-                  : `Card ending with ${mask}`,
-            };
-            setCards((prev) => [...prev, card]);
-            setSelectedCardId(card.id);
-            setPaymentType("card");
-            setIsCardModalOpen(false);
-            // reset form
-            setCardName("");
-            setCardNumber("");
-            setCardExpiry("");
-            setCardCvv("");
-          }}
-          className="space-y-3"
-        >
-          <div>
-            <label className="block text-sm mb-1">Name on card</label>
-            <input
-              className={`w-full border border-gray-200 rounded px-3 py-2 ${
-                cardErrors.name ? "border-red-500" : "border-gray-200"
-              }`}
-              value={cardName}
-              onChange={(e) => setCardName(e.target.value)}
-              placeholder="John Doe"
-            />
-            {cardErrors.name && (
-              <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Card number</label>
-            <input
-              className={`w-full border border-gray-200 rounded px-3 py-2 ${
-                cardErrors.number ? "border-red-500" : "border-gray-200"
-              }`}
-              value={cardNumber}
-              onChange={(e) => {
-                const digits = onlyDigits(e.target.value).slice(0, 19);
-                const grouped = digits.replace(/(.{4})/g, "$1 ").trim();
-                setCardNumber(grouped);
-              }}
-              inputMode="numeric"
-              placeholder="1234 5678 9012 3456"
-            />
-            {cardErrors.number && (
-              <p className="text-xs text-red-600 mt-1">{cardErrors.number}</p>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm mb-1">Expiry (MM/YY)</label>
-              <input
-                className={`w-full border border-gray-200 rounded px-3 py-2 ${
-                  cardErrors.expiry ? "border-red-500" : "border-gray-200"
-                }`}
-                value={cardExpiry}
-                onChange={(e) => {
-                  const v = onlyDigits(e.target.value).slice(0, 4);
-                  const mm = v.slice(0, 2);
-                  const rest = v.slice(2);
-                  setCardExpiry(mm + (rest ? "/" + rest : ""));
-                }}
-                placeholder="MM/YY"
-              />
-              {cardErrors.expiry && (
-                <p className="text-xs text-red-600 mt-1">{cardErrors.expiry}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm mb-1">CVV</label>
-              <input
-                className={`w-full border border-gray-200 rounded px-3 py-2 ${
-                  cardErrors.cvv ? "border-red-500" : "border-gray-200"
-                }`}
-                value={cardCvv}
-                onChange={(e) =>
-                  setCardCvv(onlyDigits(e.target.value).slice(0, 4))
-                }
-                inputMode="numeric"
-                placeholder={cardBrand === "amex" ? "4 digits" : "3 digits"}
-              />
-              {cardErrors.cvv && (
-                <p className="text-xs text-red-600 mt-1">{cardErrors.cvv}</p>
-              )}
-            </div>
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => setIsCardModalOpen(false)}
-              className="px-4 py-2 border rounded"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={!isCardValid}
-              className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
-            >
-              Save card
-            </button>
-          </div>
-        </form>
-      </Modal>
     </>
   );
 }

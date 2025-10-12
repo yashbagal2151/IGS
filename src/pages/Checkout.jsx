@@ -355,7 +355,7 @@ export default function Checkout() {
 
   return (
     <>
-      <div className="px-4 md:px-15 lg:px-20">
+      <div className="py-6 px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -818,7 +818,7 @@ export default function Checkout() {
 
             {/* Right: Pricing Summary */}
             <div>
-              <div className="border border-gray-200 rounded-lg p-4 bg-white shadow">
+              <div className="border border-gray-200 rounded-lg p-4 sticky top-2/12 bg-white shadow">
                 <h2 className="font-semibold mb-3 text-gray-800">
                   Pricing Details
                 </h2>

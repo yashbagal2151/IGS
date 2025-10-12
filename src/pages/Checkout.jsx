@@ -132,10 +132,10 @@ export default function Checkout() {
   // Netbanking
   const [selectedBank, setSelectedBank] = useState("");
 
-  // UPI
-  const [upiApp, setUpiApp] = useState("phonepe"); // 'phonepe' | 'gpay' | 'other'
+  // UPI (simplified: either enter UPI ID or scan QR)
+  const [upiOption, setUpiOption] = useState(""); // 'id' | 'qr'
   const [upiId, setUpiId] = useState("");
-  const [upiVerified, setUpiVerified] = useState(false);
+  const [upiStatus, setUpiStatus] = useState("idle"); // 'idle' | 'valid' | 'invalid'
 
   // Modals
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
@@ -239,7 +239,9 @@ export default function Checkout() {
     if (currentStep !== 2) return true;
     switch (paymentType) {
       case "upi":
-        return Boolean(upiApp) && isValidUpiId(upiId) && upiVerified;
+        if (upiOption === "qr") return true;
+        if (upiOption === "id") return isValidUpiId(upiId) && upiStatus === "valid";
+        return false;
       case "card":
         return Boolean(selectedCardId);
       case "netbanking":
@@ -252,9 +254,9 @@ export default function Checkout() {
   }, [
     currentStep,
     paymentType,
-    upiApp,
+    upiOption,
     upiId,
-    upiVerified,
+    upiStatus,
     selectedCardId,
     selectedBank,
   ]);
@@ -270,7 +272,7 @@ export default function Checkout() {
           paymentType === "card"
             ? `debit card **${selectedCard?.mask || "0000"}`
             : paymentType === "upi"
-            ? `UPI ${upiId || "(ID verified)"}`
+            ? `UPI ${upiOption === "id" ? (upiId || "(ID verified)") : "QR"}`
             : paymentType === "netbanking" && selectedBank
             ? `Netbanking ${selectedBank}`
             : paymentType,
@@ -443,124 +445,75 @@ export default function Checkout() {
                 {/* UPI */}
                 <div className="mb-4">
                   <div className="text-sm font-semibold mb-2">UPI</div>
-                  <div className="flex flex-wrap items-center gap-4 mb-3 text-sm">
+                  <div className="flex flex-col gap-2 text-sm">
                     <label className="flex items-center gap-2">
                       <input
                         type="radio"
                         name="paytype"
-                        checked={paymentType === "upi" && upiApp === "phonepe"}
+                        checked={paymentType === "upi" && upiOption === "id"}
                         onChange={() => {
                           setPaymentType("upi");
-                          setUpiApp("phonepe");
-                          setUpiVerified(false);
+                          setUpiOption("id");
+                          setUpiStatus("idle");
                           keepScroll();
                         }}
                       />
-                      <span className="inline-flex items-center gap-1">
-                        <Logo
-                          name="phonepe"
-                          alt="PhonePe"
-                          fallback={<PhonePeIcon />}
-                        />
-                        PhonePe
+                      <span className="flex items-center gap-2">
+                        Other UPI App
+                        {paymentType === "upi" && upiOption === "id" && (
+                          <>
+                            <input
+                              className={`ml-3 border px-2 py-1 rounded text-sm ${
+                                upiId && !isValidUpiId(upiId)
+                                  ? "border-red-500"
+                                  : "border-gray-200"
+                              }`}
+                              placeholder="Enter UPI ID"
+                              value={upiId}
+                              onChange={(e) => {
+                                setUpiId(e.target.value);
+                                setUpiStatus("idle");
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className={`text-purple-700 text-sm ${
+                                isValidUpiId(upiId)
+                                  ? ""
+                                  : "opacity-50 cursor-not-allowed"
+                              }`}
+                              disabled={!isValidUpiId(upiId)}
+                              onClick={() => {
+                                // Mock verification: treat IDs ending with a digit as valid
+                                const ok = isValidUpiId(upiId) && /\d$/.test(upiId);
+                                setUpiStatus(ok ? "valid" : "invalid");
+                              }}
+                            >
+                              {upiStatus === "valid"
+                                ? "Verified ✓"
+                                : upiStatus === "invalid"
+                                ? "Invalid ✕"
+                                : "Verify ID"}
+                            </button>
+                          </>
+                        )}
                       </span>
                     </label>
-                    <div className="flex items-center gap-2">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          name="paytype"
-                          checked={paymentType === "upi" && upiApp === "gpay"}
-                          onChange={() => {
-                            setPaymentType("upi");
-                            setUpiApp("gpay");
-                            setUpiVerified(false);
-                            keepScroll();
-                          }}
-                        />
-                        <span className="inline-flex items-center gap-1">
-                          <Logo
-                            name="gpay"
-                            alt="GPay"
-                            fallback={<GPayIcon />}
-                          />
-                          GPay
-                        </span>
-                      </label>
-                      {paymentType === "upi" && upiApp === "gpay" && (
-                        <>
-                          <input
-                            className={`border px-2 py-1 rounded text-sm ${
-                              upiId && !isValidUpiId(upiId)
-                                ? "border-red-500"
-                                : "border-gray-200"
-                            }`}
-                            placeholder="Enter UPI ID"
-                            value={upiId}
-                            onChange={(e) => {
-                              setUpiId(e.target.value);
-                              setUpiVerified(false);
-                            }}
-                          />
-                          <button
-                            type="button"
-                            className={`text-purple-700 text-sm ${
-                              isValidUpiId(upiId)
-                                ? ""
-                                : "opacity-50 cursor-not-allowed"
-                            }`}
-                            disabled={!isValidUpiId(upiId)}
-                            onClick={() => setUpiVerified(true)}
-                          >
-                            {upiVerified ? "Verified" : "Verify ID"}
-                          </button>
-                        </>
-                      )}
-                    </div>
                     <label className="flex items-center gap-2">
                       <input
                         type="radio"
                         name="paytype"
-                        checked={paymentType === "upi" && upiApp === "other"}
+                        checked={paymentType === "upi" && upiOption === "qr"}
                         onChange={() => {
                           setPaymentType("upi");
-                          setUpiApp("other");
-                          setUpiVerified(false);
+                          setUpiOption("qr");
+                          setUpiStatus("idle");
                           keepScroll();
                         }}
                       />
-                      Other UPI App
+                      <span>Scan QR Code and pay</span>
                     </label>
                   </div>
-                  {paymentType === "upi" && upiApp !== "gpay" && (
-                    <div className="flex items-center gap-3 text-sm">
-                      <input
-                        className={`border border-gray-200 px-2 py-1 rounded text-sm ${
-                          upiId && !isValidUpiId(upiId)
-                            ? "border-red-500"
-                            : "border-gray-200"
-                        }`}
-                        placeholder="Enter UPI ID"
-                        value={upiId}
-                        onChange={(e) => {
-                          setUpiId(e.target.value);
-                          setUpiVerified(false);
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className={`text-purple-700 text-sm ${
-                          isValidUpiId(upiId)
-                            ? ""
-                            : "opacity-50 cursor-not-allowed"
-                        }`}
-                        disabled={!isValidUpiId(upiId)}
-                        onClick={() => setUpiVerified(true)}
-                      >
-                        {upiVerified ? "Verified" : "Verify ID"}
-                      </button>
-                    </div>
-                  )}
                 </div>
 
                 {/* Cards */}

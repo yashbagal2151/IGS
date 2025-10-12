@@ -51,7 +51,7 @@ min-height: 100dvh;"
           <div className="container mx-auto xl:pt-20 grid grid-cols-2 gap-6">
             <div className="relative rounded-2xl overflow-hidden w-full h-52 object-cover">
               <SlideshowStripe
-                items={carouselData.items}
+                items={carouselData.itemsLeftTop || carouselData.items}
                 autoplayMs={carouselData.autoplayMs}
                 autoplay={true}
                 showPrevNext={false}
@@ -60,7 +60,7 @@ min-height: 100dvh;"
             </div>
             <div className="relative rounded-2xl overflow-hidden w-full h-52 object-cover">
               <SlideshowStripe
-                items={carouselData.items}
+                items={carouselData.itemsLeftBottom || carouselData.items}
                 autoplay={true}
                 showPrevNext={false}
                 showIndicators={false}

@@ -7,6 +7,7 @@ import {
 } from "../features/cart/cartSlice";
 // No sample addresses fallback; unauthenticated users add addresses fresh
 import { addOrUpdateAddress } from "../features/user/userSlice";
+import { addOrder } from "../features/orders/ordersSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
@@ -287,8 +288,9 @@ export default function Checkout() {
       },
       items,
     };
+    dispatch(addOrder(order));
     dispatch(clearCart());
-    navigate("/order-success", { state: { order } });
+    return order;
   };
 
   const handlePrimaryAction = () => {
@@ -300,7 +302,11 @@ export default function Checkout() {
       setOpen({ address: false, payment: false, review: true });
       setDone((d) => ({ ...d, payment: true }));
     } else {
-      handlePay();
+      // Place order then show pre-success page
+      (async () => {
+        const order = await handlePay();
+        navigate('/order-placed', { state: { order } });
+      })();
     }
   };
 

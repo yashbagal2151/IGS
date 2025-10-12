@@ -24,8 +24,18 @@ const ordersSlice = createSlice({
   },
   reducers: {
     addOrder(state, action) {
-      const order = { id: action.payload?.id || `ORD-${nanoid(6)}`, ...action.payload };
+      const order = {
+        id: action.payload?.id || `ORD-${nanoid(6)}`,
+        status: action.payload?.status || 'placed', // 'placed' | 'delivered' | 'cancelled'
+        ...action.payload,
+      };
       state.orders.unshift(order);
+      saveOrders(state.orders);
+    },
+    updateOrderStatus(state, action) {
+      const { id, status } = action.payload || {};
+      const o = state.orders.find((x) => x.id === id);
+      if (o) o.status = status;
       saveOrders(state.orders);
     },
     replaceOrders(state, action) {

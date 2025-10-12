@@ -10,6 +10,7 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [alias, setAlias] = useState(initial?.tag || "");
   const [makeDefault, setMakeDefault] = useState(initial?.isDefault || false);
   const [errors, setErrors] = useState({});
 
@@ -45,7 +46,7 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
     const newAddress = {
       id: initial?.id || `addr_${Date.now()}`,
       name: name.trim(),
-      tag: "Home",
+      tag: alias.trim() || "Home",
       addressLine,
       mobile: `+91 ${mobileDigits}`,
       email: "",
@@ -146,6 +147,16 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
           </select>
           {errors.state && <p className="mt-1 text-xs text-red-600">{errors.state}</p>}
         </div>
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Alias</label>
+        <input
+          type="text"
+          className="w-full border rounded px-3 py-2"
+          placeholder="Home"
+          value={alias}
+          onChange={(e) => setAlias(e.target.value)}
+        />
       </div>
       <label className="flex items-center gap-2 text-sm">
         <input

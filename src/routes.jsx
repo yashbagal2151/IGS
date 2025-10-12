@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import ProductCollections from "./pages/ProductCollections.jsx";
+// import ProductCollections from "./pages/ProductCollections.jsx";
 import Collections from "./pages/Collections.jsx";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
@@ -14,7 +14,7 @@ export default function RoutesMap() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/products" element={<ProductCollections />} />
+      {/* <Route path="/products" element={<ProductCollections />} /> */}
       <Route path="/collections" element={<Collections />} />
       <Route path="/product/:id" element={<Product />} />
       <Route path="/categories/:categorySlug" element={<CategoryPage />} />

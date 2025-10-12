@@ -3,6 +3,7 @@ import SlideshowStripe from "../components/SlideshowStripe.jsx";
 import carouselData from "../data/carousel.json";
 import Clippathgroup from "../assets/clip-path-group.svg";
 import { useNavigate } from "react-router-dom";
+import Collections from "./Collections.jsx";
 
 function Home() {
   const navigate = useNavigate();
@@ -80,7 +81,9 @@ function Home() {
           />
         </div>
       </section>
-      {/* Category grid moved to /collections */}
+      <div>
+        <Collections />
+      </div>
     </div>
   );
 }

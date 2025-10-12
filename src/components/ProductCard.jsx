@@ -60,7 +60,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
     "
     >
       {/* --- Image and Tag Section --- */}
-      <div className="relative h-48 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:shadow-2xl group-hover:ring-2 group-hover:ring-purple-200">
+      <div className="relative h-48 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-purple-200">
         <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}

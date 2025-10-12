@@ -36,7 +36,7 @@ export default function ProductSection({
   };
 
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto py-12">
       {/* Section Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">

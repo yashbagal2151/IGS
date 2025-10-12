@@ -10,7 +10,14 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
   const [pincode, setPincode] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [alias, setAlias] = useState(initial?.tag || "");
+  const DEFAULT_ALIASES = ["Home", "Work", "Other"];
+  const aliasOptions = React.useMemo(() => {
+    const existing = initial?.tag;
+    return existing && !DEFAULT_ALIASES.includes(existing)
+      ? [existing, ...DEFAULT_ALIASES]
+      : DEFAULT_ALIASES;
+  }, [initial?.tag]);
+  const [alias, setAlias] = useState(initial?.tag || "Home");
   const [makeDefault, setMakeDefault] = useState(initial?.isDefault || false);
   const [errors, setErrors] = useState({});
 
@@ -150,13 +157,17 @@ export default function AddressForm({ onSubmit, onCancel, initial, submitLabel =
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Alias</label>
-        <input
-          type="text"
+        <select
           className="w-full border rounded px-3 py-2"
-          placeholder="Home"
           value={alias}
           onChange={(e) => setAlias(e.target.value)}
-        />
+        >
+          {aliasOptions.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
       </div>
       <label className="flex items-center gap-2 text-sm">
         <input

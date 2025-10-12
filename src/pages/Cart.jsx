@@ -114,12 +114,14 @@ export default function Cart({ isDrawer = false, onClose }) {
                     className="w-24 h-24 object-cover rounded-lg mr-4 flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
-                    <div className="text-lg font-semibold text-gray-800 truncate">
-                      {it.title}
-                    </div>
-                    <div className="text-md font-bold text-gray-900 mt-1">
-                      ₹{it.price}
-                    </div>
+                    {isDrawer && (
+                      <div className="text-sm text-gray-500 mb-1">
+                        Material: <span className="font-medium capitalize">{it.material || '-'}</span>
+                        &nbsp; Size: <span className="font-medium capitalize">{it.size || '-'}</span>
+                      </div>
+                    )}
+                    <div className="text-md md:text-lg font-semibold text-gray-800 truncate">{it.title}</div>
+                    <div className="text-purple-700 font-bold mt-1">₹{it.price}</div>
                   </div>
 
                   {/* Controls/Actions Section */}
@@ -155,11 +157,7 @@ export default function Cart({ isDrawer = false, onClose }) {
                     </div>
 
                     {/* Subtotal (Drawer/Full Page) */}
-                    <div
-                      className={`${
-                        isDrawer ? "text-lg font-bold" : "hidden"
-                      } text-gray-900`}
-                    >
+                    <div className={`${isDrawer ? "text-lg font-bold" : "hidden"} text-gray-900`}>
                       ₹{it.price * it.qty}
                     </div>
                     {!isDrawer && (

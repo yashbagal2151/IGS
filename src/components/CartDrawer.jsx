@@ -44,7 +44,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         {/* Drawer Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-2xl font-bold text-gray-900">
-            Your Cart ({itemCount})
+            Your Shopping Cart
           </h2>
           <button
             onClick={onClose}

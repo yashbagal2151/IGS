@@ -279,7 +279,7 @@ export default function FilterPage() {
           </div>
 
           {/* Products Grid - Responsive Design */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6 mb-8">
             {paginatedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

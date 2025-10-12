@@ -64,7 +64,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
         <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}
-        <div className="absolute top-3 left-3 flex flex-row gap-1.5">
+        <div className="absolute top-3 left-3 flex flex-col lg:flex-row gap-1.5">
           {isFeatured && (
             <span
               className="

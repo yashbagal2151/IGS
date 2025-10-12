@@ -200,7 +200,7 @@ export default function FilterPage() {
   } = getPaginatedProducts();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       <div className="flex">
         {/* Filter Sidebar */}
         <FilterSidebar
@@ -210,7 +210,7 @@ export default function FilterPage() {
         />
 
         {/* Main Content */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-6 h-[88vh] overflow-y-auto">
           {/* Header Controls */}
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -267,7 +267,7 @@ export default function FilterPage() {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <Search
                     size={16}

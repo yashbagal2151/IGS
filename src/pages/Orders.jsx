@@ -40,20 +40,27 @@ export default function Orders() {
 
   const data = activeTab === "orders" ? filteredAll : activeTab === "current" ? currentOrders : previousOrders;
 
-  const StatusPill = ({ status }) => (
-    <span
-      className={
-        "text-xs px-2 py-1 rounded border " +
-        (status === "delivered"
-          ? "text-green-700 border-green-300"
-          : status === "cancelled"
-          ? "text-red-700 border-red-300"
-          : "text-yellow-700 border-yellow-300")
-      }
-    >
-      {status?.charAt(0).toUpperCase() + status?.slice(1)}
-    </span>
-  );
+  const StatusPill = ({ status }) => {
+    const label =
+      status === "placed"
+        ? "Ordered Placed"
+        : status === "processing"
+        ? "Processing"
+        : status === "delivered"
+        ? "Delivered"
+        : status === "cancelled"
+        ? "Cancelled"
+        : status || "Placed";
+    const cls =
+      status === "delivered"
+        ? "text-green-700 border-green-300"
+        : status === "cancelled"
+        ? "text-red-700 border-red-300"
+        : "text-yellow-700 border-yellow-300";
+    return (
+      <span className={`text-xs px-2 py-1 rounded border ${cls}`}>{label}</span>
+    );
+  };
 
   const ActionButtons = ({ order }) => {
     if (activeTab === "previous") {
@@ -118,7 +125,8 @@ export default function Orders() {
       ) : (
         <div className="space-y-6">
           {data.map((order) => (
-            <div key={order.id} className="border rounded-lg">
+            <div key={order.id} className="border rounded-lg overflow-hidden">
+              {/* Header row - table columns */}
               <div className="grid grid-cols-12 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-700">
                 <div className="col-span-2">Order ID</div>
                 <div className="col-span-5">Items</div>
@@ -127,29 +135,29 @@ export default function Orders() {
                 <div className="col-span-1">Quantity</div>
                 <div className="col-span-1">Total</div>
               </div>
-
+              {/* Body rows: one per item with actions inline to mirror screenshot */}
               {order.items.map((it, idx) => (
-                <div key={idx} className="grid grid-cols-12 items-center gap-3 px-4 py-3 border-t text-sm">
-                  <div className="col-span-2">{order.id}</div>
-                  <div className="col-span-5 flex items-center gap-4">
-                    <img src={it.image} alt={it.title} className="w-20 h-20 object-cover rounded" />
-                    <div>
+                <div key={idx} className="grid grid-cols-12 items-stretch gap-3 px-4 py-3 border-t text-sm">
+                  <div className="col-span-2 flex items-center">{order.id}</div>
+                  <div className="col-span-5 flex gap-4">
+                    <img src={it.image} alt={it.title} className="w-24 h-24 object-cover rounded" />
+                    <div className="flex-1">
                       <div className="font-medium">{it.title}</div>
                       <div className="text-xs text-gray-500">Material: {it.material || "-"} &nbsp; Size: {it.size || "-"}</div>
                       <div className="text-purple-700 font-semibold">₹{it.price}</div>
-                      <div className="text-[11px] text-gray-500">Will be delivered by - {formatDate(order.date)}</div>
+                      <div className="text-[11px] text-gray-500">Will be delivered by - {formatDate(order.date)}, 8am - 10pm</div>
+                    </div>
+                    {/* Actions */}
+                    <div className="flex flex-col gap-2 min-w-[150px] justify-center">
+                      <ActionButtons order={order} />
                     </div>
                   </div>
-                  <div className="col-span-1"><StatusPill status={order.status || "placed"} /></div>
-                  <div className="col-span-2">{formatDate(order.date)}</div>
-                  <div className="col-span-1">{it.qty || 1}</div>
-                  <div className="col-span-1">₹{order.totals?.payable || it.price}</div>
+                  <div className="col-span-1 flex items-center"><StatusPill status={order.status || "placed"} /></div>
+                  <div className="col-span-2 flex items-center">{formatDate(order.date)}</div>
+                  <div className="col-span-1 flex items-center">{it.qty || 1}</div>
+                  <div className="col-span-1 flex items-center">₹{order.totals?.payable || it.price}</div>
                 </div>
               ))}
-
-              <div className="px-4 py-3 border-t">
-                <ActionButtons order={order} />
-              </div>
             </div>
           ))}
         </div>

@@ -141,7 +141,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
             {qtyInCart === 0 ? (
               <button
                 className="
-            flex items-center justify-center py-2 px-2 text-white 
+            flex items-center justify-center py-2 px-3 xl:py-2 xl:px-2 text-white 
             bg-purple-700 hover:bg-purple-800 font-semibold text-sm 
             transition-all duration-300 ease-out 
             focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50
@@ -160,13 +160,13 @@ const ProductCard = ({ product, onOpenProduct }) => {
             ) : (
               <div
                 className="
-              inline-flex items-center bg-white border border-purple-700 text-purple-700 rounded-sm 
+              inline-flex items-center bg-purple-800 text-white border border-purple-700 rounded-sm 
               opacity-0 translate-y-1 pointer-events-none
               group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto
             "
               >
                 <button
-                  className="px-2 py-1 hover:bg-purple-50"
+                  className="px-3 py-1"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -182,7 +182,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
                 </button>
                 <span className="px-2 select-none text-sm">{qtyInCart}</span>
                 <button
-                  className="px-2 py-1 hover:bg-purple-50"
+                  className="px-3 py-1"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();

@@ -317,12 +317,7 @@ export default function Checkout() {
     }
   }, [user?.isAuthenticated, user?.profile?.addresses]);
 
-  // If there are no addresses, prompt to add one immediately
-  React.useEffect(() => {
-    if (addrList.length === 0 && !isAddressModalOpen) {
-      setIsAddressModalOpen(true);
-    }
-  }, [addrList.length, isAddressModalOpen]);
+  // Address modal now opens only when user clicks "Add new address"
 
   const Section = ({
     title,

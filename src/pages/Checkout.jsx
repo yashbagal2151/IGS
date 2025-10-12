@@ -368,7 +368,7 @@ export default function Checkout() {
                 title="User Address Details"
                 isOpen={open.address}
                 onToggle={() => setOpen((p) => ({ ...p, address: !p.address }))}
-                actionText=""
+                actionText="Change"
                 completed={done.address}
               >
                 <div className="space-y-3">
@@ -445,7 +445,7 @@ export default function Checkout() {
                 title="Payment Details"
                 isOpen={open.payment}
                 onToggle={() => setOpen((p) => ({ ...p, payment: !p.payment }))}
-                actionText=""
+                actionText="Change"
                 completed={done.payment}
               >
                 {/* UPI */}

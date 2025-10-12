@@ -36,20 +36,37 @@ export default function ProductSection({
   };
 
   return (
-    <section className="container mx-auto py-12">
+    <section className="container mx-auto px-4 py-12">
       {/* Section Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
             <Link
               to={`/filter?category=${getCategoryFilterId(title)}`}
-              className="flex items-center justify-center gap-2 text-3xl font-bold text-gray-900 mb-2 hover:text-purple-700"
+              className="text-3xl font-bold text-gray-900 mb-2 hover:text-purple-700"
             >
-              {title} <ChevronRight size={20} className="mt-1" />
+              {title}
             </Link>
           </div>
+          {/* {subtitle && (
+              <Link
+                to={`/filter?category=${getCategoryFilterId(title)}`}
+                className="text-gray-600 text-lg hover:text-purple-700"
+              >
+                {subtitle}
+              </Link>
+            )} */}
+          {showViewMore && products.length > maxItems && (
+            <Link
+              to={`/filter?category=${getCategoryFilterId(title)}`}
+              className="inline-flex items-center text-purple-700 hover:text-purple-800 font-medium transition-colors"
+            >
+              View More
+              <ChevronRight size={20} className="ml-1" />
+            </Link>
+          )}
         </div>
-        <p className="text-gray-600 text-sm">{subtitle}</p>
+        <p>{subtitle}</p>
       </div>
 
       {/* Products Grid - Responsive Design */}

@@ -24,6 +24,19 @@ export default function Cart({ isDrawer = false, onClose }) {
   const dispatch = useDispatch();
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
+  // Gift wrap UI in drawer (₹20 per unit) – matches Checkout Review design
+  const WRAP_FEE_PER_UNIT = 20;
+  const [wrapMap, setWrapMap] = React.useState({});
+  React.useEffect(() => {
+    setWrapMap((prev) => {
+      const next = { ...prev };
+      for (const it of items) {
+        if (next[it.id] === undefined) next[it.id] = false;
+      }
+      return next;
+    });
+  }, [items]);
+
   // --- Handler Functions ---
   const handleQtyChange = (id, newQty) => {
     const qty = Number(newQty);
@@ -88,6 +101,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             }`}
           >
             {/* --- Cart Items List (Main Section) --- */}
+<<<<<<< HEAD
             <div
               className={`${
                 isDrawer
@@ -109,82 +123,70 @@ export default function Cart({ isDrawer = false, onClose }) {
                     className="w-24 h-24 object-cover rounded-lg mr-4 flex-shrink-0"
                   />
                   <div className="flex-1 min-w-0">
+=======
+            <div className={`${isDrawer ? "flex-1" : "md:w-3/4 bg-white p-6 rounded-xl shadow-lg"} space-y-6`}>
+              {items.map((it) => {
+                if (isDrawer) {
+                  const lineWrap = wrapMap[it.id] ? WRAP_FEE_PER_UNIT * it.qty : 0;
+                  const lineTotal = it.price * it.qty + lineWrap;
+                  return (
+                    <div key={it.id} className="py-4 flex items-start gap-4 text-sm border-b last:border-b-0">
+                      <img src={it.image} alt={it.title} className="w-28 h-28 rounded object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900">{it.title}</div>
+                        <div className="text-gray-500">Material: {it.material || "-"} &nbsp; Size: {it.size || "-"}</div>
+                        <div className="text-purple-700 font-semibold">₹{it.price}</div>
+                        <div className="flex gap-5 py-2">
+                          <div className="flex items-center gap-2 border border-gray-200 rounded">
+                            <button type="button" className="px-2" onClick={() => (it.qty > 1 ? dispatch(updateQty({ id: it.id, qty: it.qty - 1 })) : dispatch(removeFromCart(it.id)))}>-</button>
+                            <span>{it.qty}</span>
+                            <button type="button" className="px-2" onClick={() => dispatch(updateQty({ id: it.id, qty: it.qty + 1 }))}>+</button>
+                          </div>
+                          <button type="button" className="text-red-600 text-xs" onClick={() => dispatch(removeFromCart(it.id))}>Remove from cart</button>
+                        </div>
+                        <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
+                          <input type="checkbox" checked={!!wrapMap[it.id]} onChange={(e) => setWrapMap((prev) => ({ ...prev, [it.id]: e.target.checked }))} />
+                          Gift wrap this item (₹20 for wrapping)
+                        </label>
+                      </div>
+                      <div className="text-right font-medium">
+                        <div>
+                          Subtotal (<span>{it.qty}</span> item): <span className="text-purple-700 font-semibold">₹{lineTotal}</span>
+                        </div>
+                        {lineWrap > 0 && (
+                          <div className="text-[11px] text-gray-500">incl. wrap ₹{lineWrap}</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+                // Full page cart layout (unchanged)
+                return (
+                  <div key={it.id} className={`flex ${isDrawer ? "flex-col items-start" : "flex-row items-center"} py-4 border-b last:border-b-0 relative`}>
+                    <img src={it.image} alt={it.title} className="w-24 h-24 object-cover rounded-lg mr-4 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-lg font-semibold text-gray-800 truncate">{it.title}</div>
+                      <div className="text-md font-bold text-gray-900 mt-1">₹{it.price}</div>
+                    </div>
+                    <div className={`${isDrawer ? "mt-3 flex justify-between w-full" : "flex items-center space-x-4"}`}>
+                      <div className="flex items-center border border-gray-300 rounded-lg p-1">
+                        <button onClick={() => handleQtyChange(it.id, it.qty - 1)} className="p-1 text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50" disabled={it.qty <= 1}><Minus size={16} /></button>
+                        <input type="number" value={it.qty} min={1} onChange={(e) => handleQtyChange(it.id, e.target.value)} className="w-10 text-center font-medium border-none focus:ring-0 p-0 text-sm" />
+                        <button onClick={() => handleQtyChange(it.id, it.qty + 1)} className="p-1 text-gray-600 hover:bg-gray-100 rounded-full"><Plus size={16} /></button>
+                      </div>
+                      <div className={`${isDrawer ? "text-lg font-bold" : "hidden"} text-gray-900`}>₹{it.price * it.qty}</div>
+                      {!isDrawer && (<div className="text-lg font-bold text-gray-900 w-24 text-right">₹{it.price * it.qty}</div>)}
+                      {!isDrawer && (
+                        <button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition" aria-label="Remove item"><Trash2 size={20} /></button>
+                      )}
+                    </div>
+>>>>>>> 158532e (Cart Drawer: match Checkout Review card design inside drawer (title, material/size, price, qty stepper, remove, gift wrap, line subtotal); no ETA shown per request)
                     {isDrawer && (
-                      <div className="text-sm text-gray-500 mb-1">
-                        Material: <span className="font-medium capitalize">{it.material || '-'}</span>
-                        &nbsp; Size: <span className="font-medium capitalize">{it.size || '-'}</span>
-                      </div>
-                    )}
-                    <div className="text-md md:text-lg font-semibold text-gray-800 truncate">{it.title}</div>
-                    <div className="text-purple-700 font-bold mt-1">₹{it.price}</div>
-                  </div>
-
-                  {/* Controls/Actions Section */}
-                  <div
-                    className={`${
-                      isDrawer
-                        ? "mt-3 flex justify-between w-full"
-                        : "flex items-center space-x-4"
-                    }`}
-                  >
-                    {/* Quantity Controls */}
-                    <div className="flex items-center border border-gray-300 rounded-lg p-1">
-                      <button
-                        onClick={() => handleQtyChange(it.id, it.qty - 1)}
-                        className="p-1 text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50"
-                        disabled={it.qty <= 1}
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <input
-                        type="number"
-                        value={it.qty}
-                        min={1}
-                        onChange={(e) => handleQtyChange(it.id, e.target.value)}
-                        className="w-10 text-center font-medium border-none focus:ring-0 p-0 text-sm"
-                      />
-                      <button
-                        onClick={() => handleQtyChange(it.id, it.qty + 1)}
-                        className="p-1 text-gray-600 hover:bg-gray-100 rounded-full"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-
-                    {/* Subtotal (Drawer/Full Page) */}
-                    <div className={`${isDrawer ? "text-lg font-bold" : "hidden"} text-gray-900`}>
-                      ₹{it.price * it.qty}
-                    </div>
-                    {!isDrawer && (
-                      <div className="text-lg font-bold text-gray-900 w-24 text-right">
-                        ₹{it.price * it.qty}
-                      </div>
-                    )}
-
-                    {/* Remove Button (for full-page) */}
-                    {!isDrawer && (
-                      <button
-                        onClick={() => handleRemoveItem(it.id)}
-                        className="text-red-500 hover:text-red-700 transition"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 size={20} />
-                      </button>
+                      <button onClick={() => handleRemoveItem(it.id)} className="text-red-500 hover:text-red-700 transition absolute top-4 right-0" aria-label="Remove item"><Trash2 size={20} /></button>
                     )}
                   </div>
-
-                  {/* Drawer Only Remove Button */}
-                  {isDrawer && (
-                    <button
-                      onClick={() => handleRemoveItem(it.id)}
-                      className="text-red-500 hover:text-red-700 transition absolute top-4 right-0"
-                      aria-label="Remove item"
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  )}
-                </div>
-              ))}
+                );
+              })}
 
               {/* Clear Cart Button (Only show on full page) */}
               {!isDrawer && (

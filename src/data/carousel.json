@@ -26,4 +26,45 @@
       "image": "/src/assets/art3.jpg"
     }
   ]
+  ,
+  "itemsLeftTop": [
+    {
+      "id": "lt-1",
+      "title": "Crafted Elegance",
+      "description": "Hand-polished finishes for a premium look.",
+      "image": "https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1600&auto=format&fit=crop"
+    },
+    {
+      "id": "lt-2",
+      "title": "Modern Forms",
+      "description": "Contemporary silhouettes that elevate rooms.",
+      "image": "https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d2?q=80&w=1600&auto=format&fit=crop"
+    },
+    {
+      "id": "lt-3",
+      "title": "Artisanal Touch",
+      "description": "Each piece uniquely finished by hand.",
+      "image": "https://images.unsplash.com/photo-1591635587828-4928f50f2d2d?q=80&w=1600&auto=format&fit=crop"
+    }
+  ],
+  "itemsLeftBottom": [
+    {
+      "id": "lb-1",
+      "title": "Free Delivery",
+      "description": "On orders over ₹10,000",
+      "image": "https://images.unsplash.com/photo-1556740714-a8395b3bf30f?q=80&w=1600&auto=format&fit=crop"
+    },
+    {
+      "id": "lb-2",
+      "title": "Secure Packaging",
+      "description": "Multi-layer protection for fragile art.",
+      "image": "https://images.unsplash.com/photo-1585386959984-a4155223168f?q=80&w=1600&auto=format&fit=crop"
+    },
+    {
+      "id": "lb-3",
+      "title": "Easy Returns",
+      "description": "7-day return policy for peace of mind.",
+      "image": "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?q=80&w=1600&auto=format&fit=crop"
+    }
+  ]
 }

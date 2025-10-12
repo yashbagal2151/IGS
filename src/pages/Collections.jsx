@@ -1,6 +1,7 @@
 import React from 'react';
 import categoriesData from '../data/categories.json';
 import ProductSection from '../components/ProductSection.jsx';
+import CategoryMosaic from '../components/CategoryMosaic.jsx';
 
 export default function Collections() {
   return (
@@ -26,6 +27,9 @@ export default function Collections() {
           />
         </div>
       ))}
+
+      {/* New Mosaic Section below collections */}
+      <CategoryMosaic />
     </div>
   );
 }

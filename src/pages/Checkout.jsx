@@ -5,7 +5,7 @@ import {
   updateQty,
   removeFromCart,
 } from "../features/cart/cartSlice";
-import addresses from "../data/addresses.json";
+// No sample addresses fallback; unauthenticated users add addresses fresh
 import { addOrUpdateAddress } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
@@ -311,10 +311,9 @@ export default function Checkout() {
         list.find((a) => a.isDefault)?.id || list[0]?.id || null
       );
     } else {
-      setAddrList(addresses);
-      setSelectedAddressId(
-        addresses.find((a) => a.isDefault)?.id || addresses[0]?.id || null
-      );
+      // When not logged in, do not prefill with sample addresses; force add new
+      setAddrList([]);
+      setSelectedAddressId(null);
     }
   }, [user?.isAuthenticated, user?.profile?.addresses]);
 

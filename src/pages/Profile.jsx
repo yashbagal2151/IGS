@@ -107,6 +107,13 @@ export default function Profile() {
     setCardName(""); setCardNumber(""); setCardExpiry(""); setCardCvv("");
   };
 
+  const BrandBadge = ({ brand }) => {
+    const src = `/assets/logos/${(brand || '').toLowerCase()}.svg`;
+    return (
+      <img src={src} alt={brand} className="h-4 w-auto mr-2" onError={(e)=>{ e.currentTarget.style.display='none'; }} />
+    );
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       {/* Tabs */}
@@ -240,9 +247,12 @@ export default function Profile() {
           <div className="space-y-4">
             {cards.map((c) => (
               <div key={c.id} className="border rounded p-4 flex items-center justify-between">
-                <div className="text-sm">
-                  <div className="font-medium uppercase">{c.brand}</div>
-                  <div className="text-gray-600">{c.label}</div>
+                <div className="text-sm flex items-center">
+                  <BrandBadge brand={c.brand} />
+                  <div>
+                    <div className="font-medium uppercase">{c.brand}</div>
+                    <div className="text-gray-600">{c.label}</div>
+                  </div>
                 </div>
                 <div className="flex gap-2 items-center">
                   {billingCard?.id === c.id && (
@@ -261,7 +271,7 @@ export default function Profile() {
           {billingCard && (
             <div className="mt-6 border rounded p-4 text-sm">
               <div className="font-semibold mb-2">Billing card</div>
-              <div className="uppercase text-gray-700">{billingCard.brand}</div>
+              <div className="flex items-center uppercase text-gray-700"><BrandBadge brand={billingCard.brand} />{billingCard.brand}</div>
               <div className="text-gray-600">{billingCard.label}</div>
             </div>
           )}

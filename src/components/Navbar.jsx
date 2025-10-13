@@ -183,7 +183,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 group"
                   aria-label="Open your profile"
                 >
-                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-semibold group-hover:bg-purple-200">
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-purple-700 font-semibold group-hover:bg-brand-200">
                     {user.profile.name?.[0] || "U"}
                   </div>
                 </Link>
@@ -203,7 +203,7 @@ export default function Navbar() {
                       setAuthTab("signup");
                       setIsAuthOpen(true);
                     }}
-                    className="px-5 py-2 text-sm font-medium text-white bg-purple-700 rounded hover:bg-purple-800 transition"
+                    className="px-5 py-2 text-sm font-medium text-white bg-brand-700 rounded hover:bg-brand-800 transition"
                   >
                     Sign Up
                   </button>
@@ -256,7 +256,7 @@ export default function Navbar() {
           aria-label="Main navigation"
         >
           {/* Header and Close Button */}
-          <div className="flex justify-between items-center p-5 border-b border-purple-100">
+          <div className="flex justify-between items-center p-5 border-b border-brand-100">
             <Link to="/" onClick={toggleMenu} className="flex items-center">
               <img
                 src="/images/ashita-gallery-logo.png"
@@ -266,7 +266,7 @@ export default function Navbar() {
             </Link>
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-full text-gray-500 hover:text-purple-700 hover:bg-purple-50 transition"
+              className="p-2 rounded-full text-gray-500 hover:text-purple-700 hover:bg-brand-50 transition"
               aria-label="Close menu"
             >
               <X size={24} />
@@ -279,7 +279,7 @@ export default function Navbar() {
             <div className="border-b border-gray-100 pb-2 mb-2">
               <button
                 onClick={toggleProductsDropdown}
-                className="w-full text-left text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition flex justify-between items-center"
+                className="w-full text-left text-sm font-semibold text-gray-700 hover:bg-brand-50 hover:text-purple-700 px-3 py-2 rounded-lg transition flex justify-between items-center"
               >
                 Products{" "}
                 <ChevronDown
@@ -329,7 +329,7 @@ export default function Navbar() {
                   key={link.name}
                   to={link.path}
                   onClick={toggleMenu}
-                  className="block text-sm font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-700 px-3 py-2 rounded-lg transition"
+                  className="block text-sm font-semibold text-gray-700 hover:bg-brand-50 hover:text-purple-700 px-3 py-2 rounded-lg transition"
                 >
                   {link.name}
                 </Link>
@@ -381,7 +381,7 @@ export default function Navbar() {
                   setAuthTab("signup");
                   setIsAuthOpen(true);
                 }}
-                className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-purple-700 rounded-lg hover:bg-purple-800 transition shadow-md"
+                className="w-full text-center inline-block px-4 py-3 text-sm font-bold text-white bg-brand-700 rounded-lg hover:bg-brand-800 transition shadow-md"
               >
                 Sign Up
               </button>

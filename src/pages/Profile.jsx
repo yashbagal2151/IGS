@@ -162,7 +162,7 @@ export default function Profile() {
         <button
           className={`pb-2 ${
             tab === "profile"
-              ? "border-b-2 border-purple-700 text-purple-700"
+              ? "border-b-2 border-brand-700 text-purple-700"
               : "text-gray-600"
           }`}
           onClick={() => setTab("profile")}
@@ -172,7 +172,7 @@ export default function Profile() {
         <button
           className={`pb-2 ${
             tab === "orders"
-              ? "border-b-2 border-purple-700 text-purple-700"
+              ? "border-b-2 border-brand-700 text-purple-700"
               : "text-gray-600"
           }`}
           onClick={() => setTab("orders")}
@@ -182,7 +182,7 @@ export default function Profile() {
         <button
           className={`pb-2 ${
             tab === "addresses"
-              ? "border-b-2 border-purple-700 text-purple-700"
+              ? "border-b-2 border-brand-700 text-purple-700"
               : "text-gray-600"
           }`}
           onClick={() => setTab("addresses")}
@@ -192,7 +192,7 @@ export default function Profile() {
         <button
           className={`pb-2 ${
             tab === "payments"
-              ? "border-b-2 border-purple-700 text-purple-700"
+              ? "border-b-2 border-brand-700 text-purple-700"
               : "text-gray-600"
           }`}
           onClick={() => setTab("payments")}
@@ -280,7 +280,7 @@ export default function Profile() {
           </div>
           <button
             onClick={handleSaveProfile}
-            className="mt-4 px-4 py-2 bg-purple-700 text-white rounded"
+            className="mt-4 px-4 py-2 bg-brand-700 text-white rounded"
           >
             Edit Profile
           </button>
@@ -413,7 +413,7 @@ export default function Profile() {
             ))}
           </div>
           <button
-            className="mt-4 px-4 py-2 bg-purple-700 text-white rounded"
+            className="mt-4 px-4 py-2 bg-brand-700 text-white rounded"
             onClick={() => {
               setEditAddress(null);
               setIsAddressModalOpen(true);
@@ -643,7 +643,7 @@ export default function Profile() {
                 <button
                   type="submit"
                   disabled={!isCardValid}
-                  className="px-4 py-2 bg-purple-700 text-white rounded disabled:opacity-50"
+                  className="px-4 py-2 bg-brand-700 text-white rounded disabled:opacity-50"
                 >
                   Save card
                 </button>

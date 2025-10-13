@@ -30,11 +30,11 @@ function Home() {
               <div className="flex flex-wrap gap-4 py-5">
                 <button
                   onClick={() => navigate("/filter")}
-                  className="bg-purple-900 text-white py-1 px-2 rounded-lg font-medium hover:bg-purple-800 transition"
+                  className="bg-brand-900 text-white py-1 px-2 rounded-lg font-medium hover:bg-brand-800 transition"
                 >
                   Explore Collection
                 </button>
-                <button className="border-2 border-purple-700 text-purple-700  py-1 px-1 rounded-lg font-medium hover:bg-purple-50 transition">
+                <button className="border-2 border-brand-700 text-purple-700  py-1 px-1 rounded-lg font-medium hover:bg-brand-50 transition">
                   Custom Order
                 </button>
               </div>

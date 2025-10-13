@@ -26,7 +26,7 @@ export default function OrderPlaced() {
           Go to home
         </button>
         <button
-          className="px-4 py-2 bg-purple-700 text-white rounded"
+          className="px-4 py-2 bg-brand-700 text-white rounded"
           onClick={() => navigate("/orders")}
         >
           View your orders

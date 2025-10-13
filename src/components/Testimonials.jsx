@@ -3,7 +3,7 @@ import React from "react";
 export default function Testimonials({ items = [] }) {
   // Responsive horizontal scroll (snap): lg:4, md:2, sm:1
   return (
-    <section className="bg-purple-50 py-16">
+    <section className="bg-brand-50 py-16">
       <div className="px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-end">
@@ -14,12 +14,12 @@ export default function Testimonials({ items = [] }) {
             <div className="flex md:justify-end md:text-right">
               <div>
                 <p className="text-sm text-gray-700 max-w-md">
-                  Hear from satisfied customers who have transformed their spaces
-                  with our statues
+                  Hear from satisfied customers who have transformed their
+                  spaces with our statues
                 </p>
                 <a
                   href="#"
-                  className="inline-block mt-4 text-sm bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800"
+                  className="inline-block mt-4 text-sm bg-brand-900 text-white px-4 py-2 rounded-md hover:bg-brand-800"
                 >
                   View All →
                 </a>
@@ -30,10 +30,14 @@ export default function Testimonials({ items = [] }) {
             {items.map((t, idx) => (
               <div
                 key={idx}
-                className="snap-start min-w-[88%] sm:min-w-[48%] lg:min-w-[23%] bg-purple-100/60 backdrop-blur rounded-xl p-5 shadow-sm"
+                className="snap-start min-w-[88%] sm:min-w-[48%] lg:min-w-[23%] bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-md" />
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className="w-9 h-9 rounded-md"
+                  />
                   <div>
                     <div className="text-base font-semibold text-gray-900">
                       {t.name}
@@ -46,7 +50,10 @@ export default function Testimonials({ items = [] }) {
                 <p className="text-sm text-gray-700 leading-relaxed mb-4">
                   {t.text}
                 </p>
-                <div className="text-yellow-500 text-lg" aria-label={`${t.stars} star rating`}>
+                <div
+                  className="text-yellow-500 text-lg"
+                  aria-label={`${t.stars} star rating`}
+                >
                   {"★".repeat(t.stars || 5)}
                 </div>
               </div>

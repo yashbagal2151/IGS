@@ -140,7 +140,7 @@ export default function Product() {
   };
 
   return (
-    <div className="min-h-screen bg-white  px-4 md:px-15 lg:px-20">
+    <div className="bg-white  px-4 md:px-15 lg:px-20">
       <div className=" container mx-auto">
         {/* Breadcrumb Navigation */}
         <div className="bg-white border-b border-gray-200">
@@ -182,8 +182,8 @@ export default function Product() {
                     onClick={() => handleThumbnailClick(index)}
                     className={`w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200 ${
                       index === selectedImageIndex
-                        ? "border-purple-500 ring-2 ring-purple-200"
-                        : "border-gray-200 hover:border-purple-300"
+                        ? "border-brand-500 ring-2 ring-brand-200"
+                        : "border-gray-200 hover:border-brand-300"
                     }`}
                   >
                     <img
@@ -220,10 +220,10 @@ export default function Product() {
               px-2 
               py-1 
               rounded-md 
-              bg-purple-100 
+              bg-brand-100 
               text-purple-500 
               border 
-              border-purple-500
+              border-brand-500
               whitespace-nowrap"
                     >
                       Featured
@@ -281,11 +281,11 @@ export default function Product() {
                     placeholder="Enter pincode"
                     value={pincode}
                     onChange={(e) => setPincode(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent max-w-[20%] lg:max-w-[30%]"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent max-w-[20%] lg:max-w-[30%]"
                   />
                   <button
                     onClick={handleCheckDelivery}
-                    className="px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+                    className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition"
                   >
                     Check
                   </button>
@@ -304,7 +304,7 @@ export default function Product() {
                   {materialOptions.map((option) => (
                     <label
                       key={option.value}
-                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-purple-300 transition"
+                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-brand-300 transition"
                     >
                       <input
                         type="radio"
@@ -312,7 +312,7 @@ export default function Product() {
                         value={option.value}
                         checked={selectedMaterial === option.value}
                         onChange={(e) => setSelectedMaterial(e.target.value)}
-                        className="mr-3 text-purple-600 focus:ring-purple-500"
+                        className="mr-3 text-purple-600 focus:ring-brand-500"
                       />
                       <span className="text-gray-700">{option.label}</span>
                     </label>
@@ -327,7 +327,7 @@ export default function Product() {
                   {sizeOptions.map((option) => (
                     <label
                       key={option.value}
-                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-purple-300 transition"
+                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-brand-300 transition"
                     >
                       <input
                         type="radio"
@@ -335,7 +335,7 @@ export default function Product() {
                         value={option.value}
                         checked={selectedSize === option.value}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="mr-3 text-purple-600 focus:ring-purple-500"
+                        className="mr-3 text-purple-600 focus:ring-brand-500"
                       />
                       <div>
                         <div className="font-medium text-gray-900">
@@ -373,13 +373,13 @@ export default function Product() {
                 </div>
                 <button
                   onClick={handleAddToCart}
-                  className="px-2 py-2 bg-white text-purple-700 border border-purple-700 rounded-lg hover:bg-purple-50 transition flex items-center gap-2"
+                  className="px-2 py-2 bg-white text-purple-700 border border-brand-700 rounded-lg hover:bg-brand-50 transition flex items-center gap-2"
                 >
                   Add to Cart <ShoppingCart size={15} />
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  className="px-2 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition"
+                  className="px-2 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition"
                 >
                   Buy Now
                 </button>
@@ -404,7 +404,7 @@ export default function Product() {
                   </p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Shield size={20} className="text-purple-600" />
                   </div>
                   <p className="text-xs text-gray-600">Secure Payments</p>

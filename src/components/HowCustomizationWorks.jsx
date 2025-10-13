@@ -1,8 +1,11 @@
 import React from "react";
+import DesignConsult from "../assets/design-consult.svg";
+import CraftCreate from "../assets/craft-create.svg";
+import QualityDeliver from "../assets/quality-deliver.svg";
 
 const StepRow = ({ title, description, Illustration, reverse = false }) => (
   <div
-    className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center py-10 ${
+    className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${
       reverse ? "md:[&>div:first-child]:order-2" : ""
     }`}
   >
@@ -10,12 +13,10 @@ const StepRow = ({ title, description, Illustration, reverse = false }) => (
       <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
         {title}
       </h3>
-      <p className="text-sm text-gray-600 leading-relaxed max-w-[420px]">
-        {description}
-      </p>
+      <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
     </div>
     <div className="flex justify-center">
-      <div className="w-[340px] h-[220px] md:w-[440px] md:h-[280px] bg-purple-50 rounded-2xl p-6">
+      <div className="w-[80%] h-[80%] bg-brand-50 rounded-2xl">
         <Illustration />
       </div>
     </div>
@@ -23,15 +24,27 @@ const StepRow = ({ title, description, Illustration, reverse = false }) => (
 );
 
 const PeopleIllustration = () => (
-  <img src={new URL("../assets/how-people.svg", import.meta.url).href} alt="Design & Consult" className="w-full h-full object-contain" />
+  <img
+    src={DesignConsult}
+    alt="Design & Consult"
+    className="w-full h-full object-contain"
+  />
 );
 
 const CraftIllustration = () => (
-  <img src={new URL("../assets/how-craft.svg", import.meta.url).href} alt="Craft & Create" className="w-full h-full object-contain" />
+  <img
+    src={CraftCreate}
+    alt="Craft & Create"
+    className="w-full h-full object-contain"
+  />
 );
 
 const DeliverIllustration = () => (
-  <img src={new URL("../assets/how-deliver.svg", import.meta.url).href} alt="Quality & Deliver" className="w-full h-full object-contain" />
+  <img
+    src={QualityDeliver}
+    alt="Quality & Deliver"
+    className="w-full h-full object-contain"
+  />
 );
 
 export default function HowCustomizationWorks() {
@@ -47,7 +60,7 @@ export default function HowCustomizationWorks() {
         </p>
       </div>
 
-      <div className="container mx-auto mt-6 md:mt-10">
+      <div className="container mx-auto ">
         <StepRow
           title="Design & Consult"
           description="Share your unique vision with our design experts. We provide detailed sketches, material options, and a clear consultation to begin your custom artwork."

@@ -23,31 +23,15 @@ const StepRow = ({ title, description, Illustration, reverse = false }) => (
 );
 
 const PeopleIllustration = () => (
-  <svg viewBox="0 0 200 130" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="5" y="5" width="190" height="120" rx="12" className="fill-purple-50" />
-    <circle cx="70" cy="70" r="20" className="fill-purple-200" />
-    <circle cx="130" cy="70" r="20" className="fill-purple-300" />
-    <path d="M60 95c8-6 20-6 28 0" className="stroke-purple-400" strokeWidth="3" />
-    <path d="M120 95c8-6 20-6 28 0" className="stroke-purple-500" strokeWidth="3" />
-  </svg>
+  <img src={new URL("../assets/how-people.svg", import.meta.url).href} alt="Design & Consult" className="w-full h-full object-contain" />
 );
 
 const CraftIllustration = () => (
-  <svg viewBox="0 0 200 130" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="5" y="5" width="190" height="120" rx="12" className="fill-purple-50" />
-    <rect x="70" y="40" width="60" height="50" rx="6" className="fill-purple-200" />
-    <path d="M70 80h60" className="stroke-purple-400" strokeWidth="3" />
-    <circle cx="100" cy="65" r="10" className="fill-purple-400" />
-  </svg>
+  <img src={new URL("../assets/how-craft.svg", import.meta.url).href} alt="Craft & Create" className="w-full h-full object-contain" />
 );
 
 const DeliverIllustration = () => (
-  <svg viewBox="0 0 200 130" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="5" y="5" width="190" height="120" rx="12" className="fill-purple-50" />
-    <rect x="40" y="65" width="120" height="25" rx="6" className="fill-purple-300" />
-    <circle cx="70" cy="95" r="8" className="fill-purple-500" />
-    <circle cx="140" cy="95" r="8" className="fill-purple-500" />
-  </svg>
+  <img src={new URL("../assets/how-deliver.svg", import.meta.url).href} alt="Quality & Deliver" className="w-full h-full object-contain" />
 );
 
 export default function HowCustomizationWorks() {

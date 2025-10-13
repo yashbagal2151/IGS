@@ -267,7 +267,7 @@ export default function FilterPage() {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent p-1"
+                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <Search
                     size={16}

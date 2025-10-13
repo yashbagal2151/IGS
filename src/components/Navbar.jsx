@@ -155,7 +155,7 @@ export default function Navbar() {
             </div>
 
             {/* --- Desktop Actions (Search, Login, Signup, Cart) --- */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2">
               <button
                 className="text-gray-500 hover:text-purple-700 transition hidden sm:block"
                 aria-label="Search"

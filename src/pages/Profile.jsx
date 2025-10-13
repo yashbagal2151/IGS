@@ -348,7 +348,10 @@ export default function Profile() {
           <h2 className="text-lg font-semibold mb-4">Saved Addresses</h2>
           <div className="space-y-4">
             {addresses.map((addr) => (
-              <div key={addr.id} className="border-b p-4 text-sm">
+              <div
+                key={addr.id}
+                className="border-b border-gray-300 py-4 text-sm"
+              >
                 <div className="flex items-start gap-3">
                   <input
                     type="radio"
@@ -510,7 +513,7 @@ export default function Profile() {
           )}
           {/* Billing address */}
           {addresses.find((a) => a.isDefault) && (
-            <div className="mt-6 border-y text-gray-300 rounded p-4 text-sm">
+            <div className="mt-6 border-y border-gray-300 ounded p-4 text-sm">
               <div className="font-semibold mb-2">Billing address</div>
               <div>
                 {addresses.find((a) => a.isDefault).name}{" "}

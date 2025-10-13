@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -21,22 +22,22 @@ export default function Footer() {
           <div>
             <div className="font-semibold text-lg mb-4">Company</div>
             <ul className="space-y-3 text-sm opacity-90">
-              <li>About Us</li>
-              <li>Corporate Gifting</li>
-              <li>Customization</li>
-              <li>Blog</li>
-              <li>FAQ</li>
-              <li>Contact</li>
+              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/corporate-gifting">Corporate Gifting</Link></li>
+              <li><Link to="/customization">Customization</Link></li>
+              <li><Link to="/blog">Blog</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
           <div>
             <div className="font-semibold text-lg mb-4">Categories</div>
             <ul className="space-y-3 text-sm opacity-90">
-              <li>God Statues</li>
-              <li>Motivational Statues</li>
-              <li>Custom Orders</li>
-              <li>Corporate Gifts</li>
-              <li>Home Decor</li>
+              <li><Link to="/filter?category=god-statues">God Statues</Link></li>
+              <li><Link to="/filter?category=motivational">Motivational Statues</Link></li>
+              <li><Link to="/filter?customizable=true">Custom Orders</Link></li>
+              <li><Link to="/filter?category=motivational">Corporate Gifts</Link></li>
+              <li><Link to="/filter?category=home-decor">Home Decor</Link></li>
             </ul>
           </div>
           <div>

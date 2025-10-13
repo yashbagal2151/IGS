@@ -108,14 +108,16 @@ const ProductCard = ({ product, onOpenProduct }) => {
       <div className="p-4 flex-grow flex flex-col justify-between min-h-[120px]">
         {/* Product Title - Fixed height to prevent layout shifts */}
         <div>
-          <h3 className="text-base font-semibold text-gray-800 mb-2 overflow-hidden leading-5">
+          <h3 className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">
             {name}
           </h3>
         </div>
 
         {/* Price Row */}
         <div className="flex items-baseline space-x-2 mb-2">
-          <span className="text-lg font-bold text-purple-700">₹{price}</span>
+          <span className="text-lg font-extrabold text-purple-700">
+            ₹{price}
+          </span>
           <span className="text-xs line-through text-gray-500">
             MRP: ₹{mrp}
           </span>
@@ -125,7 +127,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
         </div>
 
         {/* Rating and Add to Cart */}
-        <div className="flex flex-col xl:flex-row justify-between items-center gap-2 mt-auto">
+        <div className="flex flex-col xl:flex-row justify-between first:items-start [&amp;:nth-child(2)]:items-center xl:items-center gap-2 mt-auto">
           <div>
             <div className="flex items-center text-sm text-gray-600">
               <span>{rating}</span>
@@ -137,7 +139,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
               <span className="text-xs text-gray-500">({reviews})</span>
             </div>
           </div>
-          <div>
+          <div className="flex items-center justify-center">
             {qtyInCart === 0 ? (
               <button
                 className="

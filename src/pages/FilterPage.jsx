@@ -258,7 +258,7 @@ export default function FilterPage() {
                 </div>
 
                 {/* Search */}
-                <div className="relative">
+                <div className="relative flex justify-between items-center">
                   <input
                     type="text"
                     placeholder="Search for a product"
@@ -267,11 +267,11 @@ export default function FilterPage() {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent p-1"
                   />
                   <Search
                     size={16}
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                   />
                 </div>
               </div>

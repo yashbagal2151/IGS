@@ -5,6 +5,9 @@ import Clippathgroup from "../assets/clip-path-group.svg";
 import { useNavigate } from "react-router-dom";
 import Collections from "./Collections.jsx";
 import CategoryMosaic from "../components/CategoryMosaic.jsx";
+import HowCustomizationWorks from "../components/HowCustomizationWorks.jsx";
+import Testimonials from "../components/Testimonials.jsx";
+import testimonials from "../data/testimonials.json";
 
 function Home() {
   const navigate = useNavigate();
@@ -95,6 +98,10 @@ function Home() {
         </div>
         {/* New Mosaic Section below collections */}
       </div>
+
+      {/* Called sections from separate components */}
+      <HowCustomizationWorks />
+      <Testimonials items={testimonials} />
     </>
   );
 }

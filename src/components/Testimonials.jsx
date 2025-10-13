@@ -1,27 +1,54 @@
 import React from "react";
 
 export default function Testimonials({ items = [] }) {
-  // simple horizontal scroll (snap) - 4/2/1 per viewport
+  // Responsive horizontal scroll (snap): lg:4, md:2, sm:1
   return (
-    <section className="bg-purple-50 py-10">
+    <section className="bg-purple-50 py-16">
       <div className="px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
-          <div className="flex items-end justify-between mb-4">
-            <div>
-              <h2 className="text-xl md:text-2xl font-semibold text-gray-900">Experiences Shared by Our Clients</h2>
-              <p className="text-xs text-gray-600">Hear from satisfied customers who have trusted Ishita Gallery. Real stories with real details.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-end">
+            <h2 className="text-4xl md:text-6xl leading-tight font-serif font-semibold text-gray-900">
+              Experiences Shared by
+              <br className="hidden md:block" /> Our Clients
+            </h2>
+            <div className="flex md:justify-end md:text-right">
+              <div>
+                <p className="text-sm text-gray-700 max-w-md">
+                  Hear from satisfied customers who have transformed their spaces
+                  with our statues
+                </p>
+                <a
+                  href="#"
+                  className="inline-block mt-4 text-sm bg-purple-700 text-white px-4 py-2 rounded-md hover:bg-purple-800"
+                >
+                  View All →
+                </a>
+              </div>
             </div>
-            <a href="#" className="text-xs bg-purple-700 text-white px-3 py-1 rounded">view all</a>
           </div>
-          <div className="overflow-x-auto snap-x snap-mandatory flex gap-4 pb-4">
+          <div className="overflow-x-auto snap-x snap-mandatory flex gap-6 pb-4">
             {items.map((t, idx) => (
-              <div key={idx} className="snap-start min-w-[85%] sm:min-w-[48%] lg:min-w-[23%] bg-white rounded-lg shadow p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <img src={t.avatar} alt={t.name} className="w-6 h-6 rounded-full" />
-                  <div className="text-sm font-medium">{t.name}</div>
+              <div
+                key={idx}
+                className="snap-start min-w-[88%] sm:min-w-[48%] lg:min-w-[23%] bg-purple-100/60 backdrop-blur rounded-xl p-5 shadow-sm"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-md" />
+                  <div>
+                    <div className="text-base font-semibold text-gray-900">
+                      {t.name}
+                    </div>
+                    {t.role && (
+                      <div className="text-xs text-gray-500">{t.role}</div>
+                    )}
+                  </div>
                 </div>
-                <p className="text-xs text-gray-600 line-clamp-5 mb-3">{t.text}</p>
-                <div className="text-yellow-500 text-sm">{"★".repeat(t.stars || 5)}</div>
+                <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                  {t.text}
+                </p>
+                <div className="text-yellow-500 text-lg" aria-label={`${t.stars} star rating`}>
+                  {"★".repeat(t.stars || 5)}
+                </div>
               </div>
             ))}
           </div>

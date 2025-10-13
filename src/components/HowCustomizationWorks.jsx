@@ -1,13 +1,21 @@
 import React from "react";
 
-const Step = ({ title, children, Illustration }) => (
-  <div className="flex flex-col md:flex-row items-center gap-6 py-8">
-    <div className="flex-1">
-      <h3 className="text-sm font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-xs text-gray-600 leading-relaxed max-w-md">{children}</p>
+const StepRow = ({ title, description, Illustration, reverse = false }) => (
+  <div
+    className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center py-10 ${
+      reverse ? "md:[&>div:first-child]:order-2" : ""
+    }`}
+  >
+    <div>
+      <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
+        {title}
+      </h3>
+      <p className="text-sm text-gray-600 leading-relaxed max-w-[420px]">
+        {description}
+      </p>
     </div>
-    <div className="flex-1 flex justify-center">
-      <div className="w-64 h-40 md:w-72 md:h-48">
+    <div className="flex justify-center">
+      <div className="w-[340px] h-[220px] md:w-[440px] md:h-[280px] bg-purple-50 rounded-2xl p-6">
         <Illustration />
       </div>
     </div>
@@ -44,22 +52,34 @@ const DeliverIllustration = () => (
 
 export default function HowCustomizationWorks() {
   return (
-    <section className="px-4 md:px-15 lg:px-20 py-10">
+    <section className="px-4 md:px-15 lg:px-20 py-14">
       <div className="container mx-auto text-center">
-        <h2 className="text-xl md:text-2xl font-semibold text-gray-900">How Customization Works</h2>
-        <p className="text-[11px] text-gray-500 mt-1">From concept to creation, we guide you through every step of bringing your idea to life.</p>
+        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900">
+          How Customization Works
+        </h2>
+        <p className="text-xs md:text-sm text-gray-500 mt-2 max-w-md mx-auto">
+          From concept to creation, we guide you through every step of bringing
+          your vision to life
+        </p>
       </div>
 
-      <div className="container mx-auto mt-8">
-        <Step title="Design & Consult" Illustration={PeopleIllustration}>
-          Share your concept, work with our design experts, we provide detailed material suggestions, and a clear consultation to align your desired artwork.
-        </Step>
-        <Step title="Craft & Create" Illustration={CraftIllustration}>
-          Master artisans bring your design to life. We use premium materials, hand-finishing, and care to sculpt your statue from your personalized instructions.
-        </Step>
-        <Step title="Quality & Deliver" Illustration={DeliverIllustration}>
-          Every piece undergoes rigorous quality checks. Your finished artwork is carefully packed for safe, reliable delivery right to your doorstep, nationwide.
-        </Step>
+      <div className="container mx-auto mt-6 md:mt-10">
+        <StepRow
+          title="Design & Consult"
+          description="Share your unique vision with our design experts. We provide detailed sketches, material options, and a clear consultation to begin your custom artwork."
+          Illustration={PeopleIllustration}
+        />
+        <StepRow
+          reverse
+          title="Craft & Create"
+          description="Master artisans bring your design to life. We use premium materials and time-honored techniques to sculpt and finish your personalized masterpiece with care."
+          Illustration={CraftIllustration}
+        />
+        <StepRow
+          title="Quality & Deliver"
+          description="Every piece undergoes rigorous quality checks. Your finished masterpiece is carefully packaged for safe, secure delivery right to your door, guaranteed."
+          Illustration={DeliverIllustration}
+        />
       </div>
     </section>
   );

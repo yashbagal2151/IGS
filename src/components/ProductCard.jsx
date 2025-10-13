@@ -148,8 +148,8 @@ const ProductCard = ({ product, onOpenProduct }) => {
             transition-all duration-300 ease-out 
             focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-opacity-50
             rounded-sm
-            opacity-0 translate-y-1 pointer-events-none
-            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto gap-2 md:text-sm
+            md:opacity-0 md:translate-y-1 md:pointer-events-none
+            md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto gap-2 md:text-sm
           "
                 onClick={(e) => {
                   e.preventDefault();
@@ -162,7 +162,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
             ) : (
               <div
                 className="
-              inline-flex items-center bg-brand-800 text-white border border-brand-700 rounded-sm translate-y-1 pointer-events-none group:translate-y-0 group:pointer-events-auto
+              inline-flex items-center bg-brand-800 text-white border border-brand-700 rounded-sm md:translate-y-1 md:pointer-events-none md:group-hover:translate-y-0 md:group-hover:pointer-events-auto
             "
               >
                 <button

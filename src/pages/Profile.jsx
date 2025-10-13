@@ -56,6 +56,9 @@ export default function Profile() {
     () => setCards(user?.profile?.cards || []),
     [user?.profile?.cards]
   );
+  const defaultCardId = user?.profile?.defaultCardId;
+  const billingCard =
+    cards.find((c) => c.id === defaultCardId) || cards[0] || null;
   const [isCardModalOpen, setIsCardModalOpen] = React.useState(false);
   const [cardName, setCardName] = React.useState("");
   const [cardNumber, setCardNumber] = React.useState("");
@@ -128,12 +131,28 @@ export default function Profile() {
     };
     const next = [...cards, newCard];
     setCards(next);
-    dispatch(updateProfile({ cards: next }));
+    const payload = { cards: next };
+    if (!defaultCardId) payload.defaultCardId = newCard.id; // first saved card becomes billing by default
+    dispatch(updateProfile(payload));
     setIsCardModalOpen(false);
     setCardName("");
     setCardNumber("");
     setCardExpiry("");
     setCardCvv("");
+  };
+
+  const BrandBadge = ({ brand }) => {
+    const src = `/assets/logos/${(brand || "").toLowerCase()}.svg`;
+    return (
+      <img
+        src={src}
+        alt={brand}
+        className="h-4 w-auto mr-2"
+        onError={(e) => {
+          e.currentTarget.style.display = "none";
+        }}
+      />
+    );
   };
 
   return (
@@ -426,11 +445,19 @@ export default function Profile() {
                 key={c.id}
                 className="border rounded p-4 flex items-center justify-between"
               >
-                <div className="text-sm">
-                  <div className="font-medium uppercase">{c.brand}</div>
-                  <div className="text-gray-600">{c.label}</div>
+                <div className="text-sm flex items-center">
+                  <BrandBadge brand={c.brand} />
+                  <div>
+                    <div className="font-medium uppercase">{c.brand}</div>
+                    <div className="text-gray-600">{c.label}</div>
+                  </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
+                  {billingCard?.id === c.id && (
+                    <span className="px-2 py-1 text-xs rounded border border-green-300 text-green-700">
+                      Billing card
+                    </span>
+                  )}
                   <button
                     className="px-3 py-1 border rounded text-sm"
                     onClick={() => {
@@ -444,11 +471,26 @@ export default function Profile() {
                     onClick={() => {
                       const next = cards.filter((x) => x.id !== c.id);
                       setCards(next);
-                      dispatch(updateProfile({ cards: next }));
+                      dispatch(
+                        updateProfile({
+                          cards: next,
+                          defaultCardId: next[0]?.id || null,
+                        })
+                      );
                     }}
                   >
                     Delete Card
                   </button>
+                  {billingCard?.id !== c.id && (
+                    <button
+                      className="px-3 py-1 border rounded text-sm"
+                      onClick={() =>
+                        dispatch(updateProfile({ defaultCardId: c.id }))
+                      }
+                    >
+                      Set as Billing card
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -456,6 +498,16 @@ export default function Profile() {
               <div className="text-gray-500">No saved cards.</div>
             )}
           </div>
+          {billingCard && (
+            <div className="mt-6 border rounded p-4 text-sm">
+              <div className="font-semibold mb-2">Billing card</div>
+              <div className="flex items-center uppercase text-gray-700">
+                <BrandBadge brand={billingCard.brand} />
+                {billingCard.brand}
+              </div>
+              <div className="text-gray-600">{billingCard.label}</div>
+            </div>
+          )}
           {/* Billing address */}
           {addresses.find((a) => a.isDefault) && (
             <div className="mt-6 border-y text-gray-300 rounded p-4 text-sm">

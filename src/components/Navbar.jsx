@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Menu, X, Search, ChevronDown } from "lucide-react";
 import CartDrawer from "./CartDrawer"; // Make sure this path is correct
 import AuthModal from "./AuthModal";
-import { logout } from "../features/user/userSlice";
 import IshitaGalleryLogo from "../assets/ishita-gallery-logo.jpg";
 
 export default function Navbar() {
@@ -179,17 +178,15 @@ export default function Navbar() {
               </button>
 
               {user.isAuthenticated ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-semibold">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 group"
+                  aria-label="Open your profile"
+                >
+                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-semibold group-hover:bg-purple-200">
                     {user.profile.name?.[0] || "U"}
                   </div>
-                  <button
-                    className="text-sm text-gray-600 hover:text-purple-700"
-                    onClick={() => dispatch(logout())}
-                  >
-                    Logout
-                  </button>
-                </div>
+                </Link>
               ) : (
                 <>
                   <button
@@ -347,11 +344,11 @@ export default function Navbar() {
                 <button
                   onClick={() => {
                     toggleMenu();
-                    dispatch(logout());
+                    window.location.href = "/profile";
                   }}
                   className="text-gray-700 font-semibold hover:text-purple-700"
                 >
-                  Logout
+                  Your Profile
                 </button>
               ) : (
                 <button

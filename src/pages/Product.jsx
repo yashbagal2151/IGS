@@ -136,22 +136,21 @@ export default function Product() {
     (materialOptions.find((o) => o.value === selectedMaterial)?.label || null) ||
     product.material ||
     "—";
-  const aboutItems = [
-    { label: "Primary Material", value: primaryMaterialStr },
+  // Exact rows per design, populated dynamically
+  const aboutRows = [
+    { label: "Primary Material", value: primaryMaterialStr || "—" },
     {
       label: "Dimensions",
-      value: product.dimensions || product.sizeDescription || selectedSizeMeta?.description || null,
+      value:
+        product.dimensions ||
+        product.sizeDescription ||
+        selectedSizeMeta?.description ||
+        "—",
     },
-    { label: "Weight", value: product.weight },
-    { label: "Finish", value: product.finish },
-    { label: "Origin", value: product.origin },
-    { label: "Category", value: product.categoryName || product.category },
-    { label: "Size", value: selectedSizeMeta?.label },
-    { label: "Customizable", value: isCustomizable ? "Yes" : "No" },
-    ...(Array.isArray(product.specs)
-      ? product.specs.map((s) => ({ label: s.label, value: s.value }))
-      : []),
-  ].filter((row) => row.value);
+    { label: "Weight", value: product.weight || "—" },
+    { label: "Finish", value: product.finish || "—" },
+    { label: "Origin", value: product.origin || "—" },
+  ];
 
   const [quantity, setQuantity] = useState(1);
   const increment = () => setQuantity((q) => Math.min(99, q + 1));
@@ -483,27 +482,17 @@ export default function Product() {
                 </div>
               </div>
 
-              {/* About This Item */}
-              <div className="pt-6 border-top border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">About this item</h3>
-                {product.description && (
-                  <p className="text-sm text-gray-700 mb-3">
-                    {product.description}
-                  </p>
-                )}
-                <div className="overflow-hidden rounded-lg border border-gray-200">
-                  <div className="grid grid-cols-1 sm:grid-cols-2">
-                    {aboutItems.map((row, idx) => (
-                      <div
-                        key={`${row.label}-${idx}`}
-                        className="flex justify-between gap-4 px-4 py-2 text-sm border-t first:border-t-0 sm:[&:nth-child(odd)]:border-r bg-white"
-                      >
-                        <span className="text-gray-600 whitespace-nowrap">{row.label}</span>
-                        <span className="font-medium text-gray-900 text-right">{row.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {/* About This Item (exact two-column definition list) */}
+              <div className="pt-6 border-t border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">About this item</h3>
+                <dl className="grid grid-cols-[160px_1fr] sm:grid-cols-[220px_1fr] gap-x-6 divide-y divide-gray-200 bg-white rounded-lg border border-gray-200">
+                  {aboutRows.map((row, i) => (
+                    <div key={i} className="contents">
+                      <dt className={`py-2 px-4 text-sm text-gray-600 ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</dt>
+                      <dd className={`py-2 px-4 text-sm text-gray-900 ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
             </div>
           </div>

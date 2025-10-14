@@ -128,14 +128,17 @@ export default function Product() {
       : s
   );
 
-  const selectedSizeMeta = sizeOptions.find(
-    (o) => o.value === selectedSize
-  );
-  const selectedMaterialKey = (selectedMaterial || product.material || "").toLowerCase();
+  const selectedSizeMeta = sizeOptions.find((o) => o.value === selectedSize);
+  const selectedMaterialKey = (
+    selectedMaterial ||
+    product.material ||
+    ""
+  ).toLowerCase();
   const primaryMaterialStr =
     product.primaryMaterial ||
     aboutDefaults.primaryMaterialByMaterial[selectedMaterialKey] ||
-    (materialOptions.find((o) => o.value === selectedMaterial)?.label || null) ||
+    materialOptions.find((o) => o.value === selectedMaterial)?.label ||
+    null ||
     product.material ||
     "—";
   // Exact rows per design, populated dynamically
@@ -143,14 +146,19 @@ export default function Product() {
     { label: "Primary Material", value: primaryMaterialStr || "—" },
     {
       label: "Dimensions",
-      value: product.dimensions || aboutDefaults.dimensions || selectedSizeMeta?.description || "—",
+      value:
+        product.dimensions ||
+        aboutDefaults.dimensions ||
+        selectedSizeMeta?.description ||
+        "—",
     },
     { label: "Weight", value: product.weight || aboutDefaults.weight || "—" },
     {
       label: "Finish",
       value:
         product.finish ||
-        (aboutDefaults.finishByMaterial[selectedMaterialKey] || null) ||
+        aboutDefaults.finishByMaterial[selectedMaterialKey] ||
+        null ||
         "—",
     },
     { label: "Origin", value: product.origin || aboutDefaults.origin || "—" },
@@ -488,12 +496,26 @@ export default function Product() {
 
               {/* About This Item (exact two-column definition list) */}
               <div className="pt-6 border-t border-gray-200">
-                <p className="text-lg font-bold text-gray-900 mb-2">About this item</p>
-                <dl className="grid grid-cols-[160px_1fr] sm:grid-cols-[220px_1fr] gap-x-6 divide-y divide-gray-200 bg-white rounded-lg border border-gray-200">
+                <p className="text-lg font-bold text-gray-900 mb-2">
+                  About this item
+                </p>
+                <dl className="gap-x-6 bg-white border-b border-gray-200">
                   {aboutRows.map((row, i) => (
-                    <div key={i} className="contents">
-                      <dt className={`py-2 px-4 text-sm text-gray-600 ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</dt>
-                      <dd className={`py-2 px-4 text-sm text-gray-900 ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</dd>
+                    <div key={i} className="flex border-none">
+                      <dt
+                        className={`py-2 px-4 text-sm text-gray-600 w-[30%] ${
+                          i === 0 ? "rounded-tl-lg" : ""
+                        }`}
+                      >
+                        {row.label}
+                      </dt>
+                      <dd
+                        className={`py-2 px-4 text-sm text-gray-900 w-[70%] ${
+                          i === 0 ? "rounded-tr-lg" : ""
+                        }`}
+                      >
+                        {row.value}
+                      </dd>
                     </div>
                   ))}
                 </dl>

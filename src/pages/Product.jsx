@@ -228,10 +228,10 @@ export default function Product() {
                   <div
                     key={index}
                     onClick={() => handleThumbnailClick(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 cursor-pointer transition-all duration-200 ${
+                    className={`w-20 h-20 rounded-lg overflow-hidden border-1 cursor-pointer transition-all duration-200 ${
                       index === selectedImageIndex
-                        ? "border-brand-500 ring-2 ring-brand-200"
-                        : "border-gray-200 hover:border-brand-300"
+                        ? "border-2 border-purple-700 shadow-2xl shadow-purple-500"
+                        : "border-gray-200"
                     }`}
                   >
                     <img

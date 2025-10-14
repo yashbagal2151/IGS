@@ -4,10 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
-import categoryStory from "../data/categoryStory.json";
 import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
-import CraftStory from "../components/CraftStory.jsx";
-import RelatedCarousel from "../components/RelatedCarousel.jsx";
 import aboutDefaults from "../data/aboutDefaults.json";
 
 export default function Product() {
@@ -35,7 +32,6 @@ export default function Product() {
 
   const allProducts = getAllProducts();
   const product = allProducts.find((p) => p.id === id);
-  const productCategoryId = product?.categoryId || (product?.category || "").toLowerCase().replace(/\s+/g, "-");
 
   if (!product) {
     return (
@@ -246,8 +242,6 @@ export default function Product() {
 
             {/* Right: Product Details */}
             <div className="space-y-6">
-              {/* Section 1 (separate component) */}
-              <CraftStory categoryId={productCategoryId} />
               {/* Header */}
               <div>
                 <div className="text-3xl font-bold text-gray-900 mb-2">
@@ -491,15 +485,6 @@ export default function Product() {
                   <p className="text-xs text-gray-600">Secure Payments</p>
                 </div>
               </div>
-
-              {/* Section 2 (separate component) */}
-              <RelatedCarousel
-                items={allProducts.filter(
-                  (p) =>
-                    (p.categoryId || (p.category || "").toLowerCase().replace(/\s+/g, "-")) === productCategoryId &&
-                    p.id !== product.id
-                )}
-              />
 
               {/* About This Item (exact two-column definition list) */}
               <div className="pt-6 border-t border-gray-200">

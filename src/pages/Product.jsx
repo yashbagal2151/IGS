@@ -489,12 +489,12 @@ export default function Product() {
               {/* About This Item (exact two-column definition list) */}
               <div className="pt-6 border-t border-gray-200">
                 <p className="text-lg font-bold text-gray-900 mb-2">About this item</p>
-                <dl className="grid grid-cols sm:grid-cols gap-x-6 divide-y divide-gray-200 bg-white border-b border-gray-200">
+                <dl className="grid grid-cols-[160px_1fr] sm:grid-cols-[220px_1fr] gap-x-6 divide-y divide-gray-200 bg-white rounded-lg border border-gray-200">
                   {aboutRows.map((row, i) => (
-                    <table key={i} className="border-0">
-                      <td className={`py-2 px-4 text-sm w-[30%] ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</td>
-                      <td className={`py-2 px-4 text-sm text-gray-600 w-[70%] ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</td>
-                    </table>
+                    <div key={i} className="contents">
+                      <dt className={`py-2 px-4 text-sm text-gray-600 ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</dt>
+                      <dd className={`py-2 px-4 text-sm text-gray-900 ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</dd>
+                    </div>
                   ))}
                 </dl>
               </div>

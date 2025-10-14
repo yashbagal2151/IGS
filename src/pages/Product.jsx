@@ -128,7 +128,6 @@ export default function Product() {
       : s
   );
 
-  // Derived metadata for dynamic details
   const selectedSizeMeta = sizeOptions.find(
     (o) => o.value === selectedSize
   );
@@ -245,9 +244,9 @@ export default function Product() {
             <div className="space-y-6">
               {/* Header */}
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <div className="text-3xl font-bold text-gray-900 mb-2">
                   {title}
-                </h1>
+                </div>
                 <div className="flex items-center gap-4 mb-3">
                   <div className="flex items-center text-sm text-gray-600">
                     <span className="mr-1">{rating}</span>
@@ -265,8 +264,8 @@ export default function Product() {
               px-2 
               py-1 
               rounded-md 
-              bg-brand-100 
-              text-purple-500 
+              bg-brand-50 
+              text-purple-800 
               border 
               border-brand-500
               whitespace-nowrap"
@@ -317,9 +316,9 @@ export default function Product() {
 
               {/* Delivery Check */}
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <p className="text-md font-semibold text-gray-900">
                   Check Delivery
-                </h3>
+                </p>
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
@@ -334,7 +333,7 @@ export default function Product() {
                   />
                   <button
                     onClick={handleCheckDelivery}
-                    className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition"
+                    className="px-4 py-2 bg-brand-700 text-white text-md rounded-lg hover:bg-brand-800 transition"
                   >
                     Verify
                   </button>
@@ -359,9 +358,9 @@ export default function Product() {
 
               {/* Material Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <p className="text-md font-semibold text-gray-900">
                   Select material
-                </h3>
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {materialOptions.map((option) => (
                     <label
@@ -392,9 +391,9 @@ export default function Product() {
 
               {/* Size Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <p className="text-md font-semibold text-gray-900">
                   Select size
-                </h3>
+                </p>
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {sizeOptions.map((option) => (
                     <label
@@ -489,13 +488,13 @@ export default function Product() {
 
               {/* About This Item (exact two-column definition list) */}
               <div className="pt-6 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">About this item</h3>
-                <dl className="grid grid-cols-[160px_1fr] sm:grid-cols-[220px_1fr] gap-x-6 divide-y divide-gray-200 bg-white rounded-lg border border-gray-200">
+                <p className="text-lg font-bold text-gray-900 mb-2">About this item</p>
+                <dl className="grid grid-cols sm:grid-cols gap-x-6 divide-y divide-gray-200 bg-white border-b border-gray-200">
                   {aboutRows.map((row, i) => (
-                    <div key={i} className="contents">
-                      <dt className={`py-2 px-4 text-sm text-gray-600 ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</dt>
-                      <dd className={`py-2 px-4 text-sm text-gray-900 ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</dd>
-                    </div>
+                    <table key={i} className="border-0">
+                      <td className={`py-2 px-4 text-sm w-[30%] ${i === 0 ? "rounded-tl-lg" : ""}`}>{row.label}</td>
+                      <td className={`py-2 px-4 text-sm text-gray-600 w-[70%] ${i === 0 ? "rounded-tr-lg" : ""}`}>{row.value}</td>
+                    </table>
                   ))}
                 </dl>
               </div>

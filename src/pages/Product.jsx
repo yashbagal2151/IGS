@@ -14,6 +14,7 @@ export default function Product() {
   const [selectedMaterial, setSelectedMaterial] = useState("marble");
   const [selectedSize, setSelectedSize] = useState("small");
   const [pincode, setPincode] = useState("");
+  const [pincodeStatus, setPincodeStatus] = useState("idle"); // 'idle'|'invalid'|'ok'|'no-service'
   const [deliveryEstimate, setDeliveryEstimate] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -61,7 +62,18 @@ export default function Product() {
   const handleCheckDelivery = () => {
     const pin = pincode.replace(/\D/g, "");
     if (pin.length !== 6) {
-      setDeliveryEstimate("Please enter a valid 6-digit pincode");
+      setPincodeStatus("invalid");
+      setDeliveryEstimate("");
+      return;
+    }
+    const prefix = parseInt(pin.slice(0, 2), 10);
+    const serviceable =
+      (prefix >= 40 && prefix <= 49) ||
+      (prefix >= 56 && prefix <= 59) ||
+      (prefix >= 60 && prefix <= 69);
+    if (!serviceable) {
+      setPincodeStatus("no-service");
+      setDeliveryEstimate("");
       return;
     }
     const eta = new Date();
@@ -71,6 +83,7 @@ export default function Product() {
       month: "long",
     });
     setDeliveryEstimate(`By ${formatted}, 8am - 10pm`);
+    setPincodeStatus("ok");
   };
 
   const handleThumbnailClick = (index) => {
@@ -81,16 +94,15 @@ export default function Product() {
   const materialOptions = (
     Array.isArray(product.materials) && product.materials.length
       ? product.materials
-      : ["marble", "resin"]
-  ) // fallback options
-    .map((m) =>
-      typeof m === "string"
-        ? {
-            value: m.toLowerCase(),
-            label: m.charAt(0).toUpperCase() + m.slice(1),
-          }
-        : m
-    );
+      : [
+          { value: "marble", label: "Marble", description: "Hand-Carved" },
+          { value: "resin", label: "Resin", description: "High-Density" },
+        ]
+  ).map((m) =>
+    typeof m === "string"
+      ? { value: m.toLowerCase(), label: m.charAt(0).toUpperCase() + m.slice(1) }
+      : m
+  );
 
   // Sizes – derive dynamically from JSON if provided
   const sizeOptions = (
@@ -271,40 +283,43 @@ export default function Product() {
               </p>
 
               {/* Delivery Check */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Check Delivery
-                </h3>
-                <div className="flex gap-2">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900">Check Delivery</h3>
+                <div className="flex gap-2 items-center">
                   <input
                     type="text"
-                    placeholder="Enter pincode"
+                    placeholder="6-digit pincode"
                     value={pincode}
-                    onChange={(e) => setPincode(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent max-w-[20%] lg:max-w-[30%]"
+                    onChange={(e) => {
+                      setPincode(e.target.value.replace(/\D/g, "").slice(0, 6));
+                      setPincodeStatus("idle");
+                      setDeliveryEstimate("");
+                    }}
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent w-40"
                   />
-                  <button
-                    onClick={handleCheckDelivery}
-                    className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition"
-                  >
-                    Check
-                  </button>
+                  <button onClick={handleCheckDelivery} className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition">Verify</button>
                 </div>
-                {deliveryEstimate && (
-                  <p className="text-sm text-green-600">{deliveryEstimate}</p>
+                {pincodeStatus === "invalid" && (
+                  <p className="text-sm text-red-600">Please enter a valid 6-digit pincode</p>
+                )}
+                {pincodeStatus === "no-service" && (
+                  <p className="text-sm text-red-600">Sorry, we currently don't deliver to {pincode}.</p>
+                )}
+                {pincodeStatus === "ok" && (
+                  <p className="text-sm text-green-600">Delivery available to {pincode}. Estimated delivery {deliveryEstimate}</p>
                 )}
               </div>
 
               {/* Material Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Material
-                </h3>
-                <div className="grid grid-cols-4 gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">Select material</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {materialOptions.map((option) => (
                     <label
                       key={option.value}
-                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-brand-300 transition"
+                      className={`relative cursor-pointer p-3 border rounded-xl transition hover:border-brand-300 ${
+                        selectedMaterial === option.value ? "border-brand-600 ring-2 ring-brand-100" : "border-gray-200"
+                      }`}
                     >
                       <input
                         type="radio"
@@ -312,9 +327,12 @@ export default function Product() {
                         value={option.value}
                         checked={selectedMaterial === option.value}
                         onChange={(e) => setSelectedMaterial(e.target.value)}
-                        className="mr-3 text-purple-600 focus:ring-brand-500"
+                        className="absolute right-3 top-3 text-brand-600 focus:ring-brand-600"
                       />
-                      <span className="text-gray-700">{option.label}</span>
+                      <div className="text-gray-900 font-medium">{option.label}</div>
+                      {option.description && (
+                        <div className="text-xs text-gray-500">{option.description}</div>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -322,12 +340,14 @@ export default function Product() {
 
               {/* Size Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Size</h3>
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                <h3 className="text-lg font-semibold text-gray-900">Select size</h3>
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {sizeOptions.map((option) => (
                     <label
                       key={option.value}
-                      className="flex items-center cursor-pointer p-1 border border-gray-200 rounded-lg hover:border-brand-300 transition"
+                      className={`relative cursor-pointer p-3 border rounded-xl transition hover:border-brand-300 ${
+                        selectedSize === option.value ? "border-brand-600 ring-2 ring-brand-100" : "border-gray-200"
+                      }`}
                     >
                       <input
                         type="radio"
@@ -335,16 +355,12 @@ export default function Product() {
                         value={option.value}
                         checked={selectedSize === option.value}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="mr-3 text-purple-600 focus:ring-brand-500"
+                        className="absolute right-3 top-3 text-brand-600 focus:ring-brand-600"
                       />
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {option.label}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          ({option.description})
-                        </div>
-                      </div>
+                      <div className="font-medium text-gray-900">{option.label}</div>
+                      {option.description && (
+                        <div className="text-xs text-gray-500">{option.description}</div>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -417,36 +433,15 @@ export default function Product() {
                   About this item
                 </h3>
                 {product.description && (
-                  <p className="text-sm text-gray-700 mb-3">
-                    {product.description}
-                  </p>
+                  <p className="text-sm text-gray-700 mb-3">{product.description}</p>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Primary Material</span>
-                    <span className="font-medium capitalize">
-                      {product.primaryMaterial ||
-                        selectedMaterial ||
-                        product.material ||
-                        "marble"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Category</span>
-                    <span className="font-medium">
-                      {product.categoryName || product.category}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Size</span>
-                    <span className="font-medium">{selectedSize}</span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Customizable</span>
-                    <span className="font-medium">
-                      {isCustomizable ? "Yes" : "No"}
-                    </span>
-                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Primary Material</span><span className="font-medium capitalize">{product.primaryMaterial || selectedMaterial || product.material || "marble"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Dimensions</span><span className="font-medium">{product.dimensions || "—"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Weight</span><span className="font-medium">{product.weight || "—"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Finish</span><span className="font-medium">{product.finish || "—"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Origin</span><span className="font-medium">{product.origin || "—"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Customizable</span><span className="font-medium">{isCustomizable ? "Yes" : "No"}</span></div>
                 </div>
                 {Array.isArray(product.specs) && product.specs.length > 0 && (
                   <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">

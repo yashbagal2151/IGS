@@ -92,7 +92,7 @@ function Home() {
       </div>
       <div className="bg-brand-50">
         <div className="px-4 md:px-15 lg:px-20">
-          <div className="container py-6 mx-auto">
+          <div className="container pt-6 pb-20 mx-auto">
             <CategoryMosaic />
           </div>
         </div>

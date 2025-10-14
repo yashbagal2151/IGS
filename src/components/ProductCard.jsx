@@ -108,9 +108,9 @@ const ProductCard = ({ product, onOpenProduct }) => {
       <div className="p-4 flex-grow flex flex-col justify-between min-h-[120px]">
         {/* Product Title - Fixed height to prevent layout shifts */}
         <div>
-          <h3 className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">
+          <div className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">
             {name}
-          </h3>
+          </div>
         </div>
 
         {/* Price Row */}

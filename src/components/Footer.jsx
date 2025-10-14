@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/20">
-        <div className="">
+        <div className="px-4 md:px-15 lg:px-20">
           <div className="container mx-auto py-4 flex items-center justify-between text-sm opacity-90">
             <div>© 2024 Ishita Gallery. All rights reserved.</div>
             <div className="flex items-center gap-3 text-lg">

@@ -51,7 +51,7 @@ export default function HowCustomizationWorks() {
   return (
     <section className="px-4 md:px-15 lg:px-20 py-14">
       <div className="container mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900">
+        <h2 className="text-5xl font-semibold text-gray-900">
           How Customization Works
         </h2>
         <p className="text-xs md:text-sm text-gray-500 mt-2 max-w-md mx-auto">

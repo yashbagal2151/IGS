@@ -302,30 +302,38 @@ export default function FilterPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-between items-center">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="flex items-center gap-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ChevronLeft size={16} />
-                Previous page
-              </button>
-
-              <span className="text-sm text-gray-600">
-                Page {currentPage} of {totalPages}
-              </span>
-
-              <button
-                onClick={() =>
-                  setCurrentPage(Math.min(totalPages, currentPage + 1))
-                }
-                disabled={currentPage === totalPages}
-                className="flex items-center gap-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next page
-                <ChevronRight size={16} />
-              </button>
+            <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm border disabled:opacity-50"
+                >
+                  <ChevronLeft size={16} /> Previous page
+                </button>
+                <button
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm border disabled:opacity-50"
+                >
+                  Next page <ChevronRight size={16} />
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-700">
+                <span>Page</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={totalPages}
+                  value={currentPage}
+                  onChange={(e) => {
+                    const v = Math.max(1, Math.min(totalPages, parseInt(e.target.value || "1", 10)));
+                    setCurrentPage(v);
+                  }}
+                  className="w-14 px-2 py-1 border rounded text-center"
+                />
+                <span>of {totalPages}</span>
+              </div>
             </div>
           )}
         </div>

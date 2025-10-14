@@ -23,6 +23,7 @@ export default function FilterPage() {
   const [sortBy, setSortBy] = useState("popular");
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState("1");
 
   // Initialize filters from URL params
   useEffect(() => {
@@ -162,6 +163,11 @@ export default function FilterPage() {
       totalPages: Math.ceil(sorted.length / itemsPerPage),
     };
   };
+
+  // keep input string in sync when currentPage changes elsewhere
+  useEffect(() => {
+    setPageInput(String(currentPage));
+  }, [currentPage]);
 
   const handleFiltersChange = (newFilters) => {
     setFilters(newFilters);
@@ -322,13 +328,29 @@ export default function FilterPage() {
               <div className="flex items-center gap-2 text-sm text-gray-700">
                 <span>Page</span>
                 <input
-                  type="number"
-                  min={1}
-                  max={totalPages}
-                  value={currentPage}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={pageInput}
                   onChange={(e) => {
-                    const v = Math.max(1, Math.min(totalPages, parseInt(e.target.value || "1", 10)));
-                    setCurrentPage(v);
+                    // allow empty while typing; only digits
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setPageInput(digits);
+                  }}
+                  onBlur={() => {
+                    const v = parseInt(pageInput, 10);
+                    if (Number.isNaN(v)) {
+                      setPageInput(String(currentPage));
+                      return;
+                    }
+                    const clamped = Math.max(1, Math.min(totalPages, v));
+                    setCurrentPage(clamped);
+                    setPageInput(String(clamped));
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.currentTarget.blur();
+                    }
                   }}
                   className="w-14 px-2 py-1 border rounded text-center"
                 />

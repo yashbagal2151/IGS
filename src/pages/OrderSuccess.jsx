@@ -26,7 +26,7 @@ export default function OrderSuccess() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-purple-700 mb-2">
+      <h1 className="text-2xl font-bold text-purple-700 m-2">
         Your Order Has Been Placed Successfully!
       </h1>
       <p className="text-gray-700 mb-8">

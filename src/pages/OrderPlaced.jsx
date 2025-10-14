@@ -10,7 +10,7 @@ export default function OrderPlaced() {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
       <img src={OrderSuccessfullyCart} />
-      <h1 className="text-xl md:text-2xl font-semibold text-purple-700 mb-2">
+      <h1 className="text-xl md:text-2xl font-semibold text-purple-700 my-2">
         Your Order Has Been Placed Successfully!
       </h1>
       <p className="text-gray-600 max-w-xl">

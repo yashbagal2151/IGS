@@ -100,7 +100,10 @@ export default function Product() {
         ]
   ).map((m) =>
     typeof m === "string"
-      ? { value: m.toLowerCase(), label: m.charAt(0).toUpperCase() + m.slice(1) }
+      ? {
+          value: m.toLowerCase(),
+          label: m.charAt(0).toUpperCase() + m.slice(1),
+        }
       : m
   );
 
@@ -284,7 +287,9 @@ export default function Product() {
 
               {/* Delivery Check */}
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">Check Delivery</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Check Delivery
+                </h3>
                 <div className="flex gap-2 items-center">
                   <input
                     type="text"
@@ -297,29 +302,42 @@ export default function Product() {
                     }}
                     className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-600 focus:border-transparent w-40"
                   />
-                  <button onClick={handleCheckDelivery} className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition">Verify</button>
+                  <button
+                    onClick={handleCheckDelivery}
+                    className="px-4 py-2 bg-brand-700 text-white rounded-lg hover:bg-brand-800 transition"
+                  >
+                    Verify
+                  </button>
                 </div>
                 {pincodeStatus === "invalid" && (
-                  <p className="text-sm text-red-600">Please enter a valid 6-digit pincode</p>
+                  <p className="text-sm text-red-600">
+                    Please enter a valid 6-digit pincode
+                  </p>
                 )}
                 {pincodeStatus === "no-service" && (
-                  <p className="text-sm text-red-600">Sorry, we currently don't deliver to {pincode}.</p>
+                  <p className="text-sm text-red-600">
+                    Sorry, we currently don't deliver to {pincode}.
+                  </p>
                 )}
                 {pincodeStatus === "ok" && (
-                  <p className="text-sm text-green-600">Delivery available to {pincode}. Estimated delivery {deliveryEstimate}</p>
+                  <p className="text-sm text-green-600">
+                    Delivery available to {pincode}. Estimated delivery{" "}
+                    {deliveryEstimate}
+                  </p>
                 )}
               </div>
 
               {/* Material Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Select material</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Select material
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {materialOptions.map((option) => (
                     <label
                       key={option.value}
-                      className={`relative cursor-pointer p-3 border rounded-xl transition hover:border-brand-300 ${
-                        selectedMaterial === option.value ? "border-brand-600 ring-2 ring-brand-100" : "border-gray-200"
-                      }`}
+                      className={`relative cursor-pointer p-3 border border-gray-300 rounded-xl transition-all shadow-sm hover:shadow-lg duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500
+ ${selectedMaterial === option.value ? "shadow-lg" : "border-gray-300"}`}
                     >
                       <input
                         type="radio"
@@ -329,9 +347,13 @@ export default function Product() {
                         onChange={(e) => setSelectedMaterial(e.target.value)}
                         className="absolute right-3 top-3 text-brand-600 focus:ring-brand-600"
                       />
-                      <div className="text-gray-900 font-medium">{option.label}</div>
+                      <div className="text-gray-900 font-medium">
+                        {option.label}
+                      </div>
                       {option.description && (
-                        <div className="text-xs text-gray-500">{option.description}</div>
+                        <div className="text-xs text-gray-500">
+                          {option.description}
+                        </div>
                       )}
                     </label>
                   ))}
@@ -340,13 +362,17 @@ export default function Product() {
 
               {/* Size Selection */}
               <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gray-900">Select size</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Select size
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3">
                   {sizeOptions.map((option) => (
                     <label
                       key={option.value}
-                      className={`relative cursor-pointer p-3 border rounded-xl transition hover:border-brand-300 ${
-                        selectedSize === option.value ? "border-brand-600 ring-2 ring-brand-100" : "border-gray-200"
+                      className={`relative cursor-pointer p-3 border border-gray-300 rounded-xl transition-all shadow-sm hover:shadow-lg duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+                        selectedSize === option.value
+                          ? "shadow-lg"
+                          : " border-gray-300"
                       }`}
                     >
                       <input
@@ -357,9 +383,13 @@ export default function Product() {
                         onChange={(e) => setSelectedSize(e.target.value)}
                         className="absolute right-3 top-3 text-brand-600 focus:ring-brand-600"
                       />
-                      <div className="font-medium text-gray-900">{option.label}</div>
+                      <div className="font-medium text-gray-900">
+                        {option.label}
+                      </div>
                       {option.description && (
-                        <div className="text-xs text-gray-500">{option.description}</div>
+                        <div className="text-xs text-gray-500">
+                          {option.description}
+                        </div>
                       )}
                     </label>
                   ))}
@@ -433,15 +463,44 @@ export default function Product() {
                   About this item
                 </h3>
                 {product.description && (
-                  <p className="text-sm text-gray-700 mb-3">{product.description}</p>
+                  <p className="text-sm text-gray-700 mb-3">
+                    {product.description}
+                  </p>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Primary Material</span><span className="font-medium capitalize">{product.primaryMaterial || selectedMaterial || product.material || "marble"}</span></div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Dimensions</span><span className="font-medium">{product.dimensions || "—"}</span></div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Weight</span><span className="font-medium">{product.weight || "—"}</span></div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Finish</span><span className="font-medium">{product.finish || "—"}</span></div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Origin</span><span className="font-medium">{product.origin || "—"}</span></div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50"><span className="text-gray-600">Customizable</span><span className="font-medium">{isCustomizable ? "Yes" : "No"}</span></div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Primary Material</span>
+                    <span className="font-medium capitalize">
+                      {product.primaryMaterial ||
+                        selectedMaterial ||
+                        product.material ||
+                        "marble"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Dimensions</span>
+                    <span className="font-medium">
+                      {product.dimensions || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Weight</span>
+                    <span className="font-medium">{product.weight || "—"}</span>
+                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Finish</span>
+                    <span className="font-medium">{product.finish || "—"}</span>
+                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Origin</span>
+                    <span className="font-medium">{product.origin || "—"}</span>
+                  </div>
+                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
+                    <span className="text-gray-600">Customizable</span>
+                    <span className="font-medium">
+                      {isCustomizable ? "Yes" : "No"}
+                    </span>
+                  </div>
                 </div>
                 {Array.isArray(product.specs) && product.specs.length > 0 && (
                   <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">

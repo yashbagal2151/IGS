@@ -5,6 +5,7 @@ import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
 import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
+import aboutDefaults from "../data/aboutDefaults.json";
 
 export default function Product() {
   const { id } = useParams();
@@ -131,8 +132,10 @@ export default function Product() {
   const selectedSizeMeta = sizeOptions.find(
     (o) => o.value === selectedSize
   );
+  const selectedMaterialKey = (selectedMaterial || product.material || "").toLowerCase();
   const primaryMaterialStr =
     product.primaryMaterial ||
+    aboutDefaults.primaryMaterialByMaterial[selectedMaterialKey] ||
     (materialOptions.find((o) => o.value === selectedMaterial)?.label || null) ||
     product.material ||
     "—";
@@ -141,15 +144,17 @@ export default function Product() {
     { label: "Primary Material", value: primaryMaterialStr || "—" },
     {
       label: "Dimensions",
+      value: product.dimensions || aboutDefaults.dimensions || selectedSizeMeta?.description || "—",
+    },
+    { label: "Weight", value: product.weight || aboutDefaults.weight || "—" },
+    {
+      label: "Finish",
       value:
-        product.dimensions ||
-        product.sizeDescription ||
-        selectedSizeMeta?.description ||
+        product.finish ||
+        (aboutDefaults.finishByMaterial[selectedMaterialKey] || null) ||
         "—",
     },
-    { label: "Weight", value: product.weight || "—" },
-    { label: "Finish", value: product.finish || "—" },
-    { label: "Origin", value: product.origin || "—" },
+    { label: "Origin", value: product.origin || aboutDefaults.origin || "—" },
   ];
 
   const [quantity, setQuantity] = useState(1);

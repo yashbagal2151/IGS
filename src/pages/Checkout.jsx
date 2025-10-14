@@ -296,6 +296,8 @@ export default function Checkout() {
 
   const handlePrimaryAction = () => {
     if (currentStep === 1) {
+      // Require a selected address before proceeding
+      if (!selectedAddress) return;
       setOpen({ address: false, payment: true, review: false });
       setDone((d) => ({ ...d, address: true }));
     } else if (currentStep === 2) {
@@ -423,7 +425,7 @@ export default function Checkout() {
                     >
                       Add new address
                     </button>
-                    <button
+                <button
                       className="px-4 py-2 bg-brand-700 text-white rounded disabled:opacity-50"
                       disabled={!selectedAddress}
                       onClick={() => {
@@ -804,7 +806,9 @@ export default function Checkout() {
                   onClick={handlePrimaryAction}
                   className="w-full mt-4 px-4 py-2 bg-brand-700 text-white rounded disabled:opacity-50"
                   disabled={
-                    items.length === 0 || (currentStep === 2 && !isPaymentValid)
+                    items.length === 0 ||
+                    (currentStep === 1 && !selectedAddress) ||
+                    (currentStep === 2 && !isPaymentValid)
                   }
                 >
                   {ctaLabel}

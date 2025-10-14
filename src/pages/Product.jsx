@@ -127,6 +127,32 @@ export default function Product() {
       : s
   );
 
+  // Derived metadata for dynamic details
+  const selectedSizeMeta = sizeOptions.find(
+    (o) => o.value === selectedSize
+  );
+  const primaryMaterialStr =
+    product.primaryMaterial ||
+    (materialOptions.find((o) => o.value === selectedMaterial)?.label || null) ||
+    product.material ||
+    "—";
+  const aboutItems = [
+    { label: "Primary Material", value: primaryMaterialStr },
+    {
+      label: "Dimensions",
+      value: product.dimensions || product.sizeDescription || selectedSizeMeta?.description || null,
+    },
+    { label: "Weight", value: product.weight },
+    { label: "Finish", value: product.finish },
+    { label: "Origin", value: product.origin },
+    { label: "Category", value: product.categoryName || product.category },
+    { label: "Size", value: selectedSizeMeta?.label },
+    { label: "Customizable", value: isCustomizable ? "Yes" : "No" },
+    ...(Array.isArray(product.specs)
+      ? product.specs.map((s) => ({ label: s.label, value: s.value }))
+      : []),
+  ].filter((row) => row.value);
+
   const [quantity, setQuantity] = useState(1);
   const increment = () => setQuantity((q) => Math.min(99, q + 1));
   const decrement = () => setQuantity((q) => Math.max(1, q - 1));
@@ -458,63 +484,26 @@ export default function Product() {
               </div>
 
               {/* About This Item */}
-              <div className="pt-6 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  About this item
-                </h3>
+              <div className="pt-6 border-top border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">About this item</h3>
                 {product.description && (
                   <p className="text-sm text-gray-700 mb-3">
                     {product.description}
                   </p>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Primary Material</span>
-                    <span className="font-medium capitalize">
-                      {product.primaryMaterial ||
-                        selectedMaterial ||
-                        product.material ||
-                        "marble"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Dimensions</span>
-                    <span className="font-medium">
-                      {product.dimensions || "—"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Weight</span>
-                    <span className="font-medium">{product.weight || "—"}</span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Finish</span>
-                    <span className="font-medium">{product.finish || "—"}</span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Origin</span>
-                    <span className="font-medium">{product.origin || "—"}</span>
-                  </div>
-                  <div className="flex justify-between border rounded-md p-2 bg-gray-50">
-                    <span className="text-gray-600">Customizable</span>
-                    <span className="font-medium">
-                      {isCustomizable ? "Yes" : "No"}
-                    </span>
-                  </div>
-                </div>
-                {Array.isArray(product.specs) && product.specs.length > 0 && (
-                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                    {product.specs.map((spec, idx) => (
+                <div className="overflow-hidden rounded-lg border border-gray-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-2">
+                    {aboutItems.map((row, idx) => (
                       <div
-                        key={idx}
-                        className="flex justify-between border rounded-md p-2"
+                        key={`${row.label}-${idx}`}
+                        className="flex justify-between gap-4 px-4 py-2 text-sm border-t first:border-t-0 sm:[&:nth-child(odd)]:border-r bg-white"
                       >
-                        <span className="text-gray-600">{spec.label}</span>
-                        <span className="font-medium">{spec.value}</span>
+                        <span className="text-gray-600 whitespace-nowrap">{row.label}</span>
+                        <span className="font-medium text-gray-900 text-right">{row.value}</span>
                       </div>
                     ))}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>

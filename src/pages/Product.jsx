@@ -511,26 +511,6 @@ export default function Product() {
                 </div>
               </div>
 
-<<<<<<< HEAD
-=======
-              {/* Section 2: Related items from same category */}
-              <div className="pt-6">
-                <h3 className="text-2xl font-serif font-semibold mb-3">Statues You Might Also Like</h3>
-                <CarouselHorizontal
-                  items={allProducts.filter((p) => (p.categoryId || (p.category || "").toLowerCase().replace(/\s+/g, "-")) === productCategoryId && p.id !== product.id)}
-                  renderItem={(p) => (
-                    <div className="bg-white rounded-xl border border-gray-200 p-3 w-[280px]">
-                      <Link to={`/product/${p.id}`} className="block">
-                        <img src={p.imageURL || p.image} alt={p.name} className="h-44 w-full object-cover rounded-lg" />
-                        <div className="mt-2 text-sm font-medium text-gray-900 truncate">{p.name || p.title}</div>
-                        <div className="text-purple-700 font-semibold text-sm">₹{p.price}</div>
-                      </Link>
-                    </div>
-                  )}
-                />
-              </div>
-
->>>>>>> parent of 89bfb1c (Refactor: extract CraftStory and RelatedCarousel as standalone sections; include them in Product like Footer so they can be reused/managed independently)
               {/* About This Item (exact two-column definition list) */}
               <div className="pt-6 border-t border-gray-200">
                 <p className="text-lg font-bold text-gray-900 mb-2">About this item</p>

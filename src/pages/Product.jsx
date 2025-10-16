@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import ProductExtras from "./ProductExtras";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
 import products from "../data/products.json";
@@ -524,6 +525,8 @@ export default function Product() {
           </div>
         </div>
       </div>
+      {/* Extras sections below the main product page */}
+      <ProductExtras productId={product.id} />
     </div>
   );
 }

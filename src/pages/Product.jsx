@@ -193,7 +193,7 @@ export default function Product() {
   };
 
   return (
-    <div className="bg-white  px-4 md:px-15 lg:px-20">
+    <div className="bg-white">
       <div className=" container mx-auto">
         {/* Breadcrumb Navigation */}
         <div className="bg-white border-b border-gray-200">

@@ -8,7 +8,7 @@ export default function OrderPlaced() {
   const order = state?.order || null;
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-12 text-center">
       <img src={OrderSuccessfullyCart} />
       <h1 className="text-xl md:text-2xl font-semibold text-purple-700 my-2">
         Your Order Has Been Placed Successfully!

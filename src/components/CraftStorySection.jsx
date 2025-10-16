@@ -3,13 +3,25 @@ import storyCopy from "../data/categoryStory.json";
 
 export default function CraftStorySection({ categoryId }) {
   const story = storyCopy[categoryId] || storyCopy.default;
-  const img = new URL(`../assets/story/${categoryId || 'god-statues'}.jpg`, import.meta.url).href;
+  let img = null;
+  try {
+    img = new URL(
+      story.image || `../assets/story/${categoryId || 'god-statues'}.jpg`,
+      import.meta.url
+    ).href;
+  } catch (e) {
+    img = null; // fallback handled below
+  }
   return (
     <section className="my-12">
       <div className="container mx-auto rounded-2xl overflow-hidden border border-gray-200">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="relative min-h-[240px] lg:min-h-[320px]">
-            <img src={img} alt="Craft story" className="absolute inset-0 w-full h-full object-cover" />
+            {img ? (
+              <img src={img} alt="Craft story" className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+              <div className="absolute inset-0 bg-gray-100" />
+            )}
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/60 to-white" />
           </div>
           <div className="p-6 lg:p-10">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
 export default function RelatedCategoryCarousel({ items }) {
   if (!Array.isArray(items) || items.length === 0) return null;
@@ -14,12 +14,8 @@ export default function RelatedCategoryCarousel({ items }) {
           <button type="button" className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full shadow px-3 py-1" onClick={() => scrollBy(-320)}>‹</button>
           <div ref={containerRef} className="overflow-x-auto no-scrollbar snap-x snap-mandatory flex gap-6 pb-3">
             {items.map((p) => (
-              <div key={p.id} className="snap-start min-w-[300px]">
-                <Link to={`/product/${p.id}`} className="block bg-white rounded-xl border border-gray-200 p-3">
-                  <img src={p.imageURL || p.image} alt={p.name || p.title} className="h-56 w-full object-cover rounded-lg" />
-                  <div className="mt-2 text-sm font-medium text-gray-900 truncate">{p.name || p.title}</div>
-                  <div className="text-purple-700 font-semibold text-sm">₹{p.price}</div>
-                </Link>
+              <div key={p.id} className="snap-start min-w-[300px] max-w-[320px]">
+                <ProductCard product={p} />
               </div>
             ))}
           </div>

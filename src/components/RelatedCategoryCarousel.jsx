@@ -55,6 +55,18 @@ export default function RelatedCategoryCarousel({ items = [] }) {
     });
   };
 
+  // Autoplay similar to home page carousel
+  React.useEffect(() => {
+    if (!carouselActive || items.length <= itemsPerView) return;
+    const id = setInterval(() => {
+      setFirstVisibleIndex((idx) => {
+        const next = idx + stepSize;
+        return next > maxIndex ? 0 : next;
+      });
+    }, 3000);
+    return () => clearInterval(id);
+  }, [carouselActive, items.length, itemsPerView, stepSize, maxIndex]);
+
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">
@@ -76,7 +88,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
               <div
                 className="flex transition-transform duration-500 ease-out"
                 style={{
-                  transform: `translateX(-$${"{"}${(100 / itemsPerView) * firstVisibleIndex}${"}"}%)`,
+                  transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
                 }}
               >
                 {items.map((product) => (

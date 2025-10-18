@@ -22,6 +22,36 @@ export default function ProductSection({
   onOpenProduct,
 }) {
   const displayedProducts = products.slice(0, maxItems);
+  const [viewportWidth, setViewportWidth] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
+  const isLg = viewportWidth >= 1024;
+  const itemsPerView = isLg ? 4 : 2;
+  const carouselActive = isLg ? displayedProducts.length > 4 : true;
+  const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
+  const maxIndex = Math.max(0, displayedProducts.length - itemsPerView);
+  const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  React.useEffect(() => {
+    setFirstVisibleIndex((idx) => Math.min(idx, maxIndex));
+  }, [maxIndex]);
+
+  React.useEffect(() => {
+    if (!carouselActive || displayedProducts.length <= itemsPerView) return;
+    const id = setInterval(() => {
+      setFirstVisibleIndex((idx) => {
+        const next = idx + stepSize;
+        return next > maxIndex ? 0 : next;
+      });
+    }, 3000);
+    return () => clearInterval(id);
+  }, [carouselActive, displayedProducts.length, itemsPerView, stepSize, maxIndex]);
 
   // Map category titles to filter IDs
   const getCategoryFilterId = (title) => {
@@ -52,16 +82,42 @@ export default function ProductSection({
         <p className="text-gray-600 text-sm">{subtitle}</p>
       </div>
 
-      {/* Products Grid - Responsive Design */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-        {displayedProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onOpenProduct={onOpenProduct}
-          />
-        ))}
-      </div>
+      {/* Products Grid or Carousel - Responsive */}
+      {!carouselActive ? (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+          {displayedProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onOpenProduct={onOpenProduct}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
+              }}
+            >
+              {displayedProducts.map((product) => (
+                <div
+                  key={product.id}
+                  style={{ flex: `0 0 ${100 / itemsPerView}%` }}
+                  className="px-3"
+                >
+                  <ProductCard
+                    product={product}
+                    onOpenProduct={onOpenProduct}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

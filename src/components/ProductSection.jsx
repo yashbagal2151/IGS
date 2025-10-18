@@ -21,15 +21,15 @@ export default function ProductSection({
   categoryId,
   onOpenProduct,
 }) {
-  const displayedProducts = products.slice(0, maxItems);
   const [viewportWidth, setViewportWidth] = React.useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
   const isLg = viewportWidth >= 1024;
   const itemsPerView = isLg ? 4 : 2;
-  const carouselActive = isLg ? displayedProducts.length > 4 : true;
+  const carouselActive = isLg ? products.length > 4 : true;
+  const renderItems = carouselActive ? products : products.slice(0, maxItems);
   const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
-  const maxIndex = Math.max(0, displayedProducts.length - itemsPerView);
+  const maxIndex = Math.max(0, renderItems.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
   const dragStateRef = React.useRef({ dragging: false, startX: 0, moved: 0 });
 
@@ -44,7 +44,7 @@ export default function ProductSection({
   }, [maxIndex]);
 
   React.useEffect(() => {
-    if (!carouselActive || displayedProducts.length <= itemsPerView) return;
+    if (!carouselActive || renderItems.length <= itemsPerView) return;
     const id = setInterval(() => {
       setFirstVisibleIndex((idx) => {
         const next = idx + stepSize;
@@ -52,7 +52,7 @@ export default function ProductSection({
       });
     }, 3000);
     return () => clearInterval(id);
-  }, [carouselActive, displayedProducts.length, itemsPerView, stepSize, maxIndex]);
+  }, [carouselActive, renderItems.length, itemsPerView, stepSize, maxIndex]);
 
   const onPointerDown = (e) => {
     dragStateRef.current = {
@@ -114,7 +114,7 @@ export default function ProductSection({
       {/* Products Grid or Carousel - Responsive */}
       {!carouselActive ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-          {displayedProducts.map((product) => (
+          {renderItems.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -140,7 +140,7 @@ export default function ProductSection({
                 transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
               }}
             >
-              {displayedProducts.map((product) => (
+              {renderItems.map((product) => (
                 <div
                   key={product.id}
                   style={{ flex: `0 0 ${100 / itemsPerView}%` }}
@@ -154,7 +154,7 @@ export default function ProductSection({
               ))}
             </div>
           </div>
-          {displayedProducts.length > itemsPerView && (
+          {renderItems.length > itemsPerView && (
             <>
               <button
                 type="button"

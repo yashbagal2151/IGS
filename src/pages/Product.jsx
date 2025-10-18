@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ProductExtras from "./ProductExtras";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
 import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
 import aboutDefaults from "../data/aboutDefaults.json";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 
 export default function Product() {
   const { id } = useParams();
@@ -19,6 +20,11 @@ export default function Product() {
   const [pincodeStatus, setPincodeStatus] = useState("idle"); // 'idle'|'invalid'|'ok'|'no-service'
   const [deliveryEstimate, setDeliveryEstimate] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Scroll to top when component mounts or when id changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [id]);
 
   // Build a unified product list from categories and standalone products
   const getAllProducts = () => {
@@ -192,28 +198,17 @@ export default function Product() {
     navigate("/checkout");
   };
 
+  const breadcrumbItems = [
+    { label: "Home", link: "/" },
+    { label: "Products", link: "/filter" },
+    { label: product.category || "Category" },
+    { label: title },
+  ];
+
   return (
     <div className="bg-white">
+      <Breadcrumb items={breadcrumbItems} />
       <div className=" container mx-auto">
-        {/* Breadcrumb Navigation */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="container mx-auto px-4 py-3">
-            <nav className="text-sm text-gray-600">
-              <Link to="/" className="hover:text-purple-700">
-                Home
-              </Link>
-              <span className="mx-2">&gt;</span>
-              <Link to="/filter" className="hover:text-purple-700">
-                Products
-              </Link>
-              <span className="mx-2">&gt;</span>
-              <span className="text-gray-900">{product.category}</span>
-              <span className="mx-2">&gt;</span>
-              <span className="text-gray-900">{title}</span>
-            </nav>
-          </div>
-        </div>
-
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left: Product Images */}

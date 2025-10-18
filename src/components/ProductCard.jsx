@@ -213,7 +213,15 @@ const ProductCard = ({ product, onOpenProduct }) => {
       </button>
     );
   }
-  return <Link to={`/product/${id}`}>{content}</Link>;
+  return (
+    <Link
+      to={`/product/${id}`}
+      className="block w-full h-full"
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      {content}
+    </Link>
+  );
 };
 
 export default ProductCard;

@@ -11,6 +11,7 @@ import { addOrder } from "../features/orders/ordersSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 
 // Minimal brand/bank/app icons and logo fallback
 const VisaIcon = () => (
@@ -358,8 +359,15 @@ export default function Checkout() {
     </div>
   );
 
+  const breadcrumbItems = [
+    { label: "Home", link: "/" },
+    { label: "Cart", link: "/cart" },
+    { label: "Checkout" },
+  ];
+
   return (
     <>
+      <Breadcrumb items={breadcrumbItems} />
       <div className="py-6 px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold mb-4">Secure Checkout</h1>
@@ -425,7 +433,7 @@ export default function Checkout() {
                     >
                       Add new address
                     </button>
-                <button
+                    <button
                       className="px-4 py-2 bg-brand-700 text-white rounded disabled:opacity-50"
                       disabled={!selectedAddress}
                       onClick={() => {
@@ -653,7 +661,7 @@ export default function Checkout() {
                 onToggle={() => setOpen((p) => ({ ...p, review: !p.review }))}
                 actionText=""
               >
-                <div className="">
+                <div>
                   {items.map((i) => {
                     const lineWrap = wrapMap[i.id]
                       ? WRAP_FEE_PER_UNIT * i.qty

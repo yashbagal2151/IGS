@@ -8,11 +8,16 @@ import CategoryMosaic from "../components/CategoryMosaic.jsx";
 import HowCustomizationWorks from "../components/HowCustomizationWorks.jsx";
 import Testimonials from "../components/Testimonials.jsx";
 import testimonials from "../data/testimonials.json";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 
 function Home() {
   const navigate = useNavigate();
+
+  const breadcrumbItems = [{ label: "Home" }];
+
   return (
     <>
+      <Breadcrumb items={breadcrumbItems} />
       <div className="bg-white px-4 md:px-15 lg:px-20">
         {/* Hero Section */}
         <section className="container mx-auto flex flex-col lg:flex-row gap-10 py-12">

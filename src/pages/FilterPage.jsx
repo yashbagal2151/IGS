@@ -5,6 +5,7 @@ import ProductCard from "../components/ProductCard";
 import { Search, ChevronDown, ArrowLeft, ArrowRight } from "lucide-react";
 import categoriesData from "../data/categories.json";
 import products from "../data/products.json";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 
 export default function FilterPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -205,8 +206,11 @@ export default function FilterPage() {
     totalPages,
   } = getPaginatedProducts();
 
+  const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Products" }];
+
   return (
     <div className="bg-white">
+      <Breadcrumb items={breadcrumbItems} />
       <div className="flex">
         {/* Filter Sidebar */}
         <FilterSidebar
@@ -349,7 +353,9 @@ export default function FilterPage() {
                   <ArrowLeft size={16} /> Previous page
                 </button>
                 <button
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
                   disabled={currentPage === totalPages}
                   className="flex items-center gap-2 px-2 lg:px-4 py-2 rounded-md text-sm border disabled:opacity-50"
                 >

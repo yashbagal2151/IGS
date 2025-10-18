@@ -15,7 +15,7 @@ const StepRow = ({ title, description, Illustration, reverse = false }) => (
       </h3>
       <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
     </div>
-    <div className="">
+    <div className="flex justify-center">
       <div className="w-[80%] h-[80%] bg-brand-50 rounded-2xl">
         <Illustration />
       </div>
@@ -60,7 +60,7 @@ export default function HowCustomizationWorks() {
         </p>
       </div>
 
-      <div className="container mx-auto  px-4 py-6 md:px-10 ">
+      <div className="container mx-auto py-6 w-[80%] ">
         <StepRow
           title="Design & Consult"
           description="Share your unique vision with our design experts. We provide detailed sketches, material options, and a clear consultation to begin your custom artwork."

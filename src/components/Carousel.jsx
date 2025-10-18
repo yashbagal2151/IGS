@@ -54,12 +54,12 @@ export default function Carousel({
 
   return (
     <div
-      className={`relative rounded-2xl overflow-hidden shadow-lg ${className}`}
+      className={`relative overflow-hidden p-3  ${className}`}
     >
       <img
         src={active.image}
         alt={active.title || "slide"}
-        className="w-full h-full object-cover transition-all duration-700 ease-in-out"
+        className="w-full h-full object-cover transition-all rounded-2xl shadow-lg duration-700 ease-in-out"
       />
 
       {(active.title || active.description) && (
@@ -77,14 +77,14 @@ export default function Carousel({
         <>
           <button
             onClick={goPrev}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+            className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
             aria-label="Previous"
           >
             ←
           </button>
           <button
             onClick={goNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+            className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
             aria-label="Next"
           >
             →

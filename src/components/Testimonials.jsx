@@ -37,7 +37,9 @@ export default function Testimonials({ items = [] }) {
   React.useEffect(() => {
     if (!carouselActive || displayItems.length <= itemsPerView) return;
     const id = setInterval(() => {
-      setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize));
+      setFirstVisibleIndex((idx) =>
+        idx + stepSize > maxIndex ? 0 : idx + stepSize
+      );
     }, 3000);
     return () => clearInterval(id);
   }, [carouselActive, displayItems.length, itemsPerView, stepSize, maxIndex]);
@@ -64,7 +66,13 @@ export default function Testimonials({ items = [] }) {
       e.preventDefault();
       e.stopPropagation();
       setFirstVisibleIndex((idx) =>
-        delta < 0 ? (idx + stepSize > maxIndex ? 0 : idx + stepSize) : idx - stepSize < 0 ? maxIndex : idx - stepSize
+        delta < 0
+          ? idx + stepSize > maxIndex
+            ? 0
+            : idx + stepSize
+          : idx - stepSize < 0
+          ? maxIndex
+          : idx - stepSize
       );
     }
   };
@@ -96,16 +104,32 @@ export default function Testimonials({ items = [] }) {
           {!carouselActive ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {baseItems.map((t, idx) => (
-                <div key={idx} className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm">
+                <div
+                  key={idx}
+                  className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm"
+                >
                   <div className="flex items-center gap-3 mb-3">
-                    <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-md" />
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-9 h-9 rounded-md"
+                    />
                     <div>
-                      <div className="text-base font-semibold text-gray-900">{t.name}</div>
-                      {t.role && <div className="text-xs text-gray-500">{t.role}</div>}
+                      <div className="text-base font-semibold text-gray-900">
+                        {t.name}
+                      </div>
+                      {t.role && (
+                        <div className="text-xs text-gray-500">{t.role}</div>
+                      )}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700 leading-relaxed mb-4">{t.text}</p>
-                  <div className="text-yellow-500 text-lg" aria-label={`${t.stars} star rating`}>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                    {t.text}
+                  </p>
+                  <div
+                    className="text-yellow-500 text-lg"
+                    aria-label={`${t.stars} star rating`}
+                  >
                     {"★".repeat(t.stars || 5)}
                   </div>
                 </div>
@@ -125,20 +149,43 @@ export default function Testimonials({ items = [] }) {
               >
                 <div
                   className="flex transition-transform duration-500 ease-out gap-0"
-                  style={{ transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)` }}
+                  style={{
+                    transform: `translateX(-${
+                      (100 / itemsPerView) * firstVisibleIndex
+                    }%)`,
+                  }}
                 >
                   {displayItems.map((t, idx) => (
-                    <div key={idx} style={{ flex: `0 0 ${100 / itemsPerView}%` }} className="px-3">
+                    <div
+                      key={idx}
+                      style={{ flex: `0 0 ${100 / itemsPerView}%` }}
+                      className="px-3"
+                    >
                       <div className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm h-full">
                         <div className="flex items-center gap-3 mb-3">
-                          <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-md" />
+                          <img
+                            src={t.avatar}
+                            alt={t.name}
+                            className="w-9 h-9 rounded-md"
+                          />
                           <div>
-                            <div className="text-base font-semibold text-gray-900">{t.name}</div>
-                            {t.role && <div className="text-xs text-gray-500">{t.role}</div>}
+                            <div className="text-base font-semibold text-gray-900">
+                              {t.name}
+                            </div>
+                            {t.role && (
+                              <div className="text-xs text-gray-500">
+                                {t.role}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-700 leading-relaxed mb-4">{t.text}</p>
-                        <div className="text-yellow-500 text-lg" aria-label={`${t.stars} star rating`}>
+                        <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                          {t.text}
+                        </p>
+                        <div
+                          className="text-yellow-500 text-lg"
+                          aria-label={`${t.stars} star rating`}
+                        >
                           {"★".repeat(t.stars || 5)}
                         </div>
                       </div>
@@ -153,9 +200,11 @@ export default function Testimonials({ items = [] }) {
                     type="button"
                     aria-label="Previous"
                     onClick={() =>
-                      setFirstVisibleIndex((idx) => (idx - stepSize < 0 ? maxIndex : idx - stepSize))
+                      setFirstVisibleIndex((idx) =>
+                        idx - stepSize < 0 ? maxIndex : idx - stepSize
+                      )
                     }
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                    className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
                   >
                     ←
                   </button>
@@ -163,9 +212,11 @@ export default function Testimonials({ items = [] }) {
                     type="button"
                     aria-label="Next"
                     onClick={() =>
-                      setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize))
+                      setFirstVisibleIndex((idx) =>
+                        idx + stepSize > maxIndex ? 0 : idx + stepSize
+                      )
                     }
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
                   >
                     →
                   </button>

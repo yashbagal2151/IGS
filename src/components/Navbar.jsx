@@ -53,8 +53,8 @@ export default function Navbar() {
     { name: "Chhatrapati Shivaji Maharaj Statues", scrollTo: "shivaji" },
     { name: "Mavale Statues", scrollTo: "mavale" },
     { name: "God Statues", scrollTo: "god-statues" },
-    { name: "Motivational Statues", scrollTo: "motivational" },
     { name: "Home Decor", scrollTo: "home-decor" },
+    { name: "Motivational Statues", scrollTo: "motivational" },
   ];
 
   const handleCategoryClick = (link) => {

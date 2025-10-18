@@ -75,9 +75,13 @@ export default function ProductSection({
       e.preventDefault();
       e.stopPropagation();
       if (delta < 0) {
-        setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize));
+        setFirstVisibleIndex((idx) =>
+          idx + stepSize > maxIndex ? 0 : idx + stepSize
+        );
       } else {
-        setFirstVisibleIndex((idx) => (idx - stepSize < 0 ? maxIndex : idx - stepSize));
+        setFirstVisibleIndex((idx) =>
+          idx - stepSize < 0 ? maxIndex : idx - stepSize
+        );
       }
     }
   };
@@ -137,7 +141,9 @@ export default function ProductSection({
             <div
               className="flex transition-transform duration-500 ease-out"
               style={{
-                transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
+                transform: `translateX(-${
+                  (100 / itemsPerView) * firstVisibleIndex
+                }%)`,
               }}
             >
               {renderItems.map((product) => (
@@ -160,9 +166,11 @@ export default function ProductSection({
                 type="button"
                 aria-label="Previous"
                 onClick={() =>
-                  setFirstVisibleIndex((idx) => (idx - stepSize < 0 ? maxIndex : idx - stepSize))
+                  setFirstVisibleIndex((idx) =>
+                    idx - stepSize < 0 ? maxIndex : idx - stepSize
+                  )
                 }
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
               >
                 ←
               </button>
@@ -170,9 +178,11 @@ export default function ProductSection({
                 type="button"
                 aria-label="Next"
                 onClick={() =>
-                  setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize))
+                  setFirstVisibleIndex((idx) =>
+                    idx + stepSize > maxIndex ? 0 : idx + stepSize
+                  )
                 }
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
               >
                 →
               </button>

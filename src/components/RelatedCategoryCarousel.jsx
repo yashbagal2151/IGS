@@ -153,7 +153,9 @@ export default function RelatedCategoryCarousel({ items = [] }) {
               <div
                 className="flex transition-transform duration-500 ease-out"
                 style={{
-                  transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
+                  transform: `translateX(-${
+                    (100 / itemsPerView) * firstVisibleIndex
+                  }%)`,
                 }}
               >
                 {displayItems.map((product, idx) => (
@@ -175,7 +177,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   type="button"
                   aria-label="Previous"
                   onClick={goPrev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                  className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
                 >
                   ←
                 </button>
@@ -183,7 +185,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   type="button"
                   aria-label="Next"
                   onClick={goNext}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow hover:bg-gray-100"
                 >
                   →
                 </button>

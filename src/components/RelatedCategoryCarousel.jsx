@@ -27,7 +27,25 @@ export default function RelatedCategoryCarousel({ items = [] }) {
   // On mobile, advance one-by-one; otherwise advance by itemsPerView
   const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
 
-  const maxIndex = Math.max(0, items.length - itemsPerView);
+  const baseItems = Array.isArray(items) ? items : [];
+  const displayItems = React.useMemo(() => {
+    if (!carouselActive) return baseItems;
+    const result = [...baseItems];
+    // Ensure we can always show a full viewport (2 on sm/md, 4 on lg)
+    const remainder = result.length % itemsPerView;
+    const needed = remainder === 0 ? 0 : itemsPerView - remainder;
+    for (let i = 0; i < needed; i += 1) {
+      if (baseItems.length === 0) break;
+      result.push(baseItems[i % baseItems.length]);
+    }
+    // Guarantee at least itemsPerView items so viewport isn't half-empty
+    while (result.length < itemsPerView && baseItems.length > 0) {
+      result.push(baseItems[result.length % baseItems.length]);
+    }
+    return result;
+  }, [baseItems, carouselActive, itemsPerView]);
+
+  const maxIndex = Math.max(0, displayItems.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
   const containerRef = React.useRef(null);
   const dragStateRef = React.useRef({ dragging: false, startX: 0, moved: 0 });
@@ -62,7 +80,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
 
   // Autoplay similar to home page carousel
   React.useEffect(() => {
-    if (!carouselActive || items.length <= itemsPerView) return;
+    if (!carouselActive || displayItems.length <= itemsPerView) return;
     const id = setInterval(() => {
       setFirstVisibleIndex((idx) => {
         const next = idx + stepSize;
@@ -73,7 +91,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
       });
     }, 3000);
     return () => clearInterval(id);
-  }, [carouselActive, items.length, itemsPerView, stepSize, maxIndex]);
+  }, [carouselActive, displayItems.length, itemsPerView, stepSize, maxIndex]);
 
   // Pointer/Touch drag to navigate
   const onPointerDown = (e) => {
@@ -114,7 +132,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
         {!carouselActive ? (
           // Desktop with <= 4 items: render a simple responsive grid (match ProductSection spacing)
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {items.map((product) => (
+            {baseItems.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -138,9 +156,9 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   transform: `translateX(-${(100 / itemsPerView) * firstVisibleIndex}%)`,
                 }}
               >
-                {items.map((product) => (
+                {displayItems.map((product, idx) => (
                   <div
-                    key={product.id}
+                    key={`${product.id}-${idx}`}
                     style={{ flex: `0 0 ${100 / itemsPerView}%` }}
                     className="px-3"
                   >
@@ -151,7 +169,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
             </div>
 
             {/* Controls */}
-            {items.length > itemsPerView && (
+            {displayItems.length > itemsPerView && (
               <>
                 <button
                   type="button"

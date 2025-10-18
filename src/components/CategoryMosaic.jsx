@@ -66,30 +66,14 @@ export default function CategoryMosaic() {
           </p>
         </div>
 
-        {/* First row: 3 cards with top, bottom, top overlays */}
+        {/* First row: 3 cards with top, bottom, top overlays.
+            Middle card replaced with Mavale category (opens mavale filter). */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {row1[0] && <Card section={row1[0]} overlay="top" />}
-          {row1[1] && (
-            <button
-              onClick={() => navigate("/filter?customizable=true")}
-              className="group relative rounded-xl overflow-hidden aspect-[4/3]"
-            >
-              <img
-                src={row1[1]?.products?.[0]?.imageURL}
-                alt="Custom Order"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black/40"></div>
-              <div className="absolute bottom-3 left-3 right-3 text-white text-left">
-                <div className="text-md font-bold leading-tight">
-                  Custom Order
-                </div>
-                <div className="text-sm opacity-90 line-clamp-2">
-                  Turn your vision into a personalized, one-of-a-kind sculpture.
-                </div>
-              </div>
-            </button>
-          )}
+          {(() => {
+            const mavale = sections.find((s) => s.id === "mavale") || row1[1];
+            return mavale ? <Card section={mavale} overlay="bottom" /> : null;
+          })()}
           {row1[2] && <Card section={row1[2]} overlay="top" />}
         </div>
 

@@ -75,8 +75,8 @@ export default function RelatedCategoryCarousel({ items = [] }) {
         </h2>
 
         {!carouselActive ? (
-          // Desktop with <= 4 items: render a simple responsive grid (no carousel controls)
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          // Desktop with <= 4 items: render a simple responsive grid (match ProductSection spacing)
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {items.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -95,7 +95,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   <div
                     key={product.id}
                     style={{ flex: `0 0 ${100 / itemsPerView}%` }}
-                    className="px-4"
+                    className="px-3"
                   >
                     <ProductCard product={product} />
                   </div>

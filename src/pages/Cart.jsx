@@ -66,9 +66,9 @@ export default function Cart({ isDrawer = false, onClose }) {
       <div className={containerClasses}>
         {/* Full Page Header (Only displayed if NOT in drawer) */}
         {!isDrawer && (
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-2">
+          <h2 className="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-2">
             Shopping Cart 🛒
-          </h1>
+          </h2>
         )}
 
         {items.length === 0 ? (

@@ -10,12 +10,12 @@ const StepRow = ({ title, description, Illustration, reverse = false }) => (
     }`}
   >
     <div>
-      <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
+      <h3 className="text-3xl font-semibold text-gray-900 mb-2">
         {title}
       </h3>
       <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
     </div>
-    <div className="flex justify-center">
+    <div className="">
       <div className="w-[80%] h-[80%] bg-brand-50 rounded-2xl">
         <Illustration />
       </div>
@@ -51,7 +51,7 @@ export default function HowCustomizationWorks() {
   return (
     <section className="px-4 md:px-15 lg:px-20 py-14">
       <div className="container mx-auto text-center">
-        <h2 className="text-5xl font-semibold text-gray-900">
+        <h2 className="text-4xl md:text-5xl   font-semibold text-gray-900">
           How Customization Works
         </h2>
         <p className="text-xs md:text-sm text-gray-500 mt-2 max-w-md mx-auto">
@@ -60,7 +60,7 @@ export default function HowCustomizationWorks() {
         </p>
       </div>
 
-      <div className="container mx-auto ">
+      <div className="container mx-auto  px-4 py-6 md:px-10 ">
         <StepRow
           title="Design & Consult"
           description="Share your unique vision with our design experts. We provide detailed sketches, material options, and a clear consultation to begin your custom artwork."

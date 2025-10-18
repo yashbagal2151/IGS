@@ -57,7 +57,7 @@ export default function CategoryMosaic() {
     <section>
       <div className="container mx-auto">
         <div className="text-center py-12">
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl   font-bold text-gray-900 mb-4">
             Explore Our Curated Collections
           </h2>
           <p className="text-gray-600 text-sm">

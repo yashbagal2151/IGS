@@ -24,9 +24,9 @@ function Home() {
           {/* Left Text Block */}
           <div className="flex flex-col justify-between lg:h-[80vh]  w-full lg:w-[40%]">
             <div>
-              <h1 className="text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
-                Exquisite Statues for <br /> Every Space
-              </h1>
+              <h2 className="text-4xl md:text-5xl pb-4  xl:text-6xl font-bold leading-tight text-gray-900">
+                Exquisite Statues for Every Space
+              </h2>
               <p className="text-gray-600 text-sm">
                 Discover our collection of handcrafted god statues, motivational
                 sculptures, and custom artwork. Transform your space with

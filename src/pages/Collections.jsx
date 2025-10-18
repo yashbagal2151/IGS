@@ -9,7 +9,7 @@ export default function Collections() {
         {/* Main Section Title */}
         <section className="container mx-auto py-12">
           <div className="text-center">
-            <h2 className="text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl   font-bold text-gray-900 mb-4">
               Featured Collection
             </h2>
             <p className="text-gray-600 text-sm">

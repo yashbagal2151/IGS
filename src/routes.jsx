@@ -17,7 +17,7 @@ import ProductExtras from "./pages/ProductExtras";
 const Placeholder = (title) => () => (
   <div className="px-4 md:px-15 lg:px-20 py-10">
     <div className="container mx-auto text-center text-gray-700">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+      <h2 className="text-4xl font-semibold">{title}</h2>
       <p className="text-sm mt-2">Content coming soon.</p>
     </div>
   </div>

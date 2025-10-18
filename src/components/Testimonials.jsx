@@ -7,7 +7,7 @@ export default function Testimonials({ items = [] }) {
       <div className="px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-center">
-            <h2 className="text-5xl leading-tight font-serif font-semibold text-gray-900">
+            <h2 className="text-4xl md:text-5xl   leading-tight font-serif font-semibold text-gray-900">
               Experiences Shared by Our Clients
             </h2>
             <div className="flex">

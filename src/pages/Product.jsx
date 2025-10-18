@@ -39,6 +39,8 @@ export default function Product() {
 
   const allProducts = getAllProducts();
   const product = allProducts.find((p) => p.id === id);
+  const categorySlug =
+    product?.categoryId || (product?.category || "").toLowerCase().replace(/\s+/g, "-");
 
   if (!product) {
     return (
@@ -201,7 +203,7 @@ export default function Product() {
   const breadcrumbItems = [
     { label: "Home", link: "/" },
     { label: "Products", link: "/filter" },
-    { label: product.category || "Category" },
+    { label: product.category || "Category", link: `/filter?category=${categorySlug}` },
     { label: title },
   ];
 
@@ -209,6 +211,7 @@ export default function Product() {
     <div className="bg-white">
       <Breadcrumb items={breadcrumbItems} />
       <div className=" container mx-auto">
+        
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Left: Product Images */}

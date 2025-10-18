@@ -31,6 +31,7 @@ export default function ProductSection({
   const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
   const maxIndex = Math.max(0, displayedProducts.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
+  const dragStateRef = React.useRef({ dragging: false, startX: 0, moved: 0 });
 
   React.useEffect(() => {
     const onResize = () => setViewportWidth(window.innerWidth);
@@ -52,6 +53,34 @@ export default function ProductSection({
     }, 3000);
     return () => clearInterval(id);
   }, [carouselActive, displayedProducts.length, itemsPerView, stepSize, maxIndex]);
+
+  const onPointerDown = (e) => {
+    dragStateRef.current = {
+      dragging: true,
+      startX: e.clientX ?? (e.touches ? e.touches[0].clientX : 0),
+      moved: 0,
+    };
+  };
+  const onPointerMove = (e) => {
+    if (!dragStateRef.current.dragging) return;
+    const x = e.clientX ?? (e.touches ? e.touches[0].clientX : 0);
+    dragStateRef.current.moved = x - dragStateRef.current.startX;
+  };
+  const onPointerUp = (e) => {
+    if (!dragStateRef.current.dragging) return;
+    const delta = dragStateRef.current.moved;
+    dragStateRef.current.dragging = false;
+    const threshold = 30;
+    if (Math.abs(delta) > threshold) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (delta < 0) {
+        setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize));
+      } else {
+        setFirstVisibleIndex((idx) => (idx - stepSize < 0 ? maxIndex : idx - stepSize));
+      }
+    }
+  };
 
   // Map category titles to filter IDs
   const getCategoryFilterId = (title) => {
@@ -95,7 +124,16 @@ export default function ProductSection({
         </div>
       ) : (
         <div className="relative">
-          <div className="overflow-hidden">
+          <div
+            className="overflow-hidden select-none"
+            onMouseDown={onPointerDown}
+            onMouseMove={onPointerMove}
+            onMouseUp={onPointerUp}
+            onMouseLeave={onPointerUp}
+            onTouchStart={onPointerDown}
+            onTouchMove={onPointerMove}
+            onTouchEnd={onPointerUp}
+          >
             <div
               className="flex transition-transform duration-500 ease-out"
               style={{
@@ -116,6 +154,30 @@ export default function ProductSection({
               ))}
             </div>
           </div>
+          {displayedProducts.length > itemsPerView && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous"
+                onClick={() =>
+                  setFirstVisibleIndex((idx) => (idx - stepSize < 0 ? maxIndex : idx - stepSize))
+                }
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                aria-label="Next"
+                onClick={() =>
+                  setFirstVisibleIndex((idx) => (idx + stepSize > maxIndex ? 0 : idx + stepSize))
+                }
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+              >
+                →
+              </button>
+            </>
+          )}
         </div>
       )}
     </section>

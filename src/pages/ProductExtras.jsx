@@ -4,18 +4,33 @@ import products from "../data/products.json";
 import CraftStorySection from "../components/CraftStorySection.jsx";
 import RelatedCategoryCarousel from "../components/RelatedCategoryCarousel.jsx";
 
+/**
+ * ProductExtras
+ * Shows the craft story and related products for the current product.
+ * Data flow:
+ * - Build a unified product list with categoryId from categories and standalone products.
+ * - Find the current product by productId.
+ * - Derive categoryId (slug) and filter related products from the same category.
+ */
 export default function ProductExtras({ productId }) {
-  // Build list of all products with categoryId
-  const all = React.useMemo(() => {
-    const arr = [];
-    categoriesData.sections.forEach((s) => s.products.forEach((p) => arr.push({ ...p, categoryId: s.id })));
-    return [...arr, ...products];
+  const allProducts = React.useMemo(() => {
+    const fromCategories = [];
+    categoriesData.sections.forEach((section) =>
+      section.products.forEach((p) =>
+        fromCategories.push({ ...p, categoryId: section.id })
+      )
+    );
+    return [...fromCategories, ...products];
   }, []);
 
-  const product = all.find((p) => p.id === productId);
+  const product = allProducts.find((p) => p.id === productId);
   if (!product) return null;
-  const categoryId = product.categoryId || (product.category || "").toLowerCase().replace(/\s+/g, "-");
-  const related = all.filter((p) => (p.categoryId || (p.category || "").toLowerCase().replace(/\s+/g, "-")) === categoryId && p.id !== product.id);
+
+  const toSlug = (val) => (val || "").toLowerCase().replace(/\s+/g, "-");
+  const categoryId = product.categoryId || toSlug(product.category);
+  const related = allProducts.filter(
+    (p) => (p.categoryId || toSlug(p.category)) === categoryId && p.id !== product.id
+  );
 
   return (
     <div>

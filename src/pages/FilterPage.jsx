@@ -49,7 +49,7 @@ export default function FilterPage() {
     });
   }, [searchParams]);
 
-  // Get all products from categories
+  // Build a unified list of products from categories and standalone list
   const getAllProducts = () => {
     const allProducts = [];
     categoriesData.sections.forEach((section) => {
@@ -128,10 +128,7 @@ export default function FilterPage() {
       });
     }
 
-    // In stock filter (placeholder - would need stock data in products)
-    // if (filters.inStockOnly) {
-    //   filtered = filtered.filter(product => product.inStock);
-    // }
+    // In stock filter (placeholder for future stock data)
 
     return filtered;
   };
@@ -165,15 +162,16 @@ export default function FilterPage() {
     };
   };
 
-  // keep input string in sync when currentPage changes elsewhere
+  // Keep page input in sync when currentPage changes elsewhere
   useEffect(() => {
     setPageInput(String(currentPage));
   }, [currentPage]);
 
+  // Update filters state and URL params
   const handleFiltersChange = (newFilters) => {
     setFilters(newFilters);
 
-    // Update URL params
+    // Update URL params from non-empty filter values
     const params = new URLSearchParams();
     Object.entries(newFilters).forEach(([key, value]) => {
       if (value && value !== "all" && value !== "") {
@@ -181,9 +179,10 @@ export default function FilterPage() {
       }
     });
     setSearchParams(params);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   };
 
+  // Clear all filters and reset URL/query/pagination
   const handleResetFilters = () => {
     const resetFilters = {
       category: null,

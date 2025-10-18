@@ -17,11 +17,11 @@ export default function Product() {
   const [selectedMaterial, setSelectedMaterial] = useState("marble");
   const [selectedSize, setSelectedSize] = useState("small");
   const [pincode, setPincode] = useState("");
-  const [pincodeStatus, setPincodeStatus] = useState("idle"); // 'idle'|'invalid'|'ok'|'no-service'
+  const [pincodeStatus, setPincodeStatus] = useState("idle");
   const [deliveryEstimate, setDeliveryEstimate] = useState("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Scroll to top when component mounts or when id changes
+  // Scroll to top when component mounts or id changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
@@ -57,7 +57,7 @@ export default function Product() {
   const isCustomizable = product.isCustomizable;
   const isFeatured = product.isFeatured;
 
-  // Images – prefer product.images from JSON if present
+  // Images: prefer product.images from JSON if present
   const productImages =
     Array.isArray(product.images) && product.images.length
       ? product.images
@@ -100,7 +100,7 @@ export default function Product() {
     setSelectedImageIndex(index);
   };
 
-  // Materials – derive dynamically from JSON if provided
+  // Material options: derive dynamically from product JSON if provided
   const materialOptions = (
     Array.isArray(product.materials) && product.materials.length
       ? product.materials
@@ -117,7 +117,7 @@ export default function Product() {
       : m
   );
 
-  // Sizes – derive dynamically from JSON if provided
+  // Size options: derive dynamically from product JSON if provided
   const sizeOptions = (
     Array.isArray(product.sizes) && product.sizes.length
       ? product.sizes
@@ -150,7 +150,7 @@ export default function Product() {
     null ||
     product.material ||
     "—";
-  // Exact rows per design, populated dynamically
+  // About section rows (dynamic values per selection/defaults)
   const aboutRows = [
     { label: "Primary Material", value: primaryMaterialStr || "—" },
     {
@@ -196,7 +196,6 @@ export default function Product() {
 
   const handleBuyNow = () => {
     handleAddToCart();
-    // Use client-side navigation so Redux cart state is preserved
     navigate("/checkout");
   };
 
@@ -523,7 +522,7 @@ export default function Product() {
           </div>
         </div>
       </div>
-      {/* Extras sections below the main product page */}
+      {/* Additional sections below the main product details */}
       <ProductExtras productId={product.id} />
     </div>
   );

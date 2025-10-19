@@ -88,7 +88,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             className={`${
               isDrawer
                 ? "text-center flex flex-col items-center"
-                : "py-16 bg-white rounded-xl shadow-md text-center justify-items-center"
+                : "py-8 bg-white rounded-xl shadow-md text-center justify-items-center"
             }`}
           >
             <img src={EmptyShoppingCart} alt="" />
@@ -101,7 +101,7 @@ export default function Cart({ isDrawer = false, onClose }) {
           <div
             className={`flex ${
               isDrawer
-                ? "flex-col p-4 h-[90vh]"
+                ? "flex-col h-[90vh]"
                 : "flex-col md:flex-row gap-8 relative"
             }`}
           >
@@ -109,7 +109,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             <div
               className={`${
                 isDrawer
-                  ? "flex-1 overflow-y-auto"
+                  ? "flex-1 overflow-y-auto p-4"
                   : "md:w-3/4 bg-white p-6 rounded-xl shadow-lg"
               } space-y-6`}
             >
@@ -122,7 +122,7 @@ export default function Cart({ isDrawer = false, onClose }) {
                   return (
                     <div
                       key={it.id}
-                      className="py-4 flex items-start gap-4 text-sm border-b last:border-b-0"
+                      className="border border-gray-100 hover:shadow-lg p-2 rounded-lg flex items-start gap-4 text-sm border-b last:border-b-0"
                     >
                       <img
                         src={it.image}
@@ -140,7 +140,7 @@ export default function Cart({ isDrawer = false, onClose }) {
                         <div className="text-purple-700 font-semibold">
                           ₹{it.price}
                         </div>
-                        <div className="flex gap-5 py-2">
+                        <div className="flex gap-2 py-2">
                           <div className="flex items-center gap-2 border border-gray-200 rounded">
                             <button
                               type="button"

@@ -138,7 +138,7 @@ export default function Testimonials({ items = [] }) {
           ) : (
             <div className="relative">
               <div
-                className="overflow-hidden select-none"
+                className="overflow-hidden select-none p-2"
                 onMouseDown={onPointerDown}
                 onMouseMove={onPointerMove}
                 onMouseUp={onPointerUp}

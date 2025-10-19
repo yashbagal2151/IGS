@@ -141,7 +141,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
           <div className="relative">
             <div
               ref={containerRef}
-              className="overflow-hidden select-none"
+              className="overflow-hidden select-none p-2"
               onMouseDown={onPointerDown}
               onMouseMove={onPointerMove}
               onMouseUp={onPointerUp}

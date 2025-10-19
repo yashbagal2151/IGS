@@ -24,8 +24,8 @@ export default function RelatedCategoryCarousel({ items = [] }) {
   // Enable carousel on desktop only if > 4 items; always on md/sm
   const carouselActive = isLg ? items.length > 4 : true;
 
-  // On mobile, advance one-by-one; otherwise advance by itemsPerView
-  const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
+  // On mobile and tablet, advance one-by-one; desktop advances by page
+  const stepSize = viewportWidth < 1024 ? 1 : itemsPerView;
 
   const baseItems = Array.isArray(items) ? items : [];
   const displayItems = React.useMemo(() => {

@@ -28,7 +28,7 @@ export default function ProductSection({
   const itemsPerView = isLg ? 4 : 2;
   const carouselActive = isLg ? products.length > 4 : true;
   const renderItems = carouselActive ? products : products.slice(0, maxItems);
-  const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
+  const stepSize = viewportWidth < 1024 ? 1 : itemsPerView;
   const maxIndex = Math.max(0, renderItems.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
   const dragStateRef = React.useRef({ dragging: false, startX: 0, moved: 0 });

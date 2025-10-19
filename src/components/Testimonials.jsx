@@ -30,7 +30,7 @@ export default function Testimonials({ items = [] }) {
   }, [baseItems, itemsPerView]);
 
   const carouselActive = isLg ? displayItems.length > 4 : true;
-  const stepSize = viewportWidth < 768 ? 1 : itemsPerView;
+  const stepSize = viewportWidth < 1024 ? 1 : itemsPerView;
   const maxIndex = Math.max(0, displayItems.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
 

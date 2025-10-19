@@ -182,91 +182,75 @@ export default function Cart({ isDrawer = false, onClose }) {
                     </div>
                   );
                 }
-                // Full page cart layout (unchanged)
+                // Full page cart layout: match drawer design responsively
+                const lineWrap = wrapMap[it.id] ? WRAP_FEE_PER_UNIT * it.qty : 0;
+                const lineTotal = it.price * it.qty + lineWrap;
                 return (
                   <div
                     key={it.id}
-                    className={`flex ${
-                      isDrawer
-                        ? "flex-col items-start"
-                        : "flex-row items-center"
-                    } py-4 border-b last:border-b-0 relative`}
+                    className="py-4 flex items-start gap-4 text-sm border-b last:border-b-0"
                   >
                     <img
                       src={it.image}
                       alt={it.title}
-                      className="w-24 h-24 object-cover rounded-lg mr-4 flex-shrink-0"
+                      className="w-28 h-28 rounded object-cover"
                     />
-                    <div className="min-w-0">
-                      <div className="text-lg font-semibold text-gray-800 truncate">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-medium text-gray-900 truncate">
                         {it.title}
                       </div>
-                      <div className="text-md font-bold text-gray-900 mt-1">
-                        ₹{it.price}
+                      <div className="text-gray-500">
+                        Material: {it.material || "-"} &nbsp; Size: {it.size || "-"}
                       </div>
-                    </div>
-                    <div
-                      className={`${
-                        isDrawer
-                          ? "mt-3 flex justify-between w-full"
-                          : "flex items-center space-x-4"
-                      }`}
-                    >
-                      <div className="flex items-center border border-gray-300 rounded-lg p-1">
-                        <button
-                          onClick={() => handleQtyChange(it.id, it.qty - 1)}
-                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50"
-                          disabled={it.qty <= 1}
-                        >
-                          <Minus size={16} />
-                        </button>
-                        <input
-                          type="number"
-                          value={it.qty}
-                          min={1}
-                          onChange={(e) =>
-                            handleQtyChange(it.id, e.target.value)
-                          }
-                          className="w-10 text-center font-medium border-none focus:ring-0 p-0 text-sm"
-                        />
-                        <button
-                          onClick={() => handleQtyChange(it.id, it.qty + 1)}
-                          className="p-1 text-gray-600 hover:bg-gray-100 rounded-full"
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
-                      <div
-                        className={`${
-                          isDrawer ? "text-lg font-bold" : "hidden"
-                        } text-gray-900`}
-                      >
-                        ₹{it.price * it.qty}
-                      </div>
-                      {!isDrawer && (
-                        <div className="text-lg font-bold text-gray-900 w-24 text-right">
-                          ₹{it.price * it.qty}
+                      <div className="text-purple-700 font-semibold">₹{it.price}</div>
+
+                      <div className="flex flex-wrap items-center gap-5 py-2">
+                        <div className="flex items-center gap-2 border border-gray-200 rounded">
+                          <button
+                            type="button"
+                            className="px-2"
+                            onClick={() =>
+                              it.qty > 1
+                                ? dispatch(updateQty({ id: it.id, qty: it.qty - 1 }))
+                                : dispatch(removeFromCart(it.id))
+                            }
+                          >
+                            -
+                          </button>
+                          <span>{it.qty}</span>
+                          <button
+                            type="button"
+                            className="px-2"
+                            onClick={() => dispatch(updateQty({ id: it.id, qty: it.qty + 1 }))}
+                          >
+                            +
+                          </button>
                         </div>
-                      )}
-                      {!isDrawer && (
+
                         <button
-                          onClick={() => handleRemoveItem(it.id)}
-                          className="text-red-500 hover:text-red-700 transition"
-                          aria-label="Remove item"
+                          type="button"
+                          className="text-red-600 text-xs"
+                          onClick={() => dispatch(removeFromCart(it.id))}
                         >
-                          <Trash2 size={20} />
+                          Remove from cart
                         </button>
-                      )}
+
+                        <div className="ml-auto text-right text-gray-900 font-semibold">
+                          ₹{lineTotal}
+                        </div>
+                      </div>
+
+                      <label className="mt-2 inline-flex items-center gap-2 text-xs text-gray-700">
+                        <input
+                          type="checkbox"
+                          checked={!!wrapMap[it.id]}
+                          onChange={(e) =>
+                            setWrapMap((prev) => ({ ...prev, [it.id]: e.target.checked }))
+                          }
+                        />
+                        Gift wrap this item (₹20 for wrapping)
+                      </label>
                     </div>
-                    {isDrawer && (
-                      <button
-                        onClick={() => handleRemoveItem(it.id)}
-                        className="text-red-500 hover:text-red-700 transition absolute top-4 right-0"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    )}
                   </div>
                 );
               })}

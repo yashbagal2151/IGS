@@ -5,8 +5,8 @@ const Breadcrumb = ({ items = [] }) => {
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4 py-3">
+    <div className="bg-white">
+      <div className="container mx-auto py-2">
         <nav className="text-sm text-gray-600">
           {items.map((item, index) => (
             <React.Fragment key={index}>

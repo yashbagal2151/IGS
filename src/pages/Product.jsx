@@ -207,20 +207,21 @@ export default function Product() {
   ];
 
   return (
-    <div className="bg-white">
+    <>
+    <div className="bg-white px-4 md:px-15 lg:px-20">
       <Breadcrumb items={breadcrumbItems} />
       <div className=" container mx-auto">
         
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="container mx-auto py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             {/* Left: Product Images */}
-            <div className="space-y-4">
+            <div className="flex flex-col w-full lg:justify-start lg:flex-col gap-4">
               {/* Main Product Image */}
-              <div className="bg-gray-100 rounded-lg p-8 flex items-center justify-center">
+              <div className="bg-gray-100 h-[60vh] rounded-lg flex items-center justify-center">
                 <img
                   src={currentImage}
                   alt={title}
-                  className="max-h-[500px] w-auto object-contain"
+                  className="rounded-lg w-full h-full object-cover"
                 />
               </div>
 
@@ -522,8 +523,10 @@ export default function Product() {
           </div>
         </div>
       </div>
+    </div>
+    
       {/* Additional sections below the main product details */}
       <ProductExtras productId={product.id} />
-    </div>
+    </>
   );
 }

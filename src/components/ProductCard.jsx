@@ -110,8 +110,8 @@ const ProductCard = ({ product, onOpenProduct }) => {
       {/* --- Product Details Section --- */}
       <div className="p-4 flex-grow flex flex-col justify-between min-h-[140px] min-w-0">
         {/* Product Title - Fixed height to prevent layout shifts */}
-        <div className="min-h-[40px]">
-          <div className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">
+        <div className="min-h-[40px] w-full">
+          <div className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate w-full">
             {name}
           </div>
         </div>

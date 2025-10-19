@@ -158,7 +158,11 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                 {displayItems.map((product, idx) => (
                   <div
                     key={`${product.id}-${idx}`}
-                    style={{ flex: `0 0 ${widthPercent}%` }}
+                    style={{
+                      flex: `0 0 ${widthPercent}%`,
+                      width: `${widthPercent}%`,
+                      maxWidth: `${widthPercent}%`,
+                    }}
                     className="px-0 min-w-0"
                   >
                     <ProductCard product={product} />

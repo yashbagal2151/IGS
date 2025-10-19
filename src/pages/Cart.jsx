@@ -77,7 +77,7 @@ export default function Cart({ isDrawer = false, onClose }) {
       <div className={containerClasses}>
         {/* Full Page Header (Only displayed if NOT in drawer) */}
         {!isDrawer && (
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-8 border-b pb-2">
+          <h2 className="text-4xl font-extrabold text-gray-900 mb-8 pb-2">
             Shopping Cart 🛒
           </h2>
         )}
@@ -88,7 +88,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             className={`${
               isDrawer
                 ? "text-center flex flex-col items-center"
-                : "py-8 bg-white rounded-xl shadow-md text-center justify-items-center"
+                : "py-8 bg-white rounded-xl text-center justify-items-center"
             }`}
           >
             <img src={EmptyShoppingCart} alt="" />

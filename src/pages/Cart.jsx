@@ -36,6 +36,17 @@ export default function Cart({ isDrawer = false, onClose }) {
     });
   }, [items]);
 
+  // Compute gift-wrap total and grand total
+  const wrapTotal = React.useMemo(
+    () =>
+      items.reduce(
+        (sum, it) => sum + (wrapMap[it.id] ? WRAP_FEE_PER_UNIT * it.qty : 0),
+        0
+      ),
+    [items, wrapMap]
+  );
+  const grandTotal = total + wrapTotal;
+
   // --- Handler Functions ---
   const handleQtyChange = (id, newQty) => {
     const qty = Number(newQty);
@@ -274,7 +285,7 @@ export default function Cart({ isDrawer = false, onClose }) {
               <div className="bottom-0 bg-white py-4 border-t shadow-lg z-10">
                 <div className="flex justify-between items-center text-xl font-bold mb-4">
                   <span>Total:</span>
-                  <span className="text-purple-700">₹{total}</span>
+                  <span className="text-purple-700">₹{grandTotal}</span>
                 </div>
                 <button
                   type="button"
@@ -302,9 +313,15 @@ export default function Cart({ isDrawer = false, onClose }) {
                     <span>Subtotal ({items.length} items)</span>
                     <span>₹{total}</span>
                   </div>
+                  {wrapTotal > 0 && (
+                    <div className="flex justify-between text-gray-600 text-sm">
+                      <span>Gift wrap</span>
+                      <span>₹{wrapTotal}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
                     <span>Order Total</span>
-                    <span className="text-purple-700">₹{total}</span>
+                    <span className="text-purple-700">₹{grandTotal}</span>
                   </div>
                 </div>
                 {/* Checkout Button */}

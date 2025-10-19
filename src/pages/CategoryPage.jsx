@@ -124,7 +124,7 @@ const CategoryPage = () => {
                     width: `${widthPercent}%`,
                     maxWidth: `${widthPercent}%`,
                   }}
-                  className="px-0 min-w-0"
+                  className="px-2 min-w-0"
                 >
                   <ProductCard product={product} />
                 </div>

@@ -160,7 +160,7 @@ export default function Testimonials({ items = [] }) {
                         width: `${widthPercent}%`,
                         maxWidth: `${widthPercent}%`,
                       }}
-                      className="px-0 min-w-0"
+                      className="px-2 min-w-0"
                     >
                       <div className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm h-full">
                         <div className="flex items-center gap-3 mb-3">

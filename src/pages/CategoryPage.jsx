@@ -30,7 +30,7 @@ const CategoryPage = () => {
 
   const isLg = viewportWidth >= 1024; // Tailwind lg breakpoint
   const itemsPerView = isLg ? 4 : 2; // 2 cards visible on mobile/tablet
-  const widthPercent = isLg ? 25 : 45; // keep ~45% width on sm/md so two are visible
+  const widthPercent = isLg ? 25 : 50; // exact 2-up on sm/md
   const carouselActive = isLg ? filteredProducts.length > 4 : true;
   const stepSize = viewportWidth < 768 ? 1 : itemsPerView; // mobile step 1, others step per view
   const maxIndex = Math.max(0, filteredProducts.length - itemsPerView);
@@ -120,7 +120,7 @@ const CategoryPage = () => {
                 <div
                   key={product.id}
                   style={{ flex: `0 0 ${widthPercent}%` }}
-                  className="px-3 min-w-0"
+                  className="px-0 min-w-0"
                 >
                   <ProductCard product={product} />
                 </div>

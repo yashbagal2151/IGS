@@ -20,7 +20,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
 
   // 2 visible on mobile/tablet, 4 on desktop
   const itemsPerView = isLg ? 4 : 2;
-  const widthPercent = isLg ? 25 : 45; // keep ~2-up at 45% on sm/md
+  const widthPercent = isLg ? 25 : 50; // exact 2-up on sm/md
 
   // Enable carousel on desktop only if > 4 items; always on md/sm
   const carouselActive = isLg ? items.length > 4 : true;
@@ -159,7 +159,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   <div
                     key={`${product.id}-${idx}`}
                     style={{ flex: `0 0 ${widthPercent}%` }}
-                    className="px-3 min-w-0"
+                    className="px-0 min-w-0"
                   >
                     <ProductCard product={product} />
                   </div>

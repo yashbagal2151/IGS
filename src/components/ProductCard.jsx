@@ -60,7 +60,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
     "
     >
       {/* --- Image and Tag Section --- */}
-      <div className="relative h-48 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-brand-200">
+      <div className="relative h-56 md:h-60 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-brand-200">
         <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}
@@ -105,7 +105,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
       </div>
 
       {/* --- Product Details Section --- */}
-      <div className="p-4 flex-grow flex flex-col justify-between min-h-[120px]">
+      <div className="p-4 flex-grow flex flex-col justify-between min-h-[140px]">
         {/* Product Title - Fixed height to prevent layout shifts */}
         <div>
           <div className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">

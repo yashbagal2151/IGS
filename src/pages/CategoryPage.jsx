@@ -30,6 +30,7 @@ const CategoryPage = () => {
 
   const isLg = viewportWidth >= 1024; // Tailwind lg breakpoint
   const itemsPerView = isLg ? 4 : 2; // 2 cards visible on mobile/tablet
+  const widthPercent = isLg ? 25 : 45; // keep ~45% width on sm/md so two are visible
   const carouselActive = isLg ? filteredProducts.length > 4 : true;
   const stepSize = viewportWidth < 768 ? 1 : itemsPerView; // mobile step 1, others step per view
   const maxIndex = Math.max(0, filteredProducts.length - itemsPerView);
@@ -113,16 +114,12 @@ const CategoryPage = () => {
           >
             <div
               className="flex transition-transform duration-500 ease-out"
-              style={{
-                transform: `translateX(-${
-                  (100 / itemsPerView) * firstVisibleIndex
-                }%)`,
-              }}
+              style={{ transform: `translateX(-${widthPercent * firstVisibleIndex}%)` }}
             >
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  style={{ flex: `0 0 ${100 / itemsPerView}%` }}
+                  style={{ flex: `0 0 ${widthPercent}%` }}
                   className="px-3"
                 >
                   <ProductCard product={product} />

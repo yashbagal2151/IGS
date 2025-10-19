@@ -13,6 +13,7 @@ export default function Testimonials({ items = [] }) {
 
   const isLg = viewportWidth >= 1024;
   const itemsPerView = isLg ? 4 : 2;
+  const widthPercent = isLg ? 25 : 45;
   const baseItems = Array.isArray(items) ? items : [];
 
   const displayItems = React.useMemo(() => {
@@ -149,18 +150,10 @@ export default function Testimonials({ items = [] }) {
               >
                 <div
                   className="flex transition-transform duration-500 ease-out gap-0"
-                  style={{
-                    transform: `translateX(-${
-                      (100 / itemsPerView) * firstVisibleIndex
-                    }%)`,
-                  }}
+                  style={{ transform: `translateX(-${widthPercent * firstVisibleIndex}%)` }}
                 >
                   {displayItems.map((t, idx) => (
-                    <div
-                      key={idx}
-                      style={{ flex: `0 0 ${100 / itemsPerView}%` }}
-                      className="px-3"
-                    >
+                    <div key={idx} style={{ flex: `0 0 ${widthPercent}%` }} className="px-3">
                       <div className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm h-full">
                         <div className="flex items-center gap-3 mb-3">
                           <img

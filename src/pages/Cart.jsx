@@ -77,7 +77,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             className={`${
               isDrawer
                 ? "text-center flex flex-col items-center"
-                : "py-16 bg-white rounded-xl shadow-md text-center"
+                : "py-16 bg-white rounded-xl shadow-md text-center justify-items-center"
             }`}
           >
             <img src={EmptyShoppingCart} alt="" />
@@ -91,7 +91,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             className={`flex ${
               isDrawer
                 ? "flex-col p-4 h-[90vh]"
-                : "flex-col md:flex-row gap-8 h-100 "
+                : "flex-col md:flex-row gap-8 relative"
             }`}
           >
             {/* --- Cart Items List (Main Section) --- */}
@@ -292,7 +292,7 @@ export default function Cart({ isDrawer = false, onClose }) {
               </div>
             ) : (
               // FULL PAGE: Right Column Summary
-              <div className="md:w-1/4 bg-gray-50 p-6 rounded-xl shadow-lg h-fit sticky top-8">
+              <div className="md:w-1/4 bg-gray-50 p-6 rounded-xl shadow-lg h-fit sticky top-[15%]">
                 <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">
                   Order Summary
                 </h2>

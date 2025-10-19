@@ -159,7 +159,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   <div
                     key={`${product.id}-${idx}`}
                     style={{ flex: `0 0 ${widthPercent}%` }}
-                    className="px-3"
+                    className="px-3 min-w-0"
                   >
                     <ProductCard product={product} />
                   </div>

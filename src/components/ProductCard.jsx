@@ -54,6 +54,8 @@ const ProductCard = ({ product, onOpenProduct }) => {
       rounded-2xl
       group
       h-full
+      w-full
+      min-w-0
       shadow-sm
       hover:shadow-lg
       focus:outline-none focus:ring-2 focus:ring-brand-500
@@ -105,7 +107,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
       </div>
 
       {/* --- Product Details Section --- */}
-      <div className="p-4 flex-grow flex flex-col justify-between min-h-[140px]">
+      <div className="p-4 flex-grow flex flex-col justify-between min-h-[140px] min-w-0">
         {/* Product Title - Fixed height to prevent layout shifts */}
         <div>
           <div className="text-base font-extrabold text-gray-800 mb-2 overflow-hidden leading-5 truncate">

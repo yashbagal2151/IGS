@@ -208,7 +208,9 @@ export default function FilterPage() {
 
   return (
     <div className="bg-white">
-      <Breadcrumb items={breadcrumbItems} />
+      <div className="py-1 px-4 md:px-15 lg:px-20">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
       <div className="flex">
         {/* Filter Sidebar */}
         <FilterSidebar

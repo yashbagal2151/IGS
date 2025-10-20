@@ -111,7 +111,9 @@ export default function Orders() {
 
   return (
     <>
-      <Breadcrumb items={breadcrumbItems} />
+      <div className="py-1 px-4 md:px-15 lg:px-20">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
       <div className="container mx-auto px-4 py-6">
         <h2 className="text-2xl font-bold mb-4">Your Orders</h2>
 

@@ -7,7 +7,7 @@ export default function Collections() {
     <div className="px-4 md:px-15 lg:px-20">
       <div className="container py-6 mx-auto">
         {/* Main Section Title */}
-        <section className="container mx-auto py-12">
+        <section className="container mx-auto pt-12 pb-6">
           <div className="text-center">
             <h2 className="text-4xl md:text-5xl   font-bold text-gray-900 mb-4">
               Featured Collection

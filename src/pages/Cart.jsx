@@ -282,7 +282,7 @@ export default function Cart({ isDrawer = false, onClose }) {
             {/* --- Order Summary / Checkout Section --- */}
             {isDrawer ? (
               // DRAWER: Sticky Bottom Checkout
-              <div className="bottom-0 bg-white py-4 border-t shadow-lg z-10">
+              <div className="bottom-0 bg-white py-4 px-4 border-t shadow-lg z-10">
                 <div className="flex justify-between items-center text-xl font-bold mb-4">
                   <span>Total:</span>
                   <span className="text-purple-700">₹{grandTotal}</span>

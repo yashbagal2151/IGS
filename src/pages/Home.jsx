@@ -17,7 +17,9 @@ function Home() {
 
   return (
     <>
-      <Breadcrumb items={breadcrumbItems} />
+      <div className="py-1 px-4 md:px-15 lg:px-20">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
       <div className="bg-white px-4 md:px-15 lg:px-20">
         {/* Hero Section */}
         <section className="container mx-auto flex flex-col lg:flex-row gap-10 py-12">

@@ -367,7 +367,9 @@ export default function Checkout() {
 
   return (
     <>
+    <div className="py-1 px-4 md:px-15 lg:px-20">
       <Breadcrumb items={breadcrumbItems} />
+      </div>
       <div className="py-6 px-4 md:px-15 lg:px-20">
         <div className="container mx-auto">
           <h2 className="text-2xl font-bold mb-4">Secure Checkout</h2>

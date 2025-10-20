@@ -169,7 +169,7 @@ export default function ProductSection({
                     maxWidth: `${cardWidthPercent}%`,
                     minWidth: `${cardWidthPercent}%`,
                   }}
-                  className="px-1.5"
+                  className="px-1"
                 >
                   <ProductCard
                     product={product}

@@ -47,25 +47,25 @@ const ProductCard = ({ product, onOpenProduct }) => {
   const content = (
     <div
       className="
-      border 
-      border-gray-100
       bg-white 
       overflow-hidden 
-      transition-all duration-300 
+      transition-all duration-200 ease-out
       flex flex-col
       rounded-2xl
       group
       h-full
       w-full
       min-w-0
-      shadow-sm
-      hover:shadow-lg
       focus:outline-none focus:ring-2 focus:ring-brand-500
     "
     >
       {/* --- Image and Tag Section --- */}
-      <div className="relative h-40 md:h-60 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-brand-200">
-        <img src={imageURL} alt={name} className="w-full h-full object-cover" />
+      <div className="relative h-40 md:h-60 w-full bg-gray-100 rounded-2xl overflow-hidden flex items-center justify-center border border-gray-200 transition-all duration-200 ease-out group-hover:shadow-lg group-hover:scale-102 group-hover:-translate-y-1">
+        <img
+          src={imageURL}
+          alt={name}
+          className="w-full h-full object-cover transition-transform duration-200 ease-out group-hover:scale-105"
+        />
 
         {/* Tags at the top left */}
         <div className="absolute top-3 left-3 flex flex-col lg:flex-row gap-1.5">

@@ -30,10 +30,10 @@ export default function Testimonials({ items = [] }) {
     stepSize = 1; // Move one card at a time for strip effect
     widthPercent = 50;
   } else {
-    // Mobile: show 2 cards at 47% width each
-    itemsPerView = 2;
+    // Mobile: show 1 card at full width
+    itemsPerView = 1;
     stepSize = 1; // Move one card at a time for strip effect
-    widthPercent = 50;
+    widthPercent = 100;
   }
 
   const carouselActive = true; // Always active to show all cards
@@ -114,7 +114,7 @@ export default function Testimonials({ items = [] }) {
           ) : (
             <div className="relative">
               <div
-                className="overflow-hidden select-none p-2"
+                className="overflow-hidden select-none"
                 onMouseDown={onPointerDown}
                 onMouseMove={onPointerMove}
                 onMouseUp={onPointerUp}
@@ -124,7 +124,7 @@ export default function Testimonials({ items = [] }) {
                 onTouchEnd={onPointerUp}
               >
                 <div
-                  className="flex transition-transform duration-500 ease-out gap-2"
+                  className="flex transition-transform duration-500 ease-out"
                   style={{
                     transform: `translateX(-${
                       widthPercent * firstVisibleIndex
@@ -140,15 +140,17 @@ export default function Testimonials({ items = [] }) {
                         maxWidth: `${widthPercent}%`,
                         minWidth: `${widthPercent}%`,
                       }}
-                      className="px-1.5 min-w-0"
+                      className="px-1 min-w-0"
                     >
-                      <div className="bg-brand-100 backdrop-blur rounded-xl p-5 shadow-sm h-full">
+                      <div className="bg-brand-100 backdrop-blur rounded-xl p-5 h-full transition-all duration-200 ease-out hover:bg-white group">
                         <div className="flex items-center gap-3 mb-3">
-                          <img
-                            src={t.avatar}
-                            alt={t.name}
-                            className="w-9 h-9 rounded-md"
-                          />
+                          <div className="relative border border-gray-200 rounded-md transition-all duration-200 ease-out group-hover:shadow-lg group-hover:scale-102 group-hover:-translate-y-1">
+                            <img
+                              src={t.avatar}
+                              alt={t.name}
+                              className="w-9 h-9 rounded-md transition-transform duration-200 ease-out group-hover:scale-105"
+                            />
+                          </div>
                           <div>
                             <div className="text-base font-semibold text-gray-900">
                               {t.name}

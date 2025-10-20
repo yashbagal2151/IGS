@@ -187,19 +187,18 @@ export default function Profile() {
     );
   };
 
-  // Smooth accordion open/close without layout jank
   const AccordionBody = ({ isOpen, children }) => {
     const innerRef = React.useRef(null);
-    const [height, setHeight] = React.useState(0);
+    const [maxHeight, setMaxHeight] = React.useState(0);
     React.useEffect(() => {
       if (innerRef.current) {
-        setHeight(innerRef.current.scrollHeight);
+        setMaxHeight(innerRef.current.scrollHeight);
       }
     }, [children, isOpen]);
     return (
       <div
         className="overflow-hidden transition-[max-height] duration-300 ease-in-out"
-        style={{ maxHeight: isOpen ? height : 0 }}
+        style={{ maxHeight: isOpen ? maxHeight : 0 }}
       >
         <div ref={innerRef} className="border-t p-4 text-sm space-y-3">
           {children}
@@ -208,29 +207,7 @@ export default function Profile() {
     );
   };
 
-  // Smooth accordion body to avoid jank during open/close
-  const AccordionBody = ({ isOpen, children }) => {
-    const contentRef = React.useRef(null);
-    const [maxHeight, setMaxHeight] = React.useState(0);
-    React.useEffect(() => {
-      if (contentRef.current) {
-        setMaxHeight(contentRef.current.scrollHeight);
-      }
-    }, [children, isOpen]);
-    return (
-      <div
-        className="overflow-hidden transition-all duration-300 ease-in-out"
-        style={{ maxHeight: isOpen ? maxHeight : 0 }}
-      >
-        <div
-          ref={contentRef}
-          className="border-t border-gray-200 p-4 text-sm space-y-3"
-        >
-          {children}
-        </div>
-      </div>
-    );
-  };
+  
 
   return (
     <div className="mx-auto py-6 px-4 md:px-15 lg:px-20">

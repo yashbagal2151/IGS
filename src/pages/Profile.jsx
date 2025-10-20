@@ -662,15 +662,21 @@ export default function Profile() {
 
           <button
             className="mt-6 px-4 py-2 border rounded text-sm"
-            onClick={() => setIsCardModalOpen(true)}
+            onClick={() => {
+              setEditingCard(null);
+              setIsCardModalOpen(true);
+            }}
           >
             Add new card
           </button>
 
           <Modal
             isOpen={isCardModalOpen}
-            onClose={() => setIsCardModalOpen(false)}
-            title="Add new card"
+            onClose={() => {
+              setIsCardModalOpen(false);
+              setEditingCard(null);
+            }}
+            title={editingCard ? "Edit card details" : "Add new card"}
           >
             <form
               onSubmit={(e) => {
@@ -682,23 +688,21 @@ export default function Profile() {
               <div>
                 <label className="block text-sm mb-1">Name on card</label>
                 <input
-                  className={`w-full border rounded px-3 py-2 ${
-                    cardErrors.name ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border rounded px-3 py-2 border-gray-300`}
                   value={cardName}
                   onChange={(e) => setCardName(e.target.value)}
                   placeholder="John Doe"
                 />
-                {cardErrors.name && (
+                {cardErrors.name ? (
                   <p className="text-xs text-red-600 mt-1">{cardErrors.name}</p>
+                ) : (
+                  <p className="text-xs text-gray-400 mt-1">Name on card is required</p>
                 )}
               </div>
               <div>
                 <label className="block text-sm mb-1">Card number</label>
                 <input
-                  className={`w-full border rounded px-3 py-2 ${
-                    cardErrors.number ? "border-red-500" : "border-gray-200"
-                  }`}
+                  className={`w-full border rounded px-3 py-2 border-gray-300`}
                   value={cardNumber}
                   onChange={(e) => {
                     const digits = onlyDigitsCard(e.target.value).slice(0, 19);
@@ -706,21 +710,19 @@ export default function Profile() {
                     setCardNumber(grouped);
                   }}
                   inputMode="numeric"
-                  placeholder="1234 5678 9012 3456"
+                  placeholder={editingCard ? "(leave blank to keep current)" : "1234 5678 9012 3456"}
                 />
-                {cardErrors.number && (
-                  <p className="text-xs text-red-600 mt-1">
-                    {cardErrors.number}
-                  </p>
+                {cardErrors.number ? (
+                  <p className="text-xs text-red-600 mt-1">{cardErrors.number}</p>
+                ) : (
+                  <p className="text-xs text-gray-400 mt-1">Card number must be 16 digits</p>
                 )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm mb-1">Expiry (MM/YY)</label>
                   <input
-                    className={`w-full border rounded px-3 py-2 ${
-                      cardErrors.expiry ? "border-red-500" : "border-gray-200"
-                    }`}
+                    className={`w-full border rounded px-3 py-2 border-gray-300`}
                     value={cardExpiry}
                     onChange={(e) => {
                       const v = onlyDigitsCard(e.target.value).slice(0, 4);
@@ -730,36 +732,37 @@ export default function Profile() {
                     }}
                     placeholder="MM/YY"
                   />
-                  {cardErrors.expiry && (
-                    <p className="text-xs text-red-600 mt-1">
-                      {cardErrors.expiry}
-                    </p>
+                  {cardErrors.expiry ? (
+                    <p className="text-xs text-red-600 mt-1">{cardErrors.expiry}</p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mt-1">Enter valid MM/YY</p>
                   )}
                 </div>
                 <div>
                   <label className="block text-sm mb-1">CVV</label>
                   <input
-                    className={`w-full border rounded px-3 py-2 ${
-                      cardErrors.cvv ? "border-red-500" : "border-gray-200"
-                    }`}
+                    className={`w-full border rounded px-3 py-2 border-gray-300`}
                     value={cardCvv}
                     onChange={(e) =>
                       setCardCvv(onlyDigitsCard(e.target.value).slice(0, 4))
                     }
                     inputMode="numeric"
-                    placeholder={cardBrand === "amex" ? "4 digits" : "3 digits"}
+                    placeholder={editingCard ? "(optional)" : cardBrand === "amex" ? "4 digits" : "3 digits"}
                   />
-                  {cardErrors.cvv && (
-                    <p className="text-xs text-red-600 mt-1">
-                      {cardErrors.cvv}
-                    </p>
+                  {cardErrors.cvv ? (
+                    <p className="text-xs text-red-600 mt-1">{cardErrors.cvv}</p>
+                  ) : (
+                    <p className="text-xs text-gray-400 mt-1">{cardBrand === "amex" ? "CVV must be 4 digits" : "CVV must be 3 digits"}</p>
                   )}
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setIsCardModalOpen(false)}
+                  onClick={() => {
+                    setIsCardModalOpen(false);
+                    setEditingCard(null);
+                  }}
                   className="px-4 py-2 border rounded"
                 >
                   Cancel

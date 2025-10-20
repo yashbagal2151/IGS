@@ -8,6 +8,7 @@ import {
 } from "../features/user/userSlice";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
+import { ChevronDown } from "lucide-react";
 
 export default function Profile() {
   const user = useSelector((s) => s.user);
@@ -120,6 +121,7 @@ export default function Profile() {
     return errs;
   }, [cardName, cardDigits, cardExpiry, cardCvv, cardBrand]);
   const isCardValid = Object.keys(cardErrors).length === 0;
+  const [openCardId, setOpenCardId] = React.useState(null);
 
   const saveCard = () => {
     if (!isCardValid) return;
@@ -529,99 +531,87 @@ export default function Profile() {
       {tab === "payments" && (
         <div className="max-w-4xl">
           <h2 className="text-lg font-semibold mb-4">Payment Options</h2>
-          <div className="space-y-4">
-            {cards.map((c) => (
-              <div
-                key={c.id}
-                className="border rounded p-4 flex items-center justify-between"
-              >
-                <div className="text-sm flex items-center">
-                  <BrandBadge brand={c.brand} />
-                  <div>
-                    <div className="font-medium uppercase">{c.brand}</div>
-                    <div className="text-gray-600">{c.label}</div>
+          <div className="space-y-3">
+            {cards.map((c) => {
+              const isOpen = openCardId === c.id;
+              const defaultAddr =
+                addresses.find((a) => a.isDefault) || addresses[0] || null;
+              return (
+                <div key={c.id} className="border rounded">
+                  <div className="p-4 flex items-center justify-between cursor-pointer" onClick={() => setOpenCardId(isOpen ? null : c.id)}>
+                    <div className="text-sm flex items-center gap-2">
+                      <BrandBadge brand={c.brand} />
+                      <div>
+                        <div className="font-medium uppercase">{c.brand}</div>
+                        <div className="text-gray-600">{c.label}</div>
+                      </div>
+                      {billingCard?.id === c.id && (
+                        <span className="ml-2 px-2 py-1 text-xs rounded border border-green-300 text-green-700">Billing card</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="px-3 py-1 border rounded text-sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          /* future: open edit modal */
+                        }}
+                      >
+                        Edit card details
+                      </button>
+                      <button
+                        className="px-3 py-1 border rounded text-sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const next = cards.filter((x) => x.id !== c.id);
+                          setCards(next);
+                          dispatch(
+                            updateProfile({
+                              cards: next,
+                              defaultCardId: next[0]?.id || null,
+                            })
+                          );
+                        }}
+                      >
+                        Delete Card
+                      </button>
+                      <ChevronDown size={18} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2 items-center">
-                  {billingCard?.id === c.id && (
-                    <span className="px-2 py-1 text-xs rounded border border-green-300 text-green-700">
-                      Billing card
-                    </span>
-                  )}
-                  <button
-                    className="px-3 py-1 border rounded text-sm"
-                    onClick={() => {
-                      /* stretch goal: edit card */
-                    }}
-                  >
-                    Edit card details
-                  </button>
-                  <button
-                    className="px-3 py-1 border rounded text-sm"
-                    onClick={() => {
-                      const next = cards.filter((x) => x.id !== c.id);
-                      setCards(next);
-                      dispatch(
-                        updateProfile({
-                          cards: next,
-                          defaultCardId: next[0]?.id || null,
-                        })
-                      );
-                    }}
-                  >
-                    Delete Card
-                  </button>
-                  {billingCard?.id !== c.id && (
-                    <button
-                      className="px-3 py-1 border rounded text-sm"
-                      onClick={() =>
-                        dispatch(updateProfile({ defaultCardId: c.id }))
-                      }
-                    >
-                      Set as Billing card
-                    </button>
+                  {isOpen && (
+                    <div className="border-t p-4 text-sm space-y-3">
+                      <div className="text-gray-700">Billing address</div>
+                      {defaultAddr ? (
+                        <div className="text-gray-600 space-y-1">
+                          <div>
+                            {defaultAddr.name}
+                            {defaultAddr.tag && (
+                              <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200">{defaultAddr.tag}</span>
+                            )}
+                          </div>
+                          <div>Delivery address: {defaultAddr.addressLine}</div>
+                          <div>Mobile number: {defaultAddr.mobile}</div>
+                          {defaultAddr.email && <div>Email: {defaultAddr.email}</div>}
+                        </div>
+                      ) : (
+                        <div className="text-gray-500">No address saved. Add one in Saved Addresses.</div>
+                      )}
+                      {billingCard?.id !== c.id && (
+                        <button
+                          className="mt-2 px-3 py-1 border rounded text-sm"
+                          onClick={() => dispatch(updateProfile({ defaultCardId: c.id }))}
+                        >
+                          Set as Billing card
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
-            {cards.length === 0 && (
-              <div className="text-gray-500">No saved cards.</div>
-            )}
+              );
+            })}
+            {cards.length === 0 && <div className="text-gray-500">No saved cards.</div>}
           </div>
-          {billingCard && (
-            <div className="mt-6 border rounded p-4 text-sm">
-              <div className="font-semibold mb-2">Billing card</div>
-              <div className="flex items-center uppercase text-gray-700">
-                <BrandBadge brand={billingCard.brand} />
-                {billingCard.brand}
-              </div>
-              <div className="text-gray-600">{billingCard.label}</div>
-            </div>
-          )}
-          {/* Billing address */}
-          {addresses.find((a) => a.isDefault) && (
-            <div className="mt-6 border-y border-gray-300 ounded p-4 text-sm">
-              <div className="font-semibold mb-2">Billing address</div>
-              <div>
-                {addresses.find((a) => a.isDefault).name}{" "}
-                <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200">
-                  {addresses.find((a) => a.isDefault).tag}
-                </span>
-              </div>
-              <div className="text-gray-600">
-                Delivery address:{" "}
-                {addresses.find((a) => a.isDefault).addressLine}
-              </div>
-              <div className="text-gray-600">
-                Mobile number: {addresses.find((a) => a.isDefault).mobile}
-              </div>
-              {addresses.find((a) => a.isDefault).email && (
-                <div className="text-gray-600">
-                  Email: {addresses.find((a) => a.isDefault).email}
-                </div>
-              )}
-            </div>
-          )}
+          {/* Removed global billing summary in favor of per-card accordion details */}
 
           <button
             className="mt-6 px-4 py-2 border rounded text-sm"

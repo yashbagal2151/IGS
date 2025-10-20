@@ -178,7 +178,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   type="button"
                   aria-label="Previous"
                   onClick={goPrev}
-                  className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
                 >
                   ←
                 </button>
@@ -186,7 +186,7 @@ export default function RelatedCategoryCarousel({ items = [] }) {
                   type="button"
                   aria-label="Next"
                   onClick={goNext}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
                 >
                   →
                 </button>

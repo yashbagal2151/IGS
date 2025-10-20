@@ -25,10 +25,30 @@ export default function ProductSection({
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
   const isLg = viewportWidth >= 1024;
-  const itemsPerView = isLg ? 4 : 2;
-  const carouselActive = isLg ? products.length > 4 : true;
-  const renderItems = carouselActive ? products : products.slice(0, maxItems);
-  const stepSize = viewportWidth < 1024 ? 1 : itemsPerView;
+  const isMedium = viewportWidth >= 768 && viewportWidth < 1024;
+
+  // Always show all products in carousel
+  const renderItems = products;
+
+  // Determine items per view and step size
+  let itemsPerView, stepSize, cardWidthPercent;
+  if (isLg) {
+    itemsPerView = 4;
+    stepSize = 4;
+    cardWidthPercent = 25; // 25% width for each of 4 cards on large screens
+  } else if (isMedium) {
+    // Medium: show 2 cards at 50% width each
+    itemsPerView = 2;
+    stepSize = 1; // Move one card at a time for strip effect
+    cardWidthPercent = 50;
+  } else {
+    // Mobile: show 2 cards at 48% width each
+    itemsPerView = 2;
+    stepSize = 1; // Move one card at a time for strip effect
+    cardWidthPercent = 50;
+  }
+
+  const carouselActive = true; // Always active to show all cards
   const maxIndex = Math.max(0, renderItems.length - itemsPerView);
   const [firstVisibleIndex, setFirstVisibleIndex] = React.useState(0);
   const dragStateRef = React.useRef({ dragging: false, startX: 0, moved: 0 });
@@ -44,7 +64,7 @@ export default function ProductSection({
   }, [maxIndex]);
 
   React.useEffect(() => {
-    if (!carouselActive || renderItems.length <= itemsPerView) return;
+    if (renderItems.length <= itemsPerView) return;
     const id = setInterval(() => {
       setFirstVisibleIndex((idx) => {
         const next = idx + stepSize;
@@ -52,7 +72,7 @@ export default function ProductSection({
       });
     }, 3000);
     return () => clearInterval(id);
-  }, [carouselActive, renderItems.length, itemsPerView, stepSize, maxIndex]);
+  }, [renderItems.length, itemsPerView, stepSize, maxIndex]);
 
   const onPointerDown = (e) => {
     dragStateRef.current = {
@@ -115,16 +135,10 @@ export default function ProductSection({
         <p className="text-gray-600 text-sm">{subtitle}</p>
       </div>
 
-      {/* Products Grid or Carousel - Responsive */}
-      {!carouselActive ? (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-          {renderItems.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onOpenProduct={onOpenProduct}
-            />
-          ))}
+      {/* Products Carousel - Always show carousel to access all cards */}
+      {renderItems.length === 0 ? (
+        <div className="text-center text-gray-500 py-8">
+          No products available
         </div>
       ) : (
         <div className="relative">
@@ -142,15 +156,20 @@ export default function ProductSection({
               className="flex transition-transform duration-500 ease-out"
               style={{
                 transform: `translateX(-${
-                  (100 / itemsPerView) * firstVisibleIndex
+                  cardWidthPercent * firstVisibleIndex
                 }%)`,
               }}
             >
               {renderItems.map((product) => (
                 <div
                   key={product.id}
-                  style={{ flex: `0 0 ${100 / itemsPerView}%` }}
-                  className="px-3"
+                  style={{
+                    flex: `0 0 ${cardWidthPercent}%`,
+                    width: `${cardWidthPercent}%`,
+                    maxWidth: `${cardWidthPercent}%`,
+                    minWidth: `${cardWidthPercent}%`,
+                  }}
+                  className="px-1.5"
                 >
                   <ProductCard
                     product={product}

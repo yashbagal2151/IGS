@@ -47,6 +47,8 @@ const ProductCard = ({ product, onOpenProduct }) => {
   const content = (
     <div
       className="
+      border 
+      border-gray-100
       bg-white 
       overflow-hidden 
       transition-all duration-300 
@@ -62,7 +64,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
     "
     >
       {/* --- Image and Tag Section --- */}
-      <div className="relative h-56 md:h-60 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-brand-200">
+      <div className="relative h-40 md:h-60 w-full bg-gray-100 rounded-t-2xl overflow-hidden flex items-center justify-center transition-all duration-300 group:shadow-2xl group:ring-2 group:ring-brand-200">
         <img src={imageURL} alt={name} className="w-full h-full object-cover" />
 
         {/* Tags at the top left */}
@@ -116,7 +118,7 @@ const ProductCard = ({ product, onOpenProduct }) => {
         </div>
 
         {/* Price Row */}
-        <div className="flex items-baseline space-x-2 mb-2">
+        <div className="flex flex-col md:flex-row items-baseline space-x-2 mb-2">
           <span className="text-lg font-extrabold text-purple-700">
             ₹{price}
           </span>
@@ -144,15 +146,10 @@ const ProductCard = ({ product, onOpenProduct }) => {
           <div className="flex items-center justify-center">
             {qtyInCart === 0 ? (
               <button
-                className="
-            flex items-center justify-center py-2 px-3 xl:py-2 xl:px-2 text-white 
-            bg-brand-700 hover:bg-brand-800 font-semibold text-sm 
-            transition-all duration-300 ease-out 
-            focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-opacity-50
-            rounded-sm
-            md:opacity-0 md:translate-y-1 md:pointer-events-none
-            md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto gap-2 md:text-sm
-          "
+                className="flex items-center justify-center sm:py-0 md:py-2 px-2 md:px-3 xl:py-2 xl:px-2 text-white bg-brand-700 hover:bg-brand-800 font-semibold text-xs 
+            transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-opacity-50
+            rounded-sm md:opacity-0 md:translate-y-1 md:pointer-events-none
+            md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:pointer-events-auto gap-2 md:text-sm"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

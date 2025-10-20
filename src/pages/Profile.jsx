@@ -187,6 +187,51 @@ export default function Profile() {
     );
   };
 
+  // Smooth accordion open/close without layout jank
+  const AccordionBody = ({ isOpen, children }) => {
+    const innerRef = React.useRef(null);
+    const [height, setHeight] = React.useState(0);
+    React.useEffect(() => {
+      if (innerRef.current) {
+        setHeight(innerRef.current.scrollHeight);
+      }
+    }, [children, isOpen]);
+    return (
+      <div
+        className="overflow-hidden transition-[max-height] duration-300 ease-in-out"
+        style={{ maxHeight: isOpen ? height : 0 }}
+      >
+        <div ref={innerRef} className="border-t p-4 text-sm space-y-3">
+          {children}
+        </div>
+      </div>
+    );
+  };
+
+  // Smooth accordion body to avoid jank during open/close
+  const AccordionBody = ({ isOpen, children }) => {
+    const contentRef = React.useRef(null);
+    const [maxHeight, setMaxHeight] = React.useState(0);
+    React.useEffect(() => {
+      if (contentRef.current) {
+        setMaxHeight(contentRef.current.scrollHeight);
+      }
+    }, [children, isOpen]);
+    return (
+      <div
+        className="overflow-hidden transition-all duration-300 ease-in-out"
+        style={{ maxHeight: isOpen ? maxHeight : 0 }}
+      >
+        <div
+          ref={contentRef}
+          className="border-t border-gray-200 p-4 text-sm space-y-3"
+        >
+          {children}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="mx-auto py-6 px-4 md:px-15 lg:px-20">
       <div className="py-1">
@@ -625,34 +670,32 @@ export default function Profile() {
                       <ChevronDown size={18} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
                     </div>
                   </div>
-                  {isOpen && (
-                    <div className="p-4 text-sm space-y-3">
-                      <div className="text-gray-700">Billing address</div>
-                      {defaultAddr ? (
-                        <div className="text-gray-600 space-y-1">
-                          <div>
-                            {defaultAddr.name}
-                            {defaultAddr.tag && (
-                              <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200">{defaultAddr.tag}</span>
-                            )}
-                          </div>
-                          <div>Delivery address: {defaultAddr.addressLine}</div>
-                          <div>Mobile number: {defaultAddr.mobile}</div>
-                          {defaultAddr.email && <div>Email: {defaultAddr.email}</div>}
+                  <AccordionBody isOpen={isOpen}>
+                    <div className="text-gray-700">Billing address</div>
+                    {defaultAddr ? (
+                      <div className="text-gray-600 space-y-1">
+                        <div>
+                          {defaultAddr.name}
+                          {defaultAddr.tag && (
+                            <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200">{defaultAddr.tag}</span>
+                          )}
                         </div>
-                      ) : (
-                        <div className="text-gray-500">No address saved. Add one in Saved Addresses.</div>
-                      )}
-                      {billingCard?.id !== c.id && (
-                        <button
-                          className="mt-2 px-3 py-1 border border-gray-300 rounded text-sm"
-                          onClick={() => dispatch(updateProfile({ defaultCardId: c.id }))}
-                        >
-                          Set as Billing card
-                        </button>
-                      )}
-                    </div>
-                  )}
+                        <div>Delivery address: {defaultAddr.addressLine}</div>
+                        <div>Mobile number: {defaultAddr.mobile}</div>
+                        {defaultAddr.email && <div>Email: {defaultAddr.email}</div>}
+                      </div>
+                    ) : (
+                      <div className="text-gray-500">No address saved. Add one in Saved Addresses.</div>
+                    )}
+                    {billingCard?.id !== c.id && (
+                      <button
+                        className="mt-2 px-3 py-1 border border-gray-300 rounded text-sm"
+                        onClick={() => dispatch(updateProfile({ defaultCardId: c.id }))}
+                      >
+                        Set as Billing card
+                      </button>
+                    )}
+                  </AccordionBody>
                 </div>
               );
             })}

@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Menu, X, Search, ChevronDown } from "lucide-react";
 import CartDrawer from "./CartDrawer"; // Make sure this path is correct
 import AuthModal from "./AuthModal";
 import IshitaGalleryLogo from "../assets/ishita-gallery-logo.jpg";
+import categoriesData from "../data/categories.json";
 
 export default function Navbar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Redux: Get the total number of items in the cart
   const totalItems = useSelector((s) =>
@@ -71,9 +76,68 @@ export default function Navbar() {
     toggleProductsDropdown();
   };
 
+  // Build a searchable list of products from categories.json
+  const allProducts = useMemo(() => {
+    const arr = [];
+    categoriesData.sections.forEach((section) =>
+      section.products.forEach((p) =>
+        arr.push({
+          ...p,
+          categoryId: section.id,
+          categoryName: section.title,
+        })
+      )
+    );
+    return arr;
+  }, []);
+
+  const toSlug = (val) => (val || "").toLowerCase().replace(/\s+/g, "-");
+
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return allProducts.filter((p) => {
+      return (
+        (p.name || "").toLowerCase().includes(q) ||
+        (p.material || "").toLowerCase().includes(q) ||
+        (p.size || "").toLowerCase().includes(q) ||
+        (p.categoryName || "").toLowerCase().includes(q)
+      );
+    });
+  }, [searchQuery, allProducts]);
+
+  // Sticky glass effect on scroll
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const openSearch = () => setIsSearchOpen(true);
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  const handleSearchResultClick = (p) => {
+    const params = new URLSearchParams();
+    params.set("category", p.categoryId || toSlug(p.categoryName));
+    if (p.material) params.set("material", (p.material || "").toLowerCase());
+    if (p.size) params.set("size", p.size);
+    closeSearch();
+    navigate(`/filter?${params.toString()}`);
+  };
+
   return (
     <>
-      <nav className="bg-white shadow-sm sticky top-0 z-30 border-b border-gray-100">
+      <nav
+        className={`sticky top-0 z-30 border-b transition-colors ${
+          isScrolled
+            ? "backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/80 border-gray-200 shadow-sm"
+            : "bg-white border-gray-100"
+        }`}
+      >
         <div className="mx-auto px-4 md:px-15 lg:px-20">
           <div className="flex justify-between items-center h-20">
             {/* Logo/Brand */}
@@ -159,6 +223,7 @@ export default function Navbar() {
               <button
                 className="text-gray-500 hover:text-purple-700 transition hidden sm:block"
                 aria-label="Search"
+                onClick={openSearch}
               >
                 <Search size={20} />
               </button>
@@ -178,14 +243,8 @@ export default function Navbar() {
               </button>
 
               {user.isAuthenticated ? (
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-2 group"
-                  aria-label="Open your profile"
-                >
-                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-purple-700 font-semibold group-hover:bg-brand-200">
-                    {user.profile.name?.[0] || "U"}
-                  </div>
+                <Link to="/profile" className="text-sm font-medium text-gray-700 hover:text-purple-700">
+                  Hey, {user.profile?.name || "User"}
                 </Link>
               ) : (
                 <>
@@ -389,6 +448,77 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* Search Drawer Overlay */}
+      <div
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+          isSearchOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+        onClick={closeSearch}
+        aria-hidden={!isSearchOpen}
+      />
+      <div
+        className={`fixed top-0 right-0 h-full w-full sm:w-[460px] bg-white z-50 shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
+          isSearchOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search products"
+      >
+        <div className="p-4 border-b flex items-center gap-3">
+          <Search size={18} className="text-gray-500" />
+          <input
+            autoFocus
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Explore collection"
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+          />
+          <button
+            onClick={closeSearch}
+            className="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+            aria-label="Close search"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-3">
+          {searchQuery.trim() === "" ? (
+            <div className="text-sm text-gray-500 p-4">
+              Type to search products by name, material, or size
+            </div>
+          ) : searchResults.length === 0 ? (
+            <div className="text-sm text-gray-500 p-4">No results found.</div>
+          ) : (
+            <ul className="divide-y">
+              {searchResults.slice(0, 30).map((p) => (
+                <li key={p.id}>
+                  <button
+                    onClick={() => handleSearchResultClick(p)}
+                    className="w-full flex items-center gap-3 p-3 hover:bg-gray-50 text-left"
+                  >
+                    <img
+                      src={p.imageURL}
+                      alt={p.name}
+                      className="w-12 h-12 rounded object-cover flex-shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <div className="text-sm font-semibold text-gray-900 truncate">
+                        {p.name}
+                      </div>
+                      <div className="text-xs text-gray-500 truncate">
+                        {p.categoryName} • {p.material || ""} {p.size ? `• ${p.size}` : ""}
+                      </div>
+                    </div>
+                    <div className="ml-auto text-sm font-semibold text-gray-900">₹{p.price}</div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
 
       {/* --- Cart Drawer Component (Always positioned outside the Navbar) --- */}
       <CartDrawer isOpen={isCartOpen} onClose={toggleCart} />

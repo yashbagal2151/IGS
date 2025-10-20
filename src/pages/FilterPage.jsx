@@ -4,7 +4,6 @@ import FilterSidebar from "../components/FilterSidebar";
 import ProductCard from "../components/ProductCard";
 import { Search, ChevronDown, ArrowLeft, ArrowRight } from "lucide-react";
 import categoriesData from "../data/categories.json";
-import products from "../data/products.json";
 import Breadcrumb from "../components/Breadcrumb.jsx";
 
 export default function FilterPage() {
@@ -61,7 +60,7 @@ export default function FilterPage() {
         });
       });
     });
-    return [...allProducts, ...products]; // Include standalone products too
+    return allProducts; // single source: categories.json
   };
 
   // Filter products based on current filters

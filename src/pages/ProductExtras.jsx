@@ -1,6 +1,5 @@
 import React from "react";
 import categoriesData from "../data/categories.json";
-import products from "../data/products.json";
 import CraftStorySection from "../components/CraftStorySection.jsx";
 import RelatedCategoryCarousel from "../components/RelatedCategoryCarousel.jsx";
 
@@ -20,7 +19,7 @@ export default function ProductExtras({ productId }) {
         fromCategories.push({ ...p, categoryId: section.id })
       )
     );
-    return [...fromCategories, ...products];
+    return fromCategories; // single source: categories.json
   }, []);
 
   const product = allProducts.find((p) => p.id === productId);

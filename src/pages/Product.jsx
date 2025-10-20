@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import ProductExtras from "./ProductExtras";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
-import products from "../data/products.json";
 import categoriesData from "../data/categories.json";
 import { Star, Truck, Shield, ShoppingCart } from "lucide-react";
 import aboutDefaults from "../data/aboutDefaults.json";
@@ -26,7 +25,7 @@ export default function Product() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  // Build a unified product list from categories and standalone products
+  // Build a unified product list from categories (single source of truth)
   const getAllProducts = () => {
     const all = [];
     categoriesData.sections.forEach((section) => {
@@ -34,7 +33,7 @@ export default function Product() {
         all.push({ ...p, categoryId: section.id, categoryName: section.title });
       });
     });
-    return [...all, ...products];
+    return all;
   };
 
   const allProducts = getAllProducts();

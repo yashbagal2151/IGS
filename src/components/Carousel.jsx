@@ -53,7 +53,7 @@ export default function Carousel({
   const active = normalizedItems[currentIndex];
 
   return (
-    <div className={`relative overflow-hidden px-3  ${className}`}>
+    <div className={`relative overflow-hidden px-2 ${className}`}>
       <img
         src={active.image}
         alt={active.title || "slide"}
@@ -75,14 +75,14 @@ export default function Carousel({
         <>
           <button
             onClick={goPrev}
-            className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
             aria-label="Previous"
           >
             ←
           </button>
           <button
             onClick={goNext}
-            className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
             aria-label="Next"
           >
             →

@@ -122,7 +122,7 @@ export default function Cart({ isDrawer = false, onClose }) {
                   return (
                     <div
                       key={it.id}
-                      className="border border-gray-100 hover:shadow-lg p-2 rounded-lg flex items-start gap-4 text-sm border-b last:border-b-0"
+                      className="border border-gray-100 hover:shadow-lg p-2 rounded-lg flex items-start gap-4 text-sm"
                     >
                       <img
                         src={it.image}

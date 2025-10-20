@@ -129,7 +129,7 @@ export default function ProductSection({
       ) : (
         <div className="relative">
           <div
-            className="overflow-hidden select-none p-2"
+            className="overflow-hidden select-none"
             onMouseDown={onPointerDown}
             onMouseMove={onPointerMove}
             onMouseUp={onPointerUp}
@@ -170,7 +170,7 @@ export default function ProductSection({
                     idx - stepSize < 0 ? maxIndex : idx - stepSize
                   )
                 }
-                className="absolute left-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+                className="absolute left-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
               >
                 ←
               </button>
@@ -182,7 +182,7 @@ export default function ProductSection({
                     idx + stepSize > maxIndex ? 0 : idx + stepSize
                   )
                 }
-                className="absolute right-1 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
+                className="absolute right-0 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded-md shadow border border-gray-300 hover:border-purple-500 hover:bg-gray-100"
               >
                 →
               </button>

@@ -464,7 +464,7 @@ export default function Navbar() {
         aria-hidden={!isSearchOpen}
       />
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-white z-50 shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-80 md:w-1/2 lg:w-80 bg-white z-50 shadow-2xl transition-transform duration-500 ease-out flex flex-col ${
           isSearchOpen ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"

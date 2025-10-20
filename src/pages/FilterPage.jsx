@@ -240,7 +240,7 @@ export default function FilterPage() {
                       setItemsPerPage(parseInt(e.target.value));
                       setCurrentPage(1);
                     }}
-                    className="border border-gray-300 rounded px-2 py-1 text-sm"
+                    className="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-purple-300 focus:border-transparent p-1 focus-visible:outline-0"
                   >
                     <option value={4}>4</option>
                     <option value={8}>8</option>
@@ -258,7 +258,7 @@ export default function FilterPage() {
                       setSortBy(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="border border-gray-300 rounded px-2 py-1 text-sm"
+                    className="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-purple-300 focus:border-transparent p-1 focus-visible:outline-0"
                   >
                     <option value="popular">Popular</option>
                     <option value="price-low">Price: Low to High</option>
@@ -277,7 +277,7 @@ export default function FilterPage() {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent p-1"
+                    className=" w-20% border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-300 focus:border-transparent p-1 focus-visible:outline-0"
                   />
                   <Search
                     size={16}

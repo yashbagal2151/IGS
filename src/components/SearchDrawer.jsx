@@ -76,7 +76,7 @@ export default function SearchDrawer({ isOpen, onClose }) {
         aria-modal="true"
         aria-label="Search products"
       >
-        <div className="p-4 border-b">
+        <div className="p-4 border-b border-gray-300">
           <div className="relative flex items-center">
             <Search size={18} className="text-gray-400 absolute left-3" />
             <input

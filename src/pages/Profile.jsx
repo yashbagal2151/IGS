@@ -498,7 +498,7 @@ export default function Profile() {
                         </span>
                       )}
                       {addr.isDefault && (
-                        <span className="ml-2 text-xs bg-brand-100 px-2 py-0.5 rounded border border-purple-800 text-purple-900 font-extrabold ">
+                        <span className="ml-2 text-xs bg-brand-50 px-2 py-0.5 rounded border border-purple-800 text-purple-900 font-extrabold ">
                           Default address
                         </span>
                       )}
@@ -578,7 +578,7 @@ export default function Profile() {
               const defaultAddr =
                 addresses.find((a) => a.isDefault) || addresses[0] || null;
               return (
-                <div key={c.id} className="border rounded">
+                <div key={c.id} className="border-y border-gray-300">
                   <div className="p-4 flex items-center justify-between cursor-pointer" onClick={() => setOpenCardId(isOpen ? null : c.id)}>
                     <div className="text-sm flex items-center gap-2">
                       <BrandBadge brand={c.brand} />
@@ -587,12 +587,12 @@ export default function Profile() {
                         <div className="text-gray-600">{c.label}</div>
                       </div>
                       {billingCard?.id === c.id && (
-                        <span className="ml-2 px-2 py-1 text-xs rounded border border-green-300 text-green-700">Billing card</span>
+                        <span className="ml-2 px-2 py-1 text-xs rounded border-2 border-purple-300 bg-brand-50 text-purple-700 font-bold">Billing card</span>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
                       <button
-                        className="px-3 py-1 border rounded text-sm"
+                        className="px-3 py-1 border border-gray-300 rounded text-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           // Open edit modal with prefilled values
@@ -607,7 +607,7 @@ export default function Profile() {
                         Edit card details
                       </button>
                       <button
-                        className="px-3 py-1 border rounded text-sm"
+                        className="px-3 py-1 border border-gray-300 rounded text-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           const next = cards.filter((x) => x.id !== c.id);
@@ -626,7 +626,7 @@ export default function Profile() {
                     </div>
                   </div>
                   {isOpen && (
-                    <div className="border-t p-4 text-sm space-y-3">
+                    <div className="p-4 text-sm space-y-3">
                       <div className="text-gray-700">Billing address</div>
                       {defaultAddr ? (
                         <div className="text-gray-600 space-y-1">
@@ -645,7 +645,7 @@ export default function Profile() {
                       )}
                       {billingCard?.id !== c.id && (
                         <button
-                          className="mt-2 px-3 py-1 border rounded text-sm"
+                          className="mt-2 px-3 py-1 border border-gray-300 rounded text-sm"
                           onClick={() => dispatch(updateProfile({ defaultCardId: c.id }))}
                         >
                           Set as Billing card
@@ -661,7 +661,7 @@ export default function Profile() {
           {/* Removed global billing summary in favor of per-card accordion details */}
 
           <button
-            className="mt-6 px-4 py-2 border rounded text-sm"
+            className="mt-4 px-4 py-2 bg-brand-700 text-white rounded"
             onClick={() => {
               setEditingCard(null);
               setIsCardModalOpen(true);

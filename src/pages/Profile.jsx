@@ -63,6 +63,7 @@ export default function Profile() {
   const billingCard =
     cards.find((c) => c.id === defaultCardId) || cards[0] || null;
   const [isCardModalOpen, setIsCardModalOpen] = React.useState(false);
+  const [editingCard, setEditingCard] = React.useState(null); // when set, modal edits existing card
   const [cardName, setCardName] = React.useState("");
   const [cardNumber, setCardNumber] = React.useState("");
   const [cardExpiry, setCardExpiry] = React.useState("");
@@ -105,39 +106,66 @@ export default function Profile() {
     const errs = {};
     if (!cardName.trim()) errs.name = "Name on card is required";
     const expectedLen = cardBrand === "amex" ? 15 : 16;
-    if (cardDigits.length !== expectedLen)
-      errs.number =
-        expectedLen === 15
-          ? "AMEX requires 15 digits"
-          : "Card number must be 16 digits";
-    else if (!luhnCheck(cardDigits)) errs.number = "Invalid card number";
+    const isEditing = !!editingCard;
+    // For editing, card number is optional; validate only if provided
+    if (!isEditing || cardDigits.length > 0) {
+      if (cardDigits.length !== expectedLen)
+        errs.number =
+          expectedLen === 15
+            ? "AMEX requires 15 digits"
+            : "Card number must be 16 digits";
+      else if (!luhnCheck(cardDigits)) errs.number = "Invalid card number";
+    }
     if (!/^\d{2}\/\d{2}$/.test(cardExpiry) || !isFutureExpiry(cardExpiry))
       errs.expiry = "Enter valid MM/YY";
     const cvvLen = cardBrand === "amex" ? 4 : 3;
-    if (onlyDigitsCard(cardCvv).length !== cvvLen)
-      errs.cvv =
-        cardBrand === "amex"
-          ? "AMEX CVV must be 4 digits"
-          : "CVV must be 3 digits";
+    if (!editingCard || onlyDigitsCard(cardCvv).length > 0) {
+      if (onlyDigitsCard(cardCvv).length !== cvvLen)
+        errs.cvv =
+          cardBrand === "amex"
+            ? "AMEX CVV must be 4 digits"
+            : "CVV must be 3 digits";
+    }
     return errs;
-  }, [cardName, cardDigits, cardExpiry, cardCvv, cardBrand]);
+  }, [cardName, cardDigits, cardExpiry, cardCvv, cardBrand, editingCard]);
   const isCardValid = Object.keys(cardErrors).length === 0;
   const [openCardId, setOpenCardId] = React.useState(null);
 
   const saveCard = () => {
     if (!isCardValid) return;
-    const mask = cardDigits.slice(-4);
-    const newCard = {
-      id: `card_${cardBrand}_${mask}`,
-      brand: cardBrand,
-      mask,
-      label: `${cardBrand.toUpperCase()} card ending with ${mask}`,
-    };
-    const next = [...cards, newCard];
-    setCards(next);
-    const payload = { cards: next };
-    if (!defaultCardId) payload.defaultCardId = newCard.id; // first saved card becomes billing by default
-    dispatch(updateProfile(payload));
+    if (editingCard) {
+      const current = editingCard;
+      let updated = { ...current, name: cardName.trim(), expiry: cardExpiry };
+      if (cardDigits.length > 0 && luhnCheck(cardDigits)) {
+        const newMask = cardDigits.slice(-4);
+        const newBrand = cardBrand;
+        updated = {
+          ...updated,
+          brand: newBrand,
+          mask: newMask,
+          label: `${newBrand.toUpperCase()} card ending with ${newMask}`,
+        };
+      }
+      const next = cards.map((c) => (c.id === current.id ? updated : c));
+      setCards(next);
+      dispatch(updateProfile({ cards: next }));
+      setEditingCard(null);
+    } else {
+      const mask = cardDigits.slice(-4);
+      const newCard = {
+        id: `card_${cardBrand}_${mask}`,
+        brand: cardBrand,
+        mask,
+        label: `${cardBrand.toUpperCase()} card ending with ${mask}`,
+        name: cardName.trim(),
+        expiry: cardExpiry,
+      };
+      const next = [...cards, newCard];
+      setCards(next);
+      const payload = { cards: next };
+      if (!defaultCardId) payload.defaultCardId = newCard.id; // first saved card becomes billing by default
+      dispatch(updateProfile(payload));
+    }
     setIsCardModalOpen(false);
     setCardName("");
     setCardNumber("");
@@ -567,7 +595,13 @@ export default function Profile() {
                         className="px-3 py-1 border rounded text-sm"
                         onClick={(e) => {
                           e.stopPropagation();
-                          /* future: open edit modal */
+                          // Open edit modal with prefilled values
+                          setEditingCard(c);
+                          setCardName(c.name || "");
+                          setCardNumber(""); // keep masked, allow re-entry if they change
+                          setCardExpiry(c.expiry || "");
+                          setCardCvv("");
+                          setIsCardModalOpen(true);
                         }}
                       >
                         Edit card details

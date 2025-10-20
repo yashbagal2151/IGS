@@ -213,10 +213,12 @@ export default function Profile() {
               <input
                 className={`w-full border rounded px-3 py-2 ${
                   profileErrors.name ? "border-red-500" : "border-gray-200"
-                }`}
+                } bg-gray-50 cursor-not-allowed`}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
+                disabled
+                readOnly
               />
               {profileErrors.name && (
                 <p className="text-xs text-red-600 mt-1">
@@ -229,13 +231,15 @@ export default function Profile() {
               <input
                 className={`w-full border rounded px-3 py-2 ${
                   profileErrors.mobile ? "border-red-500" : "border-gray-200"
-                }`}
+                } bg-gray-50 cursor-not-allowed`}
                 value={mobile}
                 onChange={(e) =>
                   setMobile(onlyDigits(e.target.value).slice(0, 10))
                 }
                 placeholder="0000000000"
                 inputMode="numeric"
+                disabled
+                readOnly
               />
               {profileErrors.mobile && (
                 <p className="text-xs text-red-600 mt-1">
@@ -248,10 +252,12 @@ export default function Profile() {
               <input
                 className={`w-full border rounded px-3 py-2 ${
                   profileErrors.email ? "border-red-500" : "border-gray-200"
-                }`}
+                } bg-gray-50 cursor-not-allowed`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="demo@email.com"
+                disabled
+                readOnly
               />
               {profileErrors.email && (
                 <p className="text-xs text-red-600 mt-1">
@@ -262,18 +268,21 @@ export default function Profile() {
             <div>
               <label className="block text-sm mb-1">Date of Birth</label>
               <input
-                className="w-full border rounded px-3 py-2 border-gray-200"
+                className="w-full border rounded px-3 py-2 border-gray-200 bg-gray-50 cursor-not-allowed"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 placeholder="DD/MM/YYYY"
+                disabled
+                readOnly
               />
             </div>
             <div>
               <label className="block text-sm mb-1">Gender</label>
               <select
-                className="w-full border rounded px-3 py-2 border-gray-200"
+                className="w-full border rounded px-3 py-2 border-gray-200 bg-gray-50 cursor-not-allowed"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
+                disabled
               >
                 <option>Male</option>
                 <option>Female</option>

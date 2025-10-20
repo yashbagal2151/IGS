@@ -259,7 +259,7 @@ export default function Profile() {
       </div>
 
       {tab === "profile" && (
-        <div className="bg-white py-6 max-w-5xl">
+        <div className="bg-white py-4 max-w-5xl">
           <h2 className="text-lg font-semibold mb-4">Profile</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -552,7 +552,7 @@ export default function Profile() {
                       </button>
                       {!addr.isDefault && (
                         <button
-                          className="ml-auto text-xs border border-gray-400 text-gray-700 rounded px-2 py-1 font-semibold"
+                          className="ml-auto text-xs border border-gray-300 text-gray-700 rounded px-2 py-1 font-semibold"
                           onClick={() => dispatch(setDefaultAddress(addr.id))}
                         >
                           Set as Default address
@@ -614,7 +614,7 @@ export default function Profile() {
                     </div>
                     <div className="flex items-center gap-2">
                       <button
-                        className="px-3 py-1 border border-gray-300 rounded text-sm"
+                        className="px-3 py-1 border border-gray-300 text-gray-700 rounded text-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           // Open edit modal with prefilled values
@@ -629,7 +629,7 @@ export default function Profile() {
                         Edit card details
                       </button>
                       <button
-                        className="px-3 py-1 border border-gray-300 rounded text-sm"
+                        className="px-3 py-1 border border-gray-300 text-gray-700 rounded text-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           const next = cards.filter((x) => x.id !== c.id);
@@ -666,7 +666,7 @@ export default function Profile() {
                     )}
                     {billingCard?.id !== c.id && (
                       <button
-                        className="mt-2 px-3 py-1 border border-gray-300 rounded text-sm"
+                        className="mt-2 px-3 py-1 border border-gray-300 text-gray-700 rounded text-sm"
                         onClick={() => dispatch(updateProfile({ defaultCardId: c.id }))}
                       >
                         Set as Billing card

@@ -466,7 +466,7 @@ export default function Profile() {
                         </span>
                       )}
                       {addr.isDefault && (
-                        <span className="ml-2 text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-gray-600">
+                        <span className="ml-2 text-xs bg-brand-100 px-2 py-0.5 rounded border border-purple-800 text-purple-900 font-extrabold ">
                           Default address
                         </span>
                       )}
@@ -498,7 +498,7 @@ export default function Profile() {
                       </button>
                       {!addr.isDefault && (
                         <button
-                          className="ml-auto text-xs border rounded px-2 py-1"
+                          className="ml-auto text-xs border border-gray-400 text-gray-700 rounded px-2 py-1 font-semibold"
                           onClick={() => dispatch(setDefaultAddress(addr.id))}
                         >
                           Set as Default address

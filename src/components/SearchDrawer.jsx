@@ -48,6 +48,17 @@ export default function SearchDrawer({ isOpen, onClose }) {
     navigate(`/filter?${params.toString()}`);
   };
 
+  // Prevent background scroll when drawer is open
+  React.useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
+
   return (
     <>
       <div

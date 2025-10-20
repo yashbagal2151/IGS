@@ -8,6 +8,7 @@ import {
 } from "../features/user/userSlice";
 import Modal from "../components/Modal";
 import AddressForm from "../components/AddressForm";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 import { ChevronDown } from "lucide-react";
 
 export default function Profile() {
@@ -160,6 +161,9 @@ export default function Profile() {
 
   return (
     <div className="mx-auto py-6 px-4 md:px-15 lg:px-20">
+      <div className="py-1">
+        <Breadcrumb items={[{ label: "Home", link: "/" }, { label: "Profile" }]} />
+      </div>
       {/* Tabs */}
       <div className="flex gap-6 text-sm mb-6">
         <button

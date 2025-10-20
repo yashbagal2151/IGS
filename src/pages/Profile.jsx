@@ -23,6 +23,7 @@ export default function Profile() {
   const [dob, setDob] = React.useState(user?.profile?.dob || "");
   const [gender, setGender] = React.useState(user?.profile?.gender || "Male");
   const [profileErrors, setProfileErrors] = React.useState({});
+  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
 
   const onlyDigits = (v) => v.replace(/\D/g, "");
   const strongEmail = (v) => /\S+@\S+\.\S+/.test(v);
@@ -279,11 +280,97 @@ export default function Profile() {
             </div>
           </div>
           <button
-            onClick={handleSaveProfile}
+            onClick={() => setIsProfileModalOpen(true)}
             className="mt-4 px-4 py-2 bg-brand-700 text-white rounded"
           >
             Edit Profile
           </button>
+          <Modal
+            isOpen={isProfileModalOpen}
+            onClose={() => setIsProfileModalOpen(false)}
+            title="Edit Profile"
+          >
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSaveProfile();
+                if (Object.keys(profileErrors).length === 0) {
+                  setIsProfileModalOpen(false);
+                }
+              }}
+              className="space-y-3"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm mb-1">Name *</label>
+                  <input
+                    className={`w-full border rounded px-3 py-2 ${
+                      profileErrors.name ? "border-red-500" : "border-gray-200"
+                    }`}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Mobile Number *</label>
+                  <input
+                    className={`w-full border rounded px-3 py-2 ${
+                      profileErrors.mobile ? "border-red-500" : "border-gray-200"
+                    }`}
+                    value={mobile}
+                    onChange={(e) => setMobile(onlyDigits(e.target.value).slice(0, 10))}
+                    placeholder="0000000000"
+                    inputMode="numeric"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Email</label>
+                  <input
+                    className={`w-full border rounded px-3 py-2 ${
+                      profileErrors.email ? "border-red-500" : "border-gray-200"
+                    }`}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="demo@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Date of Birth</label>
+                  <input
+                    className="w-full border rounded px-3 py-2 border-gray-200"
+                    value={dob}
+                    onChange={(e) => setDob(e.target.value)}
+                    placeholder="DD/MM/YYYY"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1">Gender</label>
+                  <select
+                    className="w-full border rounded px-3 py-2 border-gray-200"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsProfileModalOpen(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="px-4 py-2 bg-brand-700 text-white rounded">
+                  Save changes
+                </button>
+              </div>
+            </form>
+          </Modal>
         </div>
       )}
 

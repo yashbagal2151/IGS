@@ -157,7 +157,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="mx-auto py-6 px-4 md:px-15 lg:px-20">
       {/* Tabs */}
       <div className="flex gap-6 text-sm mb-6">
         <button

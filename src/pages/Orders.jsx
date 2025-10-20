@@ -114,7 +114,7 @@ export default function Orders() {
       <div className="py-1 px-4 md:px-15 lg:px-20">
         <Breadcrumb items={breadcrumbItems} />
       </div>
-      <div className="container mx-auto px-4 py-6">
+      <div className="mx-auto py-6 px-4 md:px-15 lg:px-20">
         <h2 className="text-2xl font-bold mb-4">Your Orders</h2>
 
         <div className="flex items-center justify-between mb-4">
